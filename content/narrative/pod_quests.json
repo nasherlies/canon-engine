@@ -1,0 +1,128 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Pod quest hooks for Canon Engine RPG narrative system",
+    "note": "Small, self-contained quest modules that can be inserted dynamically"
+  },
+  "pod_quests": [
+    {
+      "id": "the_missing_merchant",
+      "name": "The Missing Merchant",
+      "phases": ["arrival"],
+      "level_range": [1, 5],
+      "quest_type": "explore",
+      "hook": "A merchant hasn't arrived at the market. His wife fears the worst.",
+      "beats": [
+        {"id": "inquiry", "description": "Gather information about the merchant's route", "skill_check": {"skill": "CHA", "dc": 10}},
+        {"id": "search", "description": "Search the road between settlements", "skill_check": {"skill": "PERCEPTION", "dc": 12}},
+        {"id": "discovery", "description": "Find the merchant's overturned cart and signs of bandits"},
+        {"id": "resolution", "description": "Track bandits to their camp and rescue merchant (or recover body)"}
+      ],
+      "outcomes": {
+        "rescue": {"gold": 50, "xp": 100, "reputation_merchant_union": 8, "item": "merchant_gratitude"},
+        "body_found": {"gold": 30, "xp": 60, "reputation_merchant_union": 3, "narrative_hook": "vengeance_widow"},
+        "never_found": {"gold": 0, "xp": 20, "reputation_merchant_union": -2}
+      }
+    },
+    {
+      "id": "the_sick_child",
+      "name": "Fever Dream",
+      "phases": ["arrival"],
+      "level_range": [1, 4],
+      "quest_type": "fetch",
+      "hook": "A child has fallen gravely ill. The local healer needs rare herbs from the dangerous forest.",
+      "beats": [
+        {"id": "diagnosis", "description": "Speak with the healer about the illness"},
+        {"id": "gather", "description": "Collect moonpetal herbs from the forest", "skill_check": {"skill": "HERBALISM", "dc": 12}},
+        {"id": "danger", "description": "Wolves guard the herb grove"},
+        {"id": "return", "description": "Deliver herbs and help prepare the cure"}
+      ],
+      "outcomes": {
+        "cure_made": {"gold": 25, "xp": 80, "reputation_scholars_order": 5, "ally": "grateful_family"},
+        "cure_failed": {"gold": 15, "xp": 40, "narrative_hook": "death_consequence"},
+        "herb_not_found": {"gold": 0, "xp": 20, "narrative_hook": "desperate_parent"}
+      }
+    },
+    {
+      "id": "the_old_warrior",
+      "name": "One Last Fight",
+      "phases": ["arrival", "rising_pressure"],
+      "level_range": [3, 8],
+      "quest_type": "escort",
+      "hook": "An aging warrior begs you to help him clear the tomb where his comrades fell decades ago.",
+      "beats": [
+        {"id": "recruit", "description": "The old warrior joins your party temporarily"},
+        {"id": "journey", "description": "Travel to the ancient battlefield"},
+        {"id": "the_tomb", "description": "Explore the tomb, fighting undead soldiers"},
+        {"id": "memorial", "description": "The warrior pays respects at the fallen comrades' graves"},
+        {"id": "final_battle", "description": "The tomb guardian awakens - defend the warrior"}
+      ],
+      "outcomes": {
+        "success": {"gold": 100, "xp": 250, "reputation_iron_guild": 12, "item": "warriors_blade", "lore": "old_war_history"},
+        "warrior_dies": {"gold": 50, "xp": 150, "reputation_iron_guild": 5, "item": "warriors_blade", "narrative_hook": "honor_oath"},
+        "retreat": {"gold": 0, "xp": 50, "reputation_iron_guild": -3}
+      }
+    },
+    {
+      "id": "the_smuggler",
+      "name": "Under the Table",
+      "phases": ["arrival", "rising_pressure"],
+      "level_range": [2, 7],
+      "quest_type": "deliver",
+      "hook": "A shady figure offers good coin to deliver a 'package' with no questions asked.",
+      "beats": [
+        {"id": "meeting", "description": "Approached in an alley or tavern"},
+        {"id": "acceptance", "description": "Accept the job (morality choice)"},
+        {"id": "the_route", "description": "Travel to destination, avoiding guard patrols"},
+        {"id": "complication", "description": "Guards, rival smugglers, or conscience intervene"},
+        {"id": "delivery", "description": "Complete or refuse the delivery"}
+      ],
+      "outcomes": {
+        "delivered_clean": {"gold": 120, "xp": 100, "reputation_thieves_circle": 10, "alignment_shift": "chaotic"},
+        "delivered_caught": {"gold": 0, "xp": 40, "reputation_thieves_circle": 3, "bounty": 50},
+        "refused": {"gold": 0, "xp": 20, "reputation_thieves_circle": -5, "alignment_shift": "lawful"},
+        "reported": {"gold": 30, "xp": 60, "reputation_iron_guild": 8, "reputation_thieves_circle": -15}
+      }
+    },
+    {
+      "id": "the_haunted_well",
+      "name": "What Lies Beneath",
+      "phases": ["rising_pressure"],
+      "level_range": [5, 10],
+      "quest_type": "explore",
+      "hook": "Villagers report hearing whispers from the old well. Animals refuse to drink from the stream.",
+      "beats": [
+        {"id": "investigation", "description": "Examine the well and surrounding area", "skill_check": {"skill": "PERCEPTION", "dc": 14}},
+        {"id": "descent", "description": "Climb down into the well"},
+        {"id": "underground", "description": "Discover a hidden chamber with necrotic energy"},
+        {"id": "source", "description": "Find a necrotic artifact corrupting the water"},
+        {"id": "choice", "description": "Destroy, take, or seal the artifact"}
+      ],
+      "outcomes": {
+        "destroy": {"gold": 80, "xp": 200, "reputation_scholars_order": 8, "reputation_iron_guild": 5},
+        "take": {"gold": 0, "xp": 150, "item": "cursed_well_stone", "corruption": 1, "narrative_hook": "artifact_curse"},
+        "seal": {"gold": 50, "xp": 180, "reputation_scholars_order": 12}
+      }
+    },
+    {
+      "id": "rival_adventurers",
+      "name": "Not the Only Heroes",
+      "phases": ["rising_pressure", "convergence"],
+      "level_range": [5, 12],
+      "quest_type": "competitive",
+      "hook": "Another group of adventurers is competing for the same prize. Race them to the treasure!",
+      "beats": [
+        {"id": "encounter", "description": "Meet the rival party at the dungeon entrance"},
+        {"id": "race", "description": "Navigate the dungeon faster than the rivals"},
+        {"id": "complication", "description": "Forced to cooperate against a greater threat"},
+        {"id": "resolution", "description": "Split the treasure, fight for it, or form an alliance"}
+      ],
+      "outcomes": {
+        "cooperation": {"gold": 100, "xp": 300, "allies": "rival_party", "reputation_all": 5},
+        "won_race": {"gold": 200, "xp": 350, "item": "treasure_hoard"},
+        "lost_race": {"gold": 30, "xp": 100, "reputation_all": -3},
+        "fought": {"gold": 150, "xp": 250, "reputation_all": -8, "alignment_shift": "evil"}
+      }
+    }
+  ]
+}

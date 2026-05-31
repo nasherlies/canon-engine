@@ -1,68 +1,57 @@
 # Canon Engine
 
-Personal AI-narrated infinite RPG: **Python** engine + **localhost web UI** (browser). **Documentation index:** [canon_engine.md § Documentation map](canon_engine.md) (single routing table — use it instead of duplicating docs).
+**AI-powered text-based infinite RPG engine.**
 
-## Requirements
-
-- Python 3.11+
-
-## Setup
+## Quick Start
 
 ```bash
-pip install -r requirements.txt
+# Run from the project root:
+python -m canon_engine --slot default
+
+# Start a tutorial sandbox (no autosave):
+python -m canon_engine --tutorial
+
+# Force a fresh game:
+python -m canon_engine --slot default --new-game
 ```
 
-Secrets live only in **`.env`** at the repo root (**never** in `.py` / committed `.json`). Policy and env knobs: **`# API KEY & COST MANAGEMENT RULES.txt`**.
+## Project Structure
 
-## Run (shipped UX)
+```
+canon-engine/
+├── canon_engine/
+│   ├── __init__.py          # Package marker + version
+│   ├── __main__.py          # CLI entry point
+│   ├── state_manager.py     # Foundation: load/save/autosave (atomic writes, path-jail)
+│   ├── config.py            # Runtime config (env vars → dataclass)
+│   ├── constants.py         # Global constants and tuning knobs
+│   ├── systems/             # Game subsystems (combat, quests, NPCs, …)
+│   ├── adapters/            # External service adapters (LLM, TTS, …)
+│   └── ui/                  # Interface layer (Telegram, web, CLI)
+├── saves/                   # Save files (managed by state_manager)
+├── tests/                   # Pytest test suite
+├── docs/                    # Documentation
+└── pyproject.toml           # Project metadata + build config
+```
 
-**Easiest — double-click `Canon Engine.bat` at the repo root.** The launcher frees port **8765** if a previous run is still holding it, starts the engine, and opens your browser at **<http://127.0.0.1:8765/>**. Close the console window (or press Ctrl+C) to stop. First run: open **SETTINGS → NARRATOR · API KEYS**, paste an OpenRouter / OpenAI / Anthropic key, click SAVE — it lands in `.env` and the running engine picks it up without a restart.
+## Core Architecture
 
-Manual equivalent (one Python command, no Node, no build step):
+The **state_manager** is the foundation of the entire engine:
+
+- **One big dict.** All game state lives in a single Python dict with keys
+  `player`, `world`, `combat`, `companions`, `memory`, `quests`, `npcs`,
+  `factions`, `saga`, `world_bible`, `command_log`, `world_log`, etc.
+- **Atomic saves.** Writes go to a temp file, then `os.replace` — a crash
+  mid-write can never produce a torn save.
+- **Path jail.** Save files must resolve directly under `saves/`; directory
+  traversal (`..`) is blocked.
+- **Slot sanitisation.** Lowercase, `[a-z0-9_]` only, length limit,
+  Windows reserved names rejected.
+- **Autosave.** Dirty turns in campaign mode auto-save; skipped in tutorial
+  sandbox.
+
+## Running Tests
 
 ```bash
-python -m api.server
+python -m pytest tests/ -v
 ```
-
-Then open **<http://127.0.0.1:8765/>**. Static UI lives in **`web/`** (HTML / CSS / vanilla JS modules); engine still owns rules, saves, narrator, combat (see **`canon_engine.md`** § HTTP bridge and **`api/server.py`**).
-
-### Build a frozen API binary (optional)
-
-For shipping **`api_server.exe`** next to a client:
-
-```bash
-pip install -r requirements-dev.txt
-python tools/build_api_exe.py
-```
-
-Output layout depends on **`tools/build_api_exe.py`** / **`tools/api_server.spec`**. Runtime **`requirements.txt`** stays unchanged.
-
-## Run (legacy harness)
-
-Terminal + Rich menu / session:
-
-```bash
-python main.py
-```
-
-Same slash-command rules as HTTP; panels follow **`ui_system.md`** aesthetically (reference only).
-
-## Tests
-
-```bash
-python -m pytest tests/ -p no:pytest-qt
-```
-
-**Playability (API contract):** **`tests/test_playability_smoke.py`** exercises **`GET /health`**, handbook, journal, tutorial preset boot, one **`/look`**, and required **`layout`** keys. Run before you call the HTTP surface “playable”:
-
-```bash
-python -m pytest tests/test_playability_smoke.py -q
-```
-
-That gate verifies **Python + HTTP** only. You still need a valid **`.env`** if you want full AI narration.
-
-Details: **`CANON_ENGINE_MASTER_MANUAL.md`** § Tests; save tests avoid touching real `saves/` when patched.
-
-## More
-
-Design + systems: **`canon_engine.md`**. Operator glossary + §5 log: **`CANON_ENGINE_MASTER_MANUAL.md`**. HTTP bridge: **`canon_engine.md`** § HTTP bridge + **`api/server.py`**. Milestones: **`roadmap.md`**. Changelog: **`canonchanges.md`**.

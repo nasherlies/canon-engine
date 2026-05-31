@@ -1,0 +1,74 @@
+{
+  "crypt": {
+    "id": "crypt",
+    "name": "The Forgotten Crypt",
+    "genre": "dark_fantasy",
+    "description": "A crumbling underground crypt beneath an ancient cathedral. Torches flicker on damp stone walls, and the air smells of dust and decay. Something stirs in the shadows beyond the sarcophagi.",
+    "ambience": "echoing_drips",
+    "danger_level": 3,
+    "connections": ["cathedral_ruins", "underground_river"],
+    "features": ["sarcophagi", "crumbling_altar", "iron_gate", "cobwebbed_corridor"],
+    "starting_enemies": ["skeleton", "zombie"],
+    "starting_items": ["old_torch", "rusty_key", "bone_dust"]
+  },
+  "tavern": {
+    "id": "tavern",
+    "name": "The Rusty Tankard",
+    "genre": "medieval_fantasy",
+    "description": "A warm, smoky tavern at the crossroads of three kingdoms. The hearth crackles, ale flows freely, and rumors flow even freer. Adventurers, merchants, and spies all share the same long tables.",
+    "ambience": "bustling_chatter",
+    "danger_level": 0,
+    "connections": ["crossroads", "market_square", "blacksmith"],
+    "features": ["hearth", "bar_counter", "back_room", "notice_board"],
+    "starting_npcs": ["innkeeper", "mysterious_stranger", "drunk_soldier"],
+    "starting_items": ["ale", "bread_and_cheese"]
+  },
+  "forest_clearing": {
+    "id": "forest_clearing",
+    "name": "Moonwell Clearing",
+    "genre": "fantasy",
+    "description": "A serene forest clearing bathed in silver moonlight. An ancient stone well sits at the center, its waters glowing faintly. Fireflies drift between the ancient oaks, and the wind carries whispers of old magic.",
+    "ambience": "night_woods",
+    "danger_level": 1,
+    "connections": ["deep_forest", "elven_ruins", "village_outskirts"],
+    "features": ["moonwell", "ancient_oak", "stone_circle", "fairy_ring"],
+    "starting_npcs": ["hermit_druid"],
+    "starting_items": ["moonwell_water", "glowing_mushroom"]
+  },
+  "space_station": {
+    "id": "space_station",
+    "name": "Outpost Epsilon-7",
+    "genre": "sci_fi",
+    "description": "A remote space station orbiting a dying star. Corridors hum with failing power, and emergency lights cast everything in red. The crew vanished three cycles ago — only automated systems remain.",
+    "ambience": "industrial_hum",
+    "danger_level": 4,
+    "connections": ["cargo_bay", "command_deck", "engineering", "escape_pods"],
+    "features": ["airlock", "med_bay", "comms_array", "ai_terminal"],
+    "starting_enemies": ["rogue_drone", "parasitic_organism"],
+    "starting_items": ["plasma_cutter", "ration_pack", "data_chip"]
+  },
+  "supermarket": {
+    "id": "supermarket",
+    "name": "GreenMart Megastore",
+    "genre": "modern",
+    "description": "A fluorescent-lit supermarket on the edge of town. Aisles stretch into infinity under buzzing lights. It's 2 AM, the shelves are mostly stocked, and you're the only customer. Or are you?",
+    "ambience": "fluorescent_buzz",
+    "danger_level": 1,
+    "connections": ["parking_lot", "loading_dock", "storage_room", "roof"],
+    "features": ["checkout_aisle", "frozen_section", "pharmacy", "break_room"],
+    "starting_npcs": ["night_shift_cashier"],
+    "starting_items": ["flashlight", "canned_food", "duct_tape", "batteries"]
+  },
+  "wasteland_camp": {
+    "id": "wasteland_camp",
+    "name": "Dusthaven Camp",
+    "genre": "post_apocalyptic",
+    "description": "A ramshackle settlement built from scrap metal and salvaged shipping containers. Dust storms howl outside the makeshift walls. Water is currency here, and trust is even more scarce.",
+    "ambience": "howling_wind",
+    "danger_level": 3,
+    "connections": ["crater_field", "ruined_highway", "underground_bunker"],
+    "features": ["water_purifier", "trading_post", "radio_tower", "scrap_heap"],
+    "starting_npcs": ["camp_leader", "suspicious_trader"],
+    "starting_items": ["water_bottle", "scrap_blade", "gas_mask"]
+  }
+}

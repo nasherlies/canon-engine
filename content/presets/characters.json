@@ -1,0 +1,121 @@
+{
+  "garros": {
+    "id": "garros",
+    "name": "Garros the Western Knight",
+    "archetype": "knight",
+    "speech_style": "western_drawl",
+    "stats": {
+      "STR": 16,
+      "DEX": 10,
+      "INT": 8,
+      "CHA": 12,
+      "CON": 14,
+      "LCK": 11
+    },
+    "description": "A weathered knight from the western frontier. Speaks with a slow drawl and carries a heavy longsword. Loyal to a fault, but not the sharpest blade in the armory.",
+    "starting_gear": ["iron_longsword", "kite_shield", "chainmail_hauberk", "health_potion"],
+    "portrait": "garros_western_knight"
+  },
+  "lyra": {
+    "id": "lyra",
+    "name": "Lyra Shadowveil",
+    "archetype": "rogue",
+    "speech_style": "sly_whisper",
+    "stats": {
+      "STR": 8,
+      "DEX": 16,
+      "INT": 13,
+      "CHA": 12,
+      "CON": 10,
+      "LCK": 11
+    },
+    "description": "A half-elf rogue with a silver tongue and quicker fingers. Raised in the undercity, she trusts no one — but once earned, her loyalty is unshakable.",
+    "starting_gear": ["twin_daggers", "leather_armor", "lockpick_set", "smoke_bomb"],
+    "portrait": "lyra_shadowveil"
+  },
+  "thalric": {
+    "id": "thalric",
+    "name": "Thalric Ashborn",
+    "archetype": "mage",
+    "speech_style": "scholarly",
+    "stats": {
+      "STR": 8,
+      "DEX": 10,
+      "INT": 16,
+      "CHA": 14,
+      "CON": 10,
+      "LCK": 12
+    },
+    "description": "A human mage who survived the burning of the Arcanum. Carries forbidden knowledge and a haunted expression. His fire spells are devastating but unpredictable.",
+    "starting_gear": ["oak_staff", "robes_of_the_arcanum", "spell_scroll_fireball", "mana_potion"],
+    "portrait": "thalric_ashborn"
+  },
+  "borin": {
+    "id": "borin",
+    "name": "Borin Stonehelm",
+    "archetype": "barbarian",
+    "speech_style": "gruff",
+    "stats": {
+      "STR": 16,
+      "DEX": 12,
+      "INT": 8,
+      "CHA": 10,
+      "CON": 16,
+      "LCK": 8
+    },
+    "description": "A dwarven berserker from the deep mountain holds. Fights with twin handaxes and a roar that shakes walls. Drinks too much, sleeps too little, fights too well.",
+    "starting_gear": ["twin_handaxes", "fur_armor", "healing_salve", "dwarven_ale"],
+    "portrait": "borin_stonehelm"
+  },
+  "elara": {
+    "id": "elara",
+    "name": "Elara Dawnwhisper",
+    "archetype": "cleric",
+    "speech_style": "gentle",
+    "stats": {
+      "STR": 10,
+      "DEX": 10,
+      "INT": 14,
+      "CHA": 16,
+      "CON": 12,
+      "LCK": 8
+    },
+    "description": "A half-elf cleric of the Order of the Silver Dawn. Gentle and compassionate, but her divine magic packs a serious punch against the undead.",
+    "starting_gear": ["silver_mace", "blessed_vestments", "holy_symbol", "healing_potion"],
+    "portrait": "elara_dawnwhisper"
+  },
+  "kai": {
+    "id": "kai",
+    "name": "Kai Windstrider",
+    "archetype": "ranger",
+    "speech_style": "terse",
+    "stats": {
+      "STR": 12,
+      "DEX": 16,
+      "INT": 10,
+      "CHA": 10,
+      "CON": 12,
+      "LCK": 10
+    },
+    "description": "A wood-elf ranger who prefers the company of wolves to people. Tracks by scent and instinct. Few words, but every arrow finds its mark.",
+    "starting_gear": ["elven_longbow", "leaf_armor", "tracking_kit", "ration_pack"],
+    "portrait": "kai_windstrider"
+  },
+  "mira": {
+    "id": "mira",
+    "name": "Mira Songweaver",
+    "archetype": "bard",
+    "speech_style": "theatrical",
+    "stats": {
+      "STR": 8,
+      "DEX": 12,
+      "INT": 14,
+      "CHA": 16,
+      "CON": 10,
+      "LCK": 10
+    },
+    "description": "A human bard with a voice that can charm dragons and a wit sharp enough to cut glass. Travels the land seeking the greatest story ever told.",
+    "starting_gear": ["enchanted_lute", "performers_outfit", "silver_tongue_amulet", "wine_flask"],
+    "portrait": "mira_songweaver"
+  }
+}

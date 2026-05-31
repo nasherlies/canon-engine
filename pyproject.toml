@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "canon-engine"
+version = "0.1.0"
+description = "AI-powered text-based infinite RPG engine"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["openai>=1.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov"]
+
+[project.scripts]
+canon-engine = "canon_engine.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

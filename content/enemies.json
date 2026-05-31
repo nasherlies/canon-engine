@@ -1,0 +1,311 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Bestiary entries for Canon Engine RPG",
+    "rarity_tiers": {
+      "dirt": 0.50,
+      "common": 0.25,
+      "uncommon": 0.12,
+      "rare": 0.07,
+      "epic": 0.04,
+      "legendary": 0.018,
+      "mythical": 0.002
+    },
+    "stats_scale": "1-20 (STR, DEX, INT, CHA, CON, LCK)"
+  },
+  "enemies": [
+    {
+      "id": "tutorial_dummy",
+      "name": "Training Dummy",
+      "type": "construct",
+      "hp": 30,
+      "max_hp": 30,
+      "ac": 8,
+      "str": 1,
+      "dex": 1,
+      "con": 10,
+      "int": 1,
+      "cha": 1,
+      "lck": 1,
+      "statuses": [],
+      "intent": "stationary_target",
+      "loot_bias": {
+        "dirt": 0.80,
+        "common": 0.20
+      },
+      "ability_cooldown": 0,
+      "resistances": [],
+      "weaknesses": ["fire"],
+      "xp_value": 5,
+      "description": "A straw-stuffed practice dummy. It doesn't fight back.",
+      "ai_behavior": "passive",
+      "encounter_weight": 0,
+      "tags": ["tutorial", "harmless"]
+    },
+    {
+      "id": "goblin",
+      "name": "Goblin",
+      "type": "humanoid",
+      "hp": 18,
+      "max_hp": 18,
+      "ac": 11,
+      "str": 6,
+      "dex": 14,
+      "con": 8,
+      "int": 8,
+      "cha": 6,
+      "lck": 10,
+      "statuses": [],
+      "intent": "aggressive",
+      "loot_bias": {
+        "dirt": 0.40,
+        "common": 0.40,
+        "uncommon": 0.15,
+        "rare": 0.05
+      },
+      "ability_cooldown": 0,
+      "resistances": [],
+      "weaknesses": ["fire", "light"],
+      "xp_value": 25,
+      "description": "A small green-skinned creature with sharp teeth and a crude blade.",
+      "ai_behavior": "swarm_tactics",
+      "encounter_weight": 30,
+      "tags": ["goblinoid", "common"]
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "type": "undead",
+      "hp": 22,
+      "max_hp": 22,
+      "ac": 12,
+      "str": 10,
+      "dex": 12,
+      "con": 8,
+      "int": 4,
+      "cha": 3,
+      "lck": 6,
+      "statuses": ["undead"],
+      "intent": "aggressive",
+      "loot_bias": {
+        "dirt": 0.35,
+        "common": 0.35,
+        "uncommon": 0.20,
+        "rare": 0.10
+      },
+      "ability_cooldown": 0,
+      "resistances": ["poison", "cold"],
+      "weaknesses": ["bludgeoning", "holy"],
+      "xp_value": 30,
+      "description": "Animated bones clatter forward, eye sockets glowing with pale necrotic light.",
+      "ai_behavior": "melee_simple",
+      "encounter_weight": 25,
+      "tags": ["undead", "dungeon"]
+    },
+    {
+      "id": "wolf",
+      "name": "Grey Wolf",
+      "type": "beast",
+      "hp": 20,
+      "max_hp": 20,
+      "ac": 10,
+      "str": 10,
+      "dex": 15,
+      "con": 10,
+      "int": 3,
+      "cha": 6,
+      "lck": 8,
+      "statuses": [],
+      "intent": "predatory",
+      "loot_bias": {
+        "dirt": 0.30,
+        "common": 0.40,
+        "uncommon": 0.25,
+        "rare": 0.05
+      },
+      "ability_cooldown": 0,
+      "resistances": [],
+      "weaknesses": ["fire"],
+      "xp_value": 20,
+      "description": "A lean grey wolf bares its fangs. It hunts in packs.",
+      "ai_behavior": "pack_tactics",
+      "encounter_weight": 28,
+      "tags": ["beast", "wilderness"],
+      "pack_bonus": {
+        "threshold": 2,
+        "effect": "attack_advantage",
+        "description": "Wolves gain advantage when 2+ are present"
+      }
+    },
+    {
+      "id": "bandit",
+      "name": "Bandit",
+      "type": "humanoid",
+      "hp": 28,
+      "max_hp": 28,
+      "ac": 13,
+      "str": 11,
+      "dex": 12,
+      "con": 12,
+      "int": 10,
+      "cha": 10,
+      "lck": 8,
+      "statuses": [],
+      "intent": "aggressive",
+      "loot_bias": {
+        "dirt": 0.15,
+        "common": 0.35,
+        "uncommon": 0.30,
+        "rare": 0.15,
+        "epic": 0.05
+      },
+      "ability_cooldown": 2,
+      "resistances": [],
+      "weaknesses": [],
+      "xp_value": 40,
+      "description": "A rough-looking outlaw armed with a rusty sword and leather armor.",
+      "ai_behavior": "opportunistic",
+      "encounter_weight": 20,
+      "tags": ["humanoid", "road"],
+      "special_abilities": [
+        {
+          "id": "dirty_trick",
+          "name": "Dirty Trick",
+          "cooldown": 2,
+          "effect": "Blinds target for 1 turn, DC 12 DEX save"
+        }
+      ]
+    },
+    {
+      "id": "dark_mage",
+      "name": "Dark Mage",
+      "type": "humanoid",
+      "hp": 35,
+      "max_hp": 35,
+      "ac": 12,
+      "str": 6,
+      "dex": 10,
+      "con": 10,
+      "int": 16,
+      "cha": 14,
+      "lck": 8,
+      "statuses": [],
+      "intent": "caster_hostile",
+      "loot_bias": {
+        "common": 0.20,
+        "uncommon": 0.35,
+        "rare": 0.30,
+        "epic": 0.10,
+        "legendary": 0.05
+      },
+      "ability_cooldown": 1,
+      "resistances": ["necrotic", "cold"],
+      "weaknesses": ["holy", "light"],
+      "xp_value": 75,
+      "description": "A robed figure wreathed in shadow, chanting words of dark power.",
+      "ai_behavior": "ranged_caster",
+      "encounter_weight": 10,
+      "tags": ["humanoid", "caster", "dungeon"],
+      "special_abilities": [
+        {
+          "id": "shadow_bolt",
+          "name": "Shadow Bolt",
+          "cooldown": 1,
+          "damage": "2d8+4 necrotic",
+          "range": 60
+        },
+        {
+          "id": "dark_shield",
+          "name": "Dark Shield",
+          "cooldown": 3,
+          "effect": "Grants +5 AC for 2 turns"
+        }
+      ]
+    },
+    {
+      "id": "cave_spider",
+      "name": "Cave Spider",
+      "type": "beast",
+      "hp": 16,
+      "max_hp": 16,
+      "ac": 13,
+      "str": 6,
+      "dex": 16,
+      "con": 8,
+      "int": 2,
+      "cha": 3,
+      "lck": 10,
+      "statuses": [],
+      "intent": "ambush",
+      "loot_bias": {
+        "dirt": 0.25,
+        "common": 0.35,
+        "uncommon": 0.30,
+        "rare": 0.10
+      },
+      "ability_cooldown": 3,
+      "resistances": [],
+      "weaknesses": ["fire"],
+      "xp_value": 35,
+      "description": "A spider the size of a large dog, lurking in webs between stalactites.",
+      "ai_behavior": "ambush_predator",
+      "encounter_weight": 18,
+      "tags": ["beast", "cave", "spider"],
+      "special_abilities": [
+        {
+          "id": "web_shot",
+          "name": "Web Shot",
+          "cooldown": 3,
+          "effect": "Restrains target, DC 13 DEX save to escape"
+        },
+        {
+          "id": "venomous_bite",
+          "name": "Venomous Bite",
+          "cooldown": 0,
+          "damage": "1d6+2 piercing + 1d4 poison",
+          "effect": "DC 11 CON save or Poisoned for 3 turns"
+        }
+      ]
+    },
+    {
+      "id": "undead_soldier",
+      "name": "Undead Soldier",
+      "type": "undead",
+      "hp": 45,
+      "max_hp": 45,
+      "ac": 15,
+      "str": 14,
+      "dex": 8,
+      "con": 14,
+      "int": 4,
+      "cha": 3,
+      "lck": 4,
+      "statuses": ["undead"],
+      "intent": "aggressive",
+      "loot_bias": {
+        "common": 0.25,
+        "uncommon": 0.35,
+        "rare": 0.25,
+        "epic": 0.10,
+        "legendary": 0.05
+      },
+      "ability_cooldown": 2,
+      "resistances": ["poison", "cold", "necrotic"],
+      "weaknesses": ["bludgeoning", "holy", "fire"],
+      "xp_value": 55,
+      "description": "Once a proud soldier, now a hollow shell in rusted armor, driven by dark magic.",
+      "ai_behavior": "melee_aggressive",
+      "encounter_weight": 15,
+      "tags": ["undead", "dungeon", "soldier"],
+      "special_abilities": [
+        {
+          "id": "shield_bash",
+          "name": "Shield Bash",
+          "cooldown": 2,
+          "damage": "1d8+3 bludgeoning",
+          "effect": "DC 12 CON save or Stunned for 1 turn"
+        }
+      ]
+    }
+  ]
+}

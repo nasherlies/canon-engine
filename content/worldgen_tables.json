@@ -1,0 +1,84 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Procedural generation tables for world building in Canon Engine RPG",
+    "note": "Weights determine probability of generation. Normalize per category."
+  },
+  "biomes": [
+    {"id": "forest", "name": "Forest", "weight": 25, "features": ["dense_trees", "clearing", "stream", "cave_entrance"], "enemy_types": ["wolf", "bandit", "goblin"], "resources": ["wood", "herbs", "berries"]},
+    {"id": "plains", "name": "Open Plains", "weight": 20, "features": ["road", "farmstead", "crossroads", "ruins"], "enemy_types": ["bandit", "wolf"], "resources": ["food", "clay"]},
+    {"id": "mountains", "name": "Mountains", "weight": 15, "features": ["cave", "mine", "pass", "peak"], "enemy_types": ["cave_spider", "bandit", "goblin"], "resources": ["ore", "gems", "stone"]},
+    {"id": "swamp", "name": "Swamp", "weight": 10, "features": ["bog", "ruins", "hut", "dead_trees"], "enemy_types": ["cave_spider", "undead_soldier"], "resources": ["herbs", "ectoplasm"]},
+    {"id": "tundra", "name": "Frozen Tundra", "weight": 8, "features": ["ice_cave", "frozen_lake", "shelter", "hot_spring"], "enemy_types": ["wolf", "undead_soldier"], "resources": ["ice_crystal", "rare_herbs"]},
+    {"id": "desert", "name": "Desert", "weight": 8, "features": ["oasis", "ruins", "sandstorm", "ancient_temple"], "enemy_types": ["bandit", "dark_mage"], "resources": ["ancient_artifacts", "sand_glass"]},
+    {"id": "underdark", "name": "Underdark", "weight": 7, "features": ["crystal_cavern", "underground_river", "fungus_forest", "drow_outpost"], "enemy_types": ["cave_spider", "skeleton", "dark_mage"], "resources": ["rare_ore", "bioluminescent_fungus"]},
+    {"id": "shadow_realm", "name": "Shadow Realm", "weight": 4, "features": ["void_rift", "shadow_tower", "nightmare_gate", "soul_anchor"], "enemy_types": ["dark_mage", "undead_soldier"], "resources": ["shadow_essence", "void_crystal"]},
+    {"id": "coastal", "name": "Coastal", "weight": 3, "features": ["beach", "cliff", "shipwreck", "lighthouse"], "enemy_types": ["bandit", "cave_spider"], "resources": ["driftwood", "pearls", "fish"]}
+  ],
+  "settlements": [
+    {"id": "village", "name": "Village", "weight": 35, "population_range": [50, 300], "buildings": ["inn", "general_store", "blacksmith", "temple", "farmsteads"], "defense_level": "low", "available_quests": 2},
+    {"id": "town", "name": "Town", "weight": 25, "population_range": [300, 2000], "buildings": ["inn", "market", "forge", "temple", "barracks", "library", "shops"], "defense_level": "medium", "available_quests": 4},
+    {"id": "city", "name": "City", "weight": 15, "population_range": [2000, 20000], "buildings": ["castle", "market_district", "temple_district", "undercity", "academy", "arena"], "defense_level": "high", "available_quests": 8},
+    {"id": "outpost", "name": "Outpost", "weight": 15, "population_range": [10, 50], "buildings": ["watchtower", "barracks", "supply_cache"], "defense_level": "medium", "available_quests": 1},
+    {"id": "ruins", "name": "Ruins", "weight": 10, "population_range": [0, 0], "buildings": [], "defense_level": "none", "available_quests": 1, "dungeon_chance": 0.6}
+  ],
+  "dungeons": [
+    {"id": "cave_system", "name": "Cave System", "weight": 25, "size": "medium", "floors": [2, 4], "enemy_types": ["cave_spider", "goblin", "bandit"], "boss_chance": 0.3},
+    {"id": "crypt", "name": "Ancient Crypt", "weight": 20, "size": "medium", "floors": [3, 5], "enemy_types": ["skeleton", "undead_soldier"], "boss_chance": 0.5},
+    {"id": "bandit_hideout", "name": "Bandit Hideout", "weight": 15, "size": "small", "floors": [1, 3], "enemy_types": ["bandit"], "boss_chance": 0.4},
+    {"id": "tower_ruins", "name": "Tower Ruins", "weight": 12, "size": "large", "floors": [3, 7], "enemy_types": ["dark_mage", "skeleton"], "boss_chance": 0.6},
+    {"id": "shadow_fortress", "name": "Shadow Fortress", "weight": 5, "size": "large", "floors": [5, 8], "enemy_types": ["dark_mage", "undead_soldier"], "boss_chance": 0.8},
+    {"id": "goblin_warren", "name": "Goblin Warren", "weight": 18, "size": "small", "floors": [1, 3], "enemy_types": ["goblin"], "boss_chance": 0.25},
+    {"id": "wolf_den", "name": "Wolf Den", "weight": 5, "size": "small", "floors": [1, 2], "enemy_types": ["wolf"], "boss_chance": 0.1}
+  ],
+  "encounter_weights": {
+    "by_biome": {
+      "forest": [{"enemy": "wolf", "weight": 30}, {"enemy": "bandit", "weight": 20}, {"enemy": "goblin", "weight": 25}],
+      "plains": [{"enemy": "bandit", "weight": 35}, {"enemy": "wolf", "weight": 15}],
+      "mountains": [{"enemy": "cave_spider", "weight": 25}, {"enemy": "bandit", "weight": 20}, {"enemy": "goblin", "weight": 30}],
+      "swamp": [{"enemy": "cave_spider", "weight": 30}, {"enemy": "undead_soldier", "weight": 25}],
+      "tundra": [{"enemy": "wolf", "weight": 40}, {"enemy": "undead_soldier", "weight": 20}],
+      "desert": [{"enemy": "bandit", "weight": 35}, {"enemy": "dark_mage", "weight": 15}],
+      "underdark": [{"enemy": "cave_spider", "weight": 25}, {"enemy": "skeleton", "weight": 25}, {"enemy": "dark_mage", "weight": 20}],
+      "shadow_realm": [{"enemy": "dark_mage", "weight": 35}, {"enemy": "undead_soldier", "weight": 35}],
+      "coastal": [{"enemy": "bandit", "weight": 30}, {"enemy": "cave_spider", "weight": 20}]
+    },
+    "encounter_frequency": {
+      "safe": {"chance_per_travel": 0.05, "description": "Heavily patrolled areas"},
+      "moderate": {"chance_per_travel": 0.15, "description": "Standard wilderness"},
+      "dangerous": {"chance_per_travel": 0.30, "description": "Hostile territory"},
+      "deadly": {"chance_per_travel": 0.50, "description": "Highly dangerous regions"},
+      "extreme": {"chance_per_travel": 0.75, "description": "End-game areas"}
+    },
+    "party_scaling": {
+      "formula": "base_count + floor(party_level / 5)",
+      "min_count": 1,
+      "max_count": 8
+    }
+  },
+  "loot_tables": {
+    "dungeon_chest": [
+      {"rarity": "dirt", "weight": 40, "contents": {"gold": [5, 20], "items": 1}},
+      {"rarity": "common", "weight": 30, "contents": {"gold": [15, 50], "items": 1}},
+      {"rarity": "uncommon", "weight": 18, "contents": {"gold": [30, 100], "items": 1}},
+      {"rarity": "rare", "weight": 8, "contents": {"gold": [50, 200], "items": [1, 2]}},
+      {"rarity": "epic", "weight": 3, "contents": {"gold": [100, 500], "items": 1}},
+      {"rarity": "legendary", "weight": 1, "contents": {"gold": [200, 1000], "items": 1}}
+    ],
+    "boss_reward": [
+      {"rarity": "uncommon", "weight": 20, "contents": {"gold": [100, 300], "items": [1, 2]}},
+      {"rarity": "rare", "weight": 40, "contents": {"gold": [200, 600], "items": [1, 3]}},
+      {"rarity": "epic", "weight": 30, "contents": {"gold": [400, 1000], "items": [2, 3]}},
+      {"rarity": "legendary", "weight": 10, "contents": {"gold": [800, 2000], "items": 1}}
+    ]
+  },
+  "weather": [
+    {"id": "clear", "name": "Clear Skies", "weight": 35, "effects": {}},
+    {"id": "cloudy", "name": "Overcast", "weight": 25, "effects": {}},
+    {"id": "rain", "name": "Rain", "weight": 20, "effects": {"stealth_bonus": 1, "fire_penalty": -2, "visibility": "reduced"}},
+    {"id": "storm", "name": "Thunderstorm", "weight": 8, "effects": {"stealth_bonus": 2, "fire_penalty": -5, "visibility": "poor", "lightning_chance": 0.05}},
+    {"id": "fog", "name": "Dense Fog", "weight": 7, "effects": {"visibility": "very_poor", "stealth_bonus": 3, "ranged_penalty": -3}},
+    {"id": "snow", "name": "Snowfall", "weight": 3, "effects": {"movement_penalty": -5, "tracking_dc_bonus": 2, "cold_damage_chance": 0.02}},
+    {"id": "blizzard", "name": "Blizzard", "weight": 2, "effects": {"movement_penalty": -10, "visibility": "near_zero", "cold_damage": "1d4/turn_outside", "tracking_dc_bonus": 5}}
+  ]
+}

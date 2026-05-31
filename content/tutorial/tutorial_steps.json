@@ -1,0 +1,107 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Tutorial steps for Canon Engine RPG new player onboarding",
+    "note": "Steps guide new players through core mechanics in a controlled sequence"
+  },
+  "tutorial_steps": [
+    {
+      "id": "welcome",
+      "header": "Welcome, Adventurer",
+      "instructions": "Welcome to Canon Engine! This tutorial will teach you the basics of survival. Follow the prompts and you'll be adventuring in no time.\n\nFirst, let's create your character. What shall we call you?",
+      "completion_trigger": "player_provides_name",
+      "unlocks": ["character_creation"],
+      "skip_allowed": false
+    },
+    {
+      "id": "character_creation",
+      "header": "Character Creation",
+      "instructions": "Now let's set up your stats. You have 60 points to distribute among:\n- **STR** (Strength)\n- **DEX** (Dexterity)\n- **INT** (Intelligence)\n- **CHA** (Charisma)\n- **CON** (Constitution)\n- **LCK** (Luck)\n\nOr choose a preset character like 'Garros the Western Knight'.\n\nUse 'set stats [str] [dex] [int] [cha] [con] [lck]' or 'preset [name]'.",
+      "completion_trigger": "stats_assigned",
+      "unlocks": ["first_look"],
+      "skip_allowed": true,
+      "skip_to": "first_look"
+    },
+    {
+      "id": "first_look",
+      "header": "Looking Around",
+      "instructions": "Great! You find yourself in a small village. Let's learn the most important command: **look**.\n\nType 'look' to see your surroundings. This shows you:\n- Where you are\n- What's nearby\n- NPCs you can talk to\n- Items you can interact with\n\nTry it now: type 'look'",
+      "completion_trigger": "player_used_look",
+      "unlocks": ["movement"],
+      "skip_allowed": false
+    },
+    {
+      "id": "movement",
+      "header": "Getting Around",
+      "instructions": "To move, use 'go [direction]' or 'go [location]'.\n\nAvailable from the village square:\n- 'go market' - Visit the marketplace\n- 'go inn' - Visit the inn\n- 'go gate' - Head to the village gate\n\nTry going somewhere: type 'go inn'",
+      "completion_trigger": "player_moved_to_location",
+      "unlocks": ["talking"],
+      "skip_allowed": false
+    },
+    {
+      "id": "talking",
+      "header": "Talking to NPCs",
+      "instructions": "You see the innkeeper behind the counter. To interact with NPCs, use 'talk [name]'.\n\nNPCs can:\n- Give you quests\n- Sell you items\n- Provide information\n- React to your reputation\n\nType 'talk innkeeper' to start a conversation.",
+      "completion_trigger": "player_talked_to_npc",
+      "unlocks": ["first_quest"],
+      "skip_allowed": false
+    },
+    {
+      "id": "first_quest",
+      "header": "Your First Quest",
+      "instructions": "The innkeeper mentioned wolves near the village. This is a quest! Use 'accept quest' when offered one.\n\nQuests appear in your quest log. Use 'quests' to see active quests.\n\nAccept the wolf quest, then head to the gate: 'go gate'",
+      "completion_trigger": "player_accepted_quest",
+      "unlocks": ["inventory_basics"],
+      "skip_allowed": false
+    },
+    {
+      "id": "inventory_basics",
+      "header": "Your Inventory",
+      "instructions": "Before heading into danger, check your gear! Use 'inventory' (or 'inv') to see what you're carrying.\n\nImportant items:\n- **Health Potion**: Restores HP. Use 'use health potion' when hurt.\n- **Torch**: Provides light in dark areas.\n- **Weapon**: Already equipped for combat.\n\nCheck your inventory now.",
+      "completion_trigger": "player_checked_inventory",
+      "unlocks": ["first_combat"],
+      "skip_allowed": false
+    },
+    {
+      "id": "first_combat",
+      "header": "Your First Fight",
+      "instructions": "You encounter a wolf in the wilderness! Combat is turn-based.\n\nEach turn you can:\n- 'attack [target]': Strike the enemy\n- 'defend': Gain +2 AC this round\n- 'use [item]': Use a consumable\n- 'flee': Try to escape\n\nDefeat the wolf to continue. Remember: if your HP drops low, use a health potion!",
+      "completion_trigger": "player_defeated_enemy",
+      "unlocks": ["looting"],
+      "skip_allowed": false
+    },
+    {
+      "id": "looting",
+      "header": "Looting & Rewards",
+      "instructions": "Victory! After defeating enemies, you can loot them. Use 'loot' to collect rewards.\n\nLoot includes:\n- **Gold**: Currency for buying and selling\n- **Items**: Equipment, consumables, crafting materials\n- **XP**: Experience points toward leveling up\n\nLoot the wolf and check your inventory again.",
+      "completion_trigger": "player_looted_corpse",
+      "unlocks": ["crafting_intro"],
+      "skip_allowed": false
+    },
+    {
+      "id": "crafting_intro",
+      "header": "Crafting Basics",
+      "instructions": "You can craft items from materials you gather. Use 'craft [recipe]' when you have the right ingredients.\n\nSome useful early recipes:\n- **Torch**: Wood stick + cloth scrap + animal fat\n- **Crude Antidote**: 2 wild mint + charcoal root + empty vial\n\nGather materials as you explore. Use 'recipes' to see what you can craft.",
+      "completion_trigger": "player_viewed_recipes",
+      "unlocks": ["rest_and_save"],
+      "skip_allowed": true,
+      "skip_to": "rest_and_save"
+    },
+    {
+      "id": "rest_and_save",
+      "header": "Rest & Saving",
+      "instructions": "When you're wounded or tired, find a safe place to rest. Use 'rest' to:\n- Restore HP and MP\n- Recover status effects\n- Pass time\n\nUse 'save' to save your progress. Save often!\n\nInns provide safe rest for a small fee. Wilderness rest is riskier.",
+      "completion_trigger": "player_saved_game",
+      "unlocks": ["tutorial_complete"],
+      "skip_allowed": false
+    },
+    {
+      "id": "tutorial_complete",
+      "header": "Tutorial Complete!",
+      "instructions": "Congratulations! You've learned the basics of Canon Engine.\n\nHere's what you know:\n- ✓ Looking around and exploring\n- ✓ Moving between locations\n- ✓ Talking to NPCs\n- ✓ Accepting and completing quests\n- ✓ Managing your inventory\n- ✓ Combat basics\n- ✓ Looting rewards\n- ✓ Crafting items\n- ✓ Resting and saving\n\nFor more help, use 'help [topic]' anytime. The handbook has detailed info on every system.\n\nYour adventure awaits! The village needs a hero.",
+      "completion_trigger": "player_dismissed_tutorial",
+      "unlocks": ["free_play"],
+      "skip_allowed": false
+    }
+  ]
+}

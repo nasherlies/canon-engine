@@ -1,0 +1,172 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Terrain features for Canon Engine RPG combat encounters",
+    "note": "Features modify combat when present in an encounter area"
+  },
+  "terrain_features": [
+    {
+      "id": "low_wall",
+      "name": "Low Wall",
+      "type": "cover",
+      "description": "A waist-high stone wall providing partial protection.",
+      "combat_bonus": {
+        "type": "cover",
+        "ac_bonus": 2,
+        "dex_save_bonus": 2,
+        "blocks_movement": false,
+        "blocks_los": false
+      },
+      "interactions": [
+        {"action": "vault_over", "dc": 10, "stat": "STR", "description": "Leap over the wall as difficult terrain"},
+        {"action": "take_cover", "cost": "bonus_action", "description": "Crouch behind wall for cover"}
+      ],
+      "destruction": {"hp": 20, "ac": 10, "vulnerable": "bludgeoning"},
+      "spawn_weight": 30
+    },
+    {
+      "id": "full_cover_pillar",
+      "name": "Stone Pillar",
+      "type": "cover",
+      "description": "A thick stone pillar that blocks line of sight completely.",
+      "combat_bonus": {
+        "type": "full_cover",
+        "ac_bonus": null,
+        "blocks_los": true,
+        "blocks_movement": true
+      },
+      "interactions": [
+        {"action": "hide_behind", "cost": "action", "description": "Hide behind pillar, DC varies by enemy awareness"}
+      ],
+      "destruction": {"hp": 60, "ac": 15, "resistant": "piercing"},
+      "spawn_weight": 20
+    },
+    {
+      "id": "high_ground",
+      "name": "Elevated Platform",
+      "type": "terrain_advantage",
+      "description": "A raised surface providing a tactical advantage to those who climb it.",
+      "combat_bonus": {
+        "type": "high_ground",
+        "attack_bonus": 2,
+        "ranged_attack_bonus": 2,
+        "melee_defense_penalty": 0,
+        "description": "+2 to attack rolls from elevated position"
+      },
+      "interactions": [
+        {"action": "climb_up", "dc": 12, "stat": "ATHLETICS", "description": "Climb to elevated position"},
+        {"action": "push_off", "dc": 14, "stat": "STR", "description": "Shove enemy off edge", "damage": "1d6 per 10ft fallen"}
+      ],
+      "spawn_weight": 15
+    },
+    {
+      "id": "oil_barrel",
+      "name": "Oil Barrel",
+      "type": "hazard",
+      "description": "A leaking barrel of oil. Highly flammable.",
+      "combat_bonus": {
+        "type": "environmental_hazard",
+        "trigger": "fire_damage",
+        "damage": "3d6 fire",
+        "aoe_radius": "10ft",
+        "save": "DC 13 DEX for half",
+        "description": "Explodes when hit by fire damage"
+      },
+      "interactions": [
+        {"action": "kick_over", "dc": 8, "stat": "STR", "description": "Spill oil in a 10ft area"},
+        {"action": "throw", "dc": 12, "stat": "STR", "description": "Throw barrel up to 20ft"},
+        {"action": "ignite", "trigger": "fire_damage", "description": "Ignite spilled oil for 2d6 fire damage in area"}
+      ],
+      "destruction": {"hp": 10, "ac": 8, "vulnerable": "fire", "immune": "psychic"},
+      "spawn_weight": 12
+    },
+    {
+      "id": "chandelier",
+      "name": "Chandelier",
+      "type": "hazard",
+      "description": "A heavy iron chandelier hanging from a chain above.",
+      "combat_bonus": {
+        "type": "droppable",
+        "damage": "4d6 bludgeoning",
+        "aoe_radius": "10ft",
+        "save": "DC 14 DEX for half",
+        "description": "Can be dropped on enemies below"
+      },
+      "interactions": [
+        {"action": "cut_chain", "dc": 12, "stat": "STR", "requires": "slashing_weapon", "description": "Cut the chain to drop the chandelier"},
+        {"action": "swing_on", "dc": 15, "stat": "ATHLETICS", "description": "Swing across the room on the chandelier"}
+      ],
+      "spawn_weight": 8
+    },
+    {
+      "id": "thorny_bushes",
+      "name": "Thorny Bushes",
+      "type": "hazard",
+      "description": "Dense bushes covered in sharp thorns.",
+      "combat_bonus": {
+        "type": "difficult_terrain",
+        "movement_cost": 2,
+        "damage_on_entry": "1d4 piercing",
+        "description": "Costs extra movement and deals damage when entering"
+      },
+      "interactions": [
+        {"action": "burn_through", "trigger": "fire_damage", "description": "Burn away bushes, clear path"},
+        {"action": "hack_through", "dc": 10, "stat": "STR", "requires": "slashing_weapon", "description": "Cut through bushes, takes 1 turn"}
+      ],
+      "destruction": {"hp": 8, "ac": 5, "vulnerable": "fire"},
+      "spawn_weight": 25
+    },
+    {
+      "id": "swamp_water",
+      "name": "Murky Water",
+      "type": "terrain",
+      "description": "Shallow, murky water that slows movement and obscures submerged objects.",
+      "combat_bonus": {
+        "type": "difficult_terrain",
+        "movement_cost": 2,
+        "stealth_bonus": 2,
+        "description": "Difficult terrain, +2 to stealth while submerged"
+      },
+      "interactions": [
+        {"action": "wade_through", "speed_penalty": 10, "description": "Move slowly through the water"},
+        {"action": "submerge", "dc": 12, "stat": "CON", "description": "Hold breath and submerge for stealth"}
+      ],
+      "spawn_weight": 18
+    },
+    {
+      "id": "magical_darkness",
+      "name": "Magical Darkness",
+      "type": "magical",
+      "description": "An area of impenetrable magical darkness. Normal light cannot illuminate it.",
+      "combat_bonus": {
+        "type": "concealment",
+        "blocks_los": true,
+        "attack_penalty": -5,
+        "description": "Attacks into/out of darkness have heavy disadvantage"
+      },
+      "interactions": [
+        {"action": "dispel", "dc": 16, "stat": "INT", "requires": "dispel_magic", "description": "Attempt to dispel the darkness"},
+        {"action": "light_spell", "requires": "light_cantrip_or_higher", "description": "Magical light partially penetrates darkness"}
+      ],
+      "spawn_weight": 10
+    },
+    {
+      "id": "unstable_floor",
+      "name": "Crumbling Floor",
+      "type": "hazard",
+      "description": "Weakened floor that may collapse under weight or impact.",
+      "combat_bonus": {
+        "type": "collapse_risk",
+        "trigger": "heavy_impact_or_weight",
+        "damage": "3d6 bludgeoning",
+        "save": "DC 14 DEX",
+        "description": "Floor collapses, dropping characters to level below"
+      },
+      "interactions": [
+        {"action": "test_weight", "dc": 14, "stat": "PERCEPTION", "description": "Identify weak spots before crossing"},
+        {"action": "careful_cross", "dc": 12, "stat": "DEX", "description": "Cross without triggering collapse"}
+      ],
+      "spawn_weight": 10
+    }
+  ]
+}

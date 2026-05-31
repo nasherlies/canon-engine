@@ -1,0 +1,251 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Crafting recipes for Canon Engine RPG",
+    "skill_categories": ["alchemy", "smithing", "tailoring", "survival", "enchanting"]
+  },
+  "recipes": [
+    {
+      "id": "crude_antidote",
+      "name": "Crude Antidote",
+      "category": "alchemy",
+      "description": "A hastily brewed remedy that can counter mild poisons.",
+      "inputs": [
+        {"item_id": "herb_wild_mint", "quantity": 2},
+        {"item_id": "herb_charcoal_root", "quantity": 1},
+        {"item_id": "empty_vial", "quantity": 1}
+      ],
+      "output": {
+        "item_id": "crude_antidote",
+        "quantity": 1,
+        "rarity": "common"
+      },
+      "skill_check": {
+        "skill": "alchemy",
+        "dc": 10,
+        "critical_success_dc": 18,
+        "critical_success_bonus": "Produces 2 antidotes",
+        "failure_effect": "Materials wasted, produces nothing"
+      },
+      "craft_time": "10 minutes",
+      "required_tools": ["alchemy_kit"],
+      "required_facility": null,
+      "xp_reward": 15
+    },
+    {
+      "id": "healing_salve",
+      "name": "Healing Salve",
+      "category": "alchemy",
+      "description": "A thick, herbal paste that promotes wound healing when applied.",
+      "inputs": [
+        {"item_id": "herb_sunpetal", "quantity": 2},
+        {"item_id": "herb_life_root", "quantity": 1},
+        {"item_id": "beeswax", "quantity": 1}
+      ],
+      "output": {
+        "item_id": "healing_salve",
+        "quantity": 1,
+        "rarity": "common"
+      },
+      "skill_check": {
+        "skill": "alchemy",
+        "dc": 12,
+        "critical_success_dc": 20,
+        "critical_success_bonus": "Salve heals 50% more",
+        "failure_effect": "Produces a weaker version (half healing)"
+      },
+      "craft_time": "15 minutes",
+      "required_tools": ["alchemy_kit"],
+      "required_facility": null,
+      "xp_reward": 20,
+      "effect": "Restore 2d4+2 HP when applied out of combat"
+    },
+    {
+      "id": "torch",
+      "name": "Torch",
+      "category": "survival",
+      "description": "A simple but effective torch for lighting dark places.",
+      "inputs": [
+        {"item_id": "wooden_stick", "quantity": 1},
+        {"item_id": "cloth_scrap", "quantity": 1},
+        {"item_id": "animal_fat", "quantity": 1}
+      ],
+      "output": {
+        "item_id": "torch",
+        "quantity": 2,
+        "rarity": "dirt"
+      },
+      "skill_check": {
+        "skill": "survival",
+        "dc": 5,
+        "critical_success_dc": 15,
+        "critical_success_bonus": "Produces 4 torches",
+        "failure_effect": "Produces 1 torch"
+      },
+      "craft_time": "5 minutes",
+      "required_tools": [],
+      "required_facility": null,
+      "xp_reward": 5,
+      "effect": "Provides light in 20ft radius for 1 hour"
+    },
+    {
+      "id": "reinforced_cloth",
+      "name": "Reinforced Cloth Armor",
+      "category": "tailoring",
+      "description": "Cloth armor reinforced with leather strips. Light but surprisingly durable.",
+      "inputs": [
+        {"item_id": "cloth_scrap", "quantity": 4},
+        {"item_id": "leather_strip", "quantity": 2},
+        {"item_id": "thread", "quantity": 3}
+      ],
+      "output": {
+        "item_id": "reinforced_cloth_armor",
+        "quantity": 1,
+        "rarity": "common"
+      },
+      "skill_check": {
+        "skill": "tailoring",
+        "dc": 14,
+        "critical_success_dc": 20,
+        "critical_success_bonus": "Armor gains +1 AC bonus",
+        "failure_effect": "Produces tattered cloth armor (half AC)"
+      },
+      "craft_time": "30 minutes",
+      "required_tools": ["needle_and_thread"],
+      "required_facility": "workbench",
+      "xp_reward": 25,
+      "effect": {
+        "ac_bonus": 2,
+        "special": "No disadvantage on stealth checks"
+      }
+    },
+    {
+      "id": "iron_sword",
+      "name": "Iron Sword",
+      "category": "smithing",
+      "description": "A sturdy blade forged from iron ingots.",
+      "inputs": [
+        {"item_id": "iron_ingot", "quantity": 2},
+        {"item_id": "leather_strip", "quantity": 1},
+        {"item_id": "coal", "quantity": 1}
+      ],
+      "output": {
+        "item_id": "iron_sword",
+        "quantity": 1,
+        "rarity": "common"
+      },
+      "skill_check": {
+        "skill": "smithing",
+        "dc": 14,
+        "critical_success_dc": 20,
+        "critical_success_bonus": "Sword gains Keen property (+1 to crit range)",
+        "failure_effect": "Produces a brittle sword (may break on critical failure)"
+      },
+      "craft_time": "1 hour",
+      "required_tools": ["hammer", "tongs"],
+      "required_facility": "forge",
+      "xp_reward": 30,
+      "effect": {
+        "damage": "1d8+2 slashing",
+        "properties": ["versatile"]
+      }
+    },
+    {
+      "id": "fire_bomb",
+      "name": "Fire Bomb",
+      "category": "alchemy",
+      "description": "A volatile concoction that explodes on impact.",
+      "inputs": [
+        {"item_id": "empty_flask", "quantity": 1},
+        {"item_id": "oil", "quantity": 1},
+        {"item_id": "sulfur", "quantity": 1},
+        {"item_id": "cloth_scrap", "quantity": 1}
+      ],
+      "output": {
+        "item_id": "fire_bomb",
+        "quantity": 1,
+        "rarity": "uncommon"
+      },
+      "skill_check": {
+        "skill": "alchemy",
+        "dc": 15,
+        "critical_success_dc": 22,
+        "critical_success_bonus": "Bomb deals extra 1d6 fire damage",
+        "failure_effect": "Bomb detonates prematurely (1d6 fire damage to crafter)"
+      },
+      "craft_time": "20 minutes",
+      "required_tools": ["alchemy_kit"],
+      "required_facility": null,
+      "xp_reward": 35,
+      "effect": {
+        "damage": "2d6 fire",
+        "aoe_radius": "10ft",
+        "save": "DC 13 DEX for half"
+      }
+    },
+    {
+      "id": "enchant_weapon_fire",
+      "name": "Flame Enchantment",
+      "category": "enchanting",
+      "description": "Imbues a weapon with the power of flame.",
+      "inputs": [
+        {"item_id": "enchant_stone_fire", "quantity": 1},
+        {"item_id": "mana_dust", "quantity": 3},
+        {"item_id": "enchant_ink", "quantity": 1}
+      ],
+      "output": {
+        "item_id": "enchant_flame",
+        "quantity": 1,
+        "rarity": "rare"
+      },
+      "skill_check": {
+        "skill": "enchanting",
+        "dc": 18,
+        "critical_success_dc": 24,
+        "critical_success_bonus": "Enchantment deals extra 1d4 fire damage",
+        "failure_effect": "Enchantment stone is consumed with no result"
+      },
+      "craft_time": "2 hours",
+      "required_tools": ["enchanting_kit"],
+      "required_facility": "enchanting_altar",
+      "xp_reward": 60,
+      "effect": {
+        "applies_to": "weapon",
+        "bonus_damage": "1d6 fire",
+        "duration": "permanent",
+        "special": "Weapon glows faintly orange"
+      }
+    },
+    {
+      "id": "leather_armor_craft",
+      "name": "Leather Armor",
+      "category": "tailoring",
+      "description": "Standard leather armor, lightweight and flexible.",
+      "inputs": [
+        {"item_id": "leather_hide", "quantity": 3},
+        {"item_id": "thread", "quantity": 2},
+        {"item_id": "buckle", "quantity": 4}
+      ],
+      "output": {
+        "item_id": "leather_armor",
+        "quantity": 1,
+        "rarity": "common"
+      },
+      "skill_check": {
+        "skill": "tailoring",
+        "dc": 12,
+        "critical_success_dc": 18,
+        "critical_success_bonus": "Armor gains +1 AC",
+        "failure_effect": "Produces poorly fitted armor (-1 to stealth)"
+      },
+      "craft_time": "45 minutes",
+      "required_tools": ["needle_and_thread", "knife"],
+      "required_facility": "workbench",
+      "xp_reward": 25,
+      "effect": {
+        "ac_bonus": 2,
+        "stealth_disadvantage": false
+      }
+    }
+  ]
+}

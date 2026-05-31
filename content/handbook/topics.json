@@ -1,0 +1,187 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Player handbook topics for Canon Engine RPG",
+    "format": "Markdown-friendly text blocks for in-game help system"
+  },
+  "topics": {
+    "getting_started": {
+      "title": "Getting Started",
+      "sections": [
+        {
+          "header": "Welcome to Canon Engine",
+          "content": "Welcome, adventurer! Canon Engine is a text-based RPG where your choices shape the world. This guide will help you begin your journey."
+        },
+        {
+          "header": "Creating Your Character",
+          "content": "You'll choose a name, backstory, and starting stats. Stats range from 1-20:\n- **STR** (Strength): Physical power, melee damage\n- **DEX** (Dexterity): Agility, stealth, ranged attacks\n- **INT** (Intelligence): Magic power, knowledge, crafting\n- **CHA** (Charisma): Persuasion, intimidation, leadership\n- **CON** (Constitution): Health, endurance, poison resistance\n- **LCK** (Luck): Critical hits, loot quality, random events\n\nAverage stat is 10. Heroes typically have 12-16 in their primary stats."
+        },
+        {
+          "header": "Your First Steps",
+          "content": "Begin by exploring your starting location. Talk to NPCs, examine objects, and accept quests. Use 'look around' to see what's available, and 'help commands' for a full command list."
+        }
+      ]
+    },
+    "combat_basics": {
+      "title": "Combat Basics",
+      "sections": [
+        {
+          "header": "How Combat Works",
+          "content": "Combat is turn-based. Each round:\n1. Initiative is rolled (DEX-based)\n2. Each character takes their turn in order\n3. On your turn: move + action + bonus action\n4. Round ends when all characters have acted"
+        },
+        {
+          "header": "Attacking",
+          "content": "To attack, use 'attack [target]'. You roll d20 + attack bonus vs target's AC:\n- **Hit**: Roll damage dice + modifiers\n- **Critical Hit**: Natural 20, double damage dice\n- **Miss**: Attack fails to connect"
+        },
+        {
+          "header": "Defending",
+          "content": "Your AC (Armor Class) determines how hard you are to hit. Higher is better. Sources of AC:\n- Base: 10 + DEX modifier\n- Armor: Adds flat AC bonus\n- Shield: +2 AC\n- Spells and abilities: Various bonuses"
+        },
+        {
+          "header": "Status Effects",
+          "content": "Common status effects:\n- **Poisoned**: Disadvantage on attacks, damage over time\n- **Frightened**: Disadvantage, can't move closer to source\n- **Stunned**: Can't act for duration\n- **Prone**: Disadvantage on attacks, melee advantage against you\n- **Burning**: Fire damage each turn\n- **Frozen**: Speed halved, DEX disadvantage"
+        }
+      ]
+    },
+    "inventory": {
+      "title": "Inventory & Items",
+      "sections": [
+        {
+          "header": "Managing Your Inventory",
+          "content": "Use 'inventory' to see what you carry. Items have weight - exceeding your carry capacity slows you down. STR determines carry weight: STR × 15 = max lbs."
+        },
+        {
+          "header": "Item Rarity",
+          "content": "Items come in tiers of rarity:\n- **Dirt** (50%): Basic, common goods\n- **Common** (25%): Standard equipment\n- **Uncommon** (12%): Notable quality\n- **Rare** (7%): Powerful or unique\n- **Epic** (4%): Exceptional artifacts\n- **Legendary** (1.8%): Items of legend\n- **Mythical** (0.2%): Reality-shaping power"
+        },
+        {
+          "header": "Using Items",
+          "content": "Use 'use [item]' to consume or activate items. Equipment is auto-equipped when you 'equip [item]'. Some items require specific conditions (combat, rest, etc.)."
+        }
+      ]
+    },
+    "companions": {
+      "title": "Companions",
+      "sections": [
+        {
+          "header": "Party Companions",
+          "content": "NPCs can join your party through quests, reputation, or story events. Each companion has their own stats, abilities, and personality."
+        },
+        {
+          "header": "Companion Management",
+          "content": "Commands: 'companion info [name]', 'companion gear [name]', 'companion tactics [name]'\n\nCompanions can be set to: Aggressive, Defensive, Support, or Free Will AI."
+        },
+        {
+          "header": "Companion Morale",
+          "content": "Companions have morale affected by your decisions. High morale grants combat bonuses. Low morale may cause them to leave. Actions that align with their values increase morale."
+        }
+      ]
+    },
+    "quests": {
+      "title": "Quests",
+      "sections": [
+        {
+          "header": "Quest Types",
+          "content": "- **Fetch**: Retrieve an item from a location\n- **Kill**: Defeat specific enemies\n- **Deliver**: Transport items between locations\n- **Explore**: Discover new areas or secrets\n- **Escort**: Protect an NPC during travel\n- **Main Story**: Advance the saga narrative"
+        },
+        {
+          "header": "Quest Log",
+          "content": "Use 'quests' to see active quests. 'quest [name]' for details. Quests can have:\n- Optional objectives (bonus rewards)\n- Time limits (fail if expired)\n- Moral choices (affects reputation and story)"
+        },
+        {
+          "header": "Quest Rewards",
+          "content": "Rewards include: gold, XP, reputation, items, and story progression. Some quests unlock new areas, merchants, or abilities."
+        }
+      ]
+    },
+    "crafting": {
+      "title": "Crafting",
+      "sections": [
+        {
+          "header": "Crafting Basics",
+          "content": "Use 'craft [recipe]' when you have the required materials and tools. Crafting skills: Alchemy, Smithing, Tailoring, Enchanting, Survival."
+        },
+        {
+          "header": "Skill Checks",
+          "content": "Each recipe has a DC. Roll d20 + skill modifier:\n- **Success**: Craft the item\n- **Critical Success**: Enhanced item\n- **Failure**: Materials wasted (sometimes partial result)"
+        },
+        {
+          "header": "Gathering Materials",
+          "content": "Materials come from: defeating enemies (monster parts), gathering in wilderness (herbs, ore), purchasing from merchants, or finding in containers."
+        }
+      ]
+    },
+    "stealth": {
+      "title": "Stealth & Subterfuge",
+      "sections": [
+        {
+          "header": "Stealth Mechanics",
+          "content": "Use 'hide' to attempt stealth. Roll d20 + DEX (Stealth) vs enemy Perception. While hidden:\n- Advantage on attacks (sneak attack bonus)\n- Can bypass enemies\n- Can pickpocket or eavesdrop"
+        },
+        {
+          "header": "Stealth Modifiers",
+          "content": "Bonus: darkness (+2), distractions (+2), cover (+2), rain (+1)\nPenalty: bright light (-2), heavy armor (-3), running (-2), open terrain (-2)"
+        },
+        {
+          "header": "Crime & Consequences",
+          "content": "Committing crimes (theft, assault, murder) affects reputation. Witnesses report crimes. Bounties are placed. Guards will confront you. The Thieves' Circle can help with legal troubles... for a price."
+        }
+      ]
+    },
+    "economy": {
+      "title": "Economy & Trade",
+      "sections": [
+        {
+          "header": "Currency",
+          "content": "Gold is the standard currency. 1 gold = 10 silver = 100 copper. Higher denominations exist in wealthy areas."
+        },
+        {
+          "header": "Buying & Selling",
+          "content": "Merchants buy at ~50% base value and sell at ~110%. Haggle skill and reputation modify prices. Different merchants specialize in different goods."
+        },
+        {
+          "header": "Trade Routes",
+          "content": "Buy low in one region, sell high in another. Prices vary by location. Rare goods command premiums in areas that can't produce them. Watch for bandits on trade routes!"
+        }
+      ]
+    },
+    "death_system": {
+      "title": "Death & Consequences",
+      "sections": [
+        {
+          "header": "When You Fall",
+          "content": "At 0 HP, you're incapacitated. At negative CON score, you're dead. Party members can stabilize you with DC 10 Medicine check."
+        },
+        {
+          "header": "Resurrection",
+          "content": "Death isn't always permanent. Options include:\n- Temple resurrection (expensive, reputation-gated)\n- Rare resurrection items\n- Quest-based revival\n- Dark bargains with powerful entities"
+        },
+        {
+          "header": "Death Consequences",
+          "content": "Each death has lasting effects:\n- First death: Minor stat penalty (temporary)\n- Subsequent deaths: Increasing penalties\n- Permadeath mode: Game over (optional hardcore mode)\n- Some deaths change the story permanently"
+        }
+      ]
+    },
+    "commands_reference": {
+      "title": "Commands Reference",
+      "sections": [
+        {
+          "header": "Movement & Exploration",
+          "content": "- 'look' / 'l': Examine surroundings\n- 'go [direction]' / 'n/s/e/w': Move\n- 'enter [location]': Enter a building/dungeon\n- 'examine [object]': Inspect something\n- 'search': Search for hidden things"
+        },
+        {
+          "header": "Combat Commands",
+          "content": "- 'attack [target]': Melee/ranged attack\n- 'cast [spell] [target]': Use magic\n- 'defend': Take defensive stance (+2 AC)\n- 'flee': Attempt to escape combat\n- 'use [item]': Use an item in combat"
+        },
+        {
+          "header": "Interaction",
+          "content": "- 'talk [npc]': Start conversation\n- 'trade [merchant]': Open shop\n- 'accept [quest]': Accept a quest\n- 'give [item] [npc]': Give item to NPC\n- 'craft [recipe]': Craft an item"
+        },
+        {
+          "header": "Character Management",
+          "content": "- 'stats': View character stats\n- 'inventory' / 'inv': View inventory\n- 'equip [item]': Equip gear\n- 'skills': View skill tree\n- 'map': View current map\n- 'save': Save game\n- 'help [topic]': Get help on a topic"
+        }
+      ]
+    }
+  }
+}

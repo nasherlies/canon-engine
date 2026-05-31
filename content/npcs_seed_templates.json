@@ -1,0 +1,161 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "NPC generation templates for Canon Engine RPG",
+    "note": "Used by the engine to procedurally generate NPCs with consistent personality"
+  },
+  "roles": [
+    {
+      "id": "merchant",
+      "name": "Merchant",
+      "description": "Buys and sells goods. May have connections to trade networks.",
+      "stat_priority": ["CHA", "INT", "LCK"],
+      "base_stats": {"str": 8, "dex": 10, "con": 10, "int": 13, "cha": 14, "lck": 12},
+      "inventory_type": "shop",
+      "quest_giver_chance": 0.4,
+      "locations": ["market", "town_square", "shop", "road"],
+      "personality_pool": ["shrewd", "generous", "anxious", "boastful", "secretive", "cheerful", "grumpy"],
+      "speech_styles": [
+        "Punctuates sentences with trade terms. 'I'll give you a fair margin on that.'",
+        "Overly enthusiastic about their wares. Everything is 'the finest quality!'",
+        "Speaks slowly and deliberately, weighing every word like gold."
+      ]
+    },
+    {
+      "id": "guard",
+      "name": "Guard",
+      "description": "Protector of the peace. Enforces local laws.",
+      "stat_priority": ["STR", "CON", "WIS"],
+      "base_stats": {"str": 14, "dex": 12, "con": 14, "int": 10, "cha": 10, "lck": 8},
+      "inventory_type": "limited",
+      "quest_giver_chance": 0.3,
+      "locations": ["gate", "barracks", "patrol_route", "market"],
+      "personality_pool": ["dutiful", "corrupt", "weary", "suspicious", "friendly", "by_the_book"],
+      "speech_styles": [
+        "Clipped, military-style speech. 'State your business.'",
+        "Tries to sound authoritative but clearly bored. 'Move along... please.'",
+        "Friendly but watchful. 'Haven't seen you around here before.'"
+      ]
+    },
+    {
+      "id": "innkeeper",
+      "name": "Innkeeper",
+      "description": "Runs the local inn. Knows all the local gossip.",
+      "stat_priority": ["CHA", "CON", "INT"],
+      "base_stats": {"str": 10, "dex": 10, "con": 12, "int": 12, "cha": 14, "lck": 10},
+      "inventory_type": "food_and_drink",
+      "quest_giver_chance": 0.6,
+      "locations": ["inn", "tavern"],
+      "personality_pool": ["jovial", "nosy", "warm", "sardonic", "maternal", "worldly"],
+      "speech_styles": [
+        "Loud and welcoming. 'Come in, come in! You look like you could use a drink!'",
+        "Speaks in a conspiratorial whisper. 'I hear things... things you might want to know.'",
+        "Motherly/fatherly tone. 'You look thin, dear. Sit down, eat something.'"
+      ]
+    },
+    {
+      "id": "scholar",
+      "name": "Scholar",
+      "description": "Academic researcher. Seeks knowledge above all.",
+      "stat_priority": ["INT", "WIS", "CHA"],
+      "base_stats": {"str": 6, "dex": 8, "con": 10, "int": 16, "cha": 12, "lck": 10},
+      "inventory_type": "books_and_scroll",
+      "quest_giver_chance": 0.7,
+      "locations": ["library", "tower", "academy", "ruins"],
+      "personality_pool": ["absent_minded", "intense", "pedantic", "excitable", "melancholic", "arrogant"],
+      "speech_styles": [
+        "Uses unnecessarily complex vocabulary. 'Your proposition is... most intriguing, albeit flawed.'",
+        "Distracted, trails off mid-sentence. 'Yes, the ruins are— oh, did you see that bird?'",
+        "Passionate and rapid. 'FASCINATING! Tell me everything! No wait, let me get my quill—'"
+      ]
+    },
+    {
+      "id": "farmer",
+      "name": "Farmer",
+      "description": "Hardworking laborer. Knows the land well.",
+      "stat_priority": ["STR", "CON", "WIS"],
+      "base_stats": {"str": 14, "dex": 10, "con": 14, "int": 8, "cha": 10, "lck": 10},
+      "inventory_type": "produce",
+      "quest_giver_chance": 0.5,
+      "locations": ["farm", "village", "field", "market"],
+      "personality_pool": ["simple", "hardworking", "superstitious", "kind", "bitter", "wise"],
+      "speech_styles": [
+        "Plain-spoken and direct. 'Ain't got time for fancy talk.'",
+        "Superstitious. 'Bad things been happenin' since the moon turned red.'",
+        "Quiet wisdom. 'My granddaddy always said...'"
+      ]
+    },
+    {
+      "id": "rogue",
+      "name": "Rogue",
+      "description": "Shady character with connections to the underworld.",
+      "stat_priority": ["DEX", "CHA", "LCK"],
+      "base_stats": {"str": 10, "dex": 16, "con": 10, "int": 12, "cha": 14, "lck": 14},
+      "inventory_type": "black_market",
+      "quest_giver_chance": 0.6,
+      "locations": ["alley", "undercity", "tavern", "back_room"],
+      "personality_pool": ["cunning", "charming", "paranoid", "loyal", "amoral", "philosophical"],
+      "speech_styles": [
+        "Casual and streetwise. 'Look, I ain't gonna sugarcoat it for ya.'",
+        "Mysterious and evasive. 'Let's just say I know people who know people.'",
+        "Darkly humorous. 'The good news is you're still alive. The bad news...'"
+      ]
+    },
+    {
+      "id": "priest",
+      "name": "Priest",
+      "description": "Religious figure. Provides healing and spiritual guidance.",
+      "stat_priority": ["WIS", "CHA", "CON"],
+      "base_stats": {"str": 8, "dex": 8, "con": 12, "int": 12, "cha": 14, "lck": 10},
+      "inventory_type": "religious",
+      "quest_giver_chance": 0.6,
+      "locations": ["temple", "shrine", "church", "hospital"],
+      "personality_pool": ["pious", "doubting", "compassionate", "zealous", "humble", "judgmental"],
+      "speech_styles": [
+        "Formal and blessing-heavy. 'May the light guide your path, traveler.'",
+        "Doubting, questioning. 'I... I want to believe, but the evidence...'",
+        "Compassionate. 'All are welcome here. Speak your troubles.'"
+      ]
+    },
+    {
+      "id": "blacksmith",
+      "name": "Blacksmith",
+      "description": "Crafts weapons and armor. Strong and practical.",
+      "stat_priority": ["STR", "CON", "DEX"],
+      "base_stats": {"str": 16, "dex": 12, "con": 14, "int": 10, "cha": 10, "lck": 8},
+      "inventory_type": "weapons_and_armor",
+      "quest_giver_chance": 0.4,
+      "locations": ["forge", "smithy", "workshop"],
+      "personality_pool": ["proud", "gruff", "perfectionist", "quiet", "boastful", "humble"],
+      "speech_styles": [
+        "Terse and to the point. 'What do you need? I'm busy.'",
+        "Proud craftsman. 'Feel that edge? That's MY work.'",
+        "Gruff but caring. 'Don't go getting yourself killed, eh?'"
+      ]
+    }
+  ],
+  "personality_traits": {
+    "positive": ["brave", "generous", "loyal", "wise", "cheerful", "patient", "honest", "compassionate"],
+    "negative": ["greedy", "cowardly", "cruel", "arrogant", "paranoid", "vain", "lazy", "bitter"],
+    "neutral": ["curious", "cautious", "impulsive", "methodical", "traditional", "eccentric", "stoic", "playful"]
+  },
+  "appearance_templates": {
+    "build": ["thin", "average", "stocky", "muscular", "heavy", "gaunt", "tall", "short"],
+    "hair": ["black", "brown", "blonde", "red", "grey", "white", "bald", "braided"],
+    "distinguishing_features": [
+      "Scar across the left cheek",
+      "Missing the tip of the right ear",
+      "Eyes of two different colors",
+      "Always wears a pendant",
+      "Tattoo of a serpent on the neck",
+      "Walks with a slight limp",
+      "Burn marks on both hands",
+      "Piercing green eyes that seem to glow"
+    ]
+  },
+  "name_pools": {
+    "male": ["Gareth", "Aldric", "Theron", "Magnus", "Roland", "Darius", "Corvin", "Edrin", "Baelor", "Fenwick"],
+    "female": ["Lyra", "Sera", "Miriel", "Thessa", "Elara", "Vera", "Kira", "Ashlyn", "Brenna", "Isolde"],
+    "surname": ["Ashvale", "Blackwood", "Ironforge", "Dawnquill", "Shadowmere", "Brightwater", "Stoneheart", "Hawkwind", "Darkhollow", "Silverstream"]
+  }
+}

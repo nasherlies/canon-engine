@@ -1,0 +1,220 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Saga seed framework for Canon Engine RPG narrative engine",
+    "note": "Provides the backbone structure for AI-driven storytelling"
+  },
+  "saga_spine": {
+    "description": "The main narrative arc. Each phase has escalation triggers, available beats, and consequence hooks.",
+    "phases": [
+      {
+        "id": "arrival",
+        "name": "Arrival",
+        "order": 1,
+        "duration_beats": [3, 6],
+        "description": "The player arrives in the world and establishes themselves. Low stakes, high exploration.",
+        "tone": "hopeful, curious, low-threat",
+        "available_beats": [
+          {"id": "first_quest", "name": "The First Job", "type": "tutorial", "weight": 10},
+          {"id": "local_problem", "name": "A Local Problem", "type": "fetch_kill", "weight": 8},
+          {"id": "meet_factions", "name": "Faction Introductions", "type": "social", "weight": 6},
+          {"id": "strange_signs", "name": "Strange Signs", "type": "foreshadowing", "weight": 4}
+        ],
+        "escalation_triggers": {
+          "time_threshold": 10,
+          "reputation_threshold": 30,
+          "quest_count": 5,
+          "story_flag": "arrival_complete"
+        },
+        "consequences": {
+          "positive": ["reputation_boost", "ally_gain", "item_reward"],
+          "negative": ["minor_enemy_spawn", "reputation_loss"],
+          "narrative": ["world_state_change", "npc_dialogue_update"]
+        }
+      },
+      {
+        "id": "rising_pressure",
+        "name": "Rising Pressure",
+        "order": 2,
+        "duration_beats": [4, 8],
+        "description": "Threats escalate. The player faces real danger. Factions become relevant. Choices matter more.",
+        "tone": "tense, dangerous, consequential",
+        "available_beats": [
+          {"id": "betrayal", "name": "A Betrayal", "type": "plot_twist", "weight": 5},
+          {"id": "faction_conflict", "name": "Faction Conflict", "type": "political", "weight": 7},
+          {"id": "dungeon_delve", "name": "The Deep Place", "type": "exploration", "weight": 8},
+          {"id": "dark_revelation", "name": "Dark Revelation", "type": "lore", "weight": 6},
+          {"id": "ally_in_danger", "name": "Ally in Peril", "type": "rescue", "weight": 7}
+        ],
+        "escalation_triggers": {
+          "time_threshold": 20,
+          "reputation_threshold": 60,
+          "quest_count": 12,
+          "boss_defeated": 1,
+          "story_flag": "pressure_peak"
+        },
+        "consequences": {
+          "positive": ["major_ally", "rare_item", "new_area_unlock"],
+          "negative": ["npc_death", "area_lockout", "bounty_placed"],
+          "narrative": ["backstory_reveal", "world_event"]
+        }
+      },
+      {
+        "id": "convergence",
+        "name": "Convergence",
+        "order": 3,
+        "duration_beats": [3, 6],
+        "description": "Storylines merge. The true threat becomes clear. Allies and enemies are defined. The player must choose sides.",
+        "tone": "dramatic, revelatory, high-stakes",
+        "available_beats": [
+          {"id": "alliance_formed", "name": "The Alliance", "type": "political", "weight": 6},
+          {"id": "enemy_revealed", "name": "The True Enemy", "type": "revelation", "weight": 8},
+          {"id": "sacrifice_choice", "name": "The Sacrifice", "type": "moral_dilemma", "weight": 5},
+          {"id": "power_awakens", "name": "Power Awakens", "type": "character_growth", "weight": 7},
+          {"id": "world_shaken", "name": "World Shaken", "type": "world_event", "weight": 6}
+        ],
+        "escalation_triggers": {
+          "boss_defeated": 2,
+          "story_flag": "convergence_complete",
+          "faction_ally": true,
+          "major_choice_made": true
+        },
+        "consequences": {
+          "positive": ["legendary_item", "faction_leadership", "world_save"],
+          "negative": ["companion_loss", "area_destroyed", "permanent_stat_change"],
+          "narrative": ["climax_setup", "final_villain_motivation"]
+        }
+      },
+      {
+        "id": "reckoning",
+        "name": "Reckoning",
+        "order": 4,
+        "duration_beats": [2, 4],
+        "description": "The climax. All threads converge. The final confrontation. Maximum tension and consequence.",
+        "tone": "epic, desperate, heroic",
+        "available_beats": [
+          {"id": "final_assault", "name": "The Final Assault", "type": "combat", "weight": 10},
+          {"id": "dark_hour", "name": "The Darkest Hour", "type": "crisis", "weight": 7},
+          {"id": "last_stand", "name": "The Last Stand", "type": "defense", "weight": 6},
+          {"id": "truth_revealed", "name": "The Final Truth", "type": "revelation", "weight": 5}
+        ],
+        "escalation_triggers": {
+          "final_boss_defeated": true,
+          "story_flag": "reckoning_complete"
+        },
+        "consequences": {
+          "positive": ["world_saved", "legend_status", "epilogue_good"],
+          "negative": ["world_changed", "loss_mourned", "epilogue_bittersweet"],
+          "narrative": ["resolution", "hook_forward"]
+        }
+      },
+      {
+        "id": "hook_forward",
+        "name": "Hook Forward",
+        "order": 5,
+        "duration_beats": [1, 2],
+        "description": "The aftermath. Seeds for the next saga. The world continues. New threats emerge.",
+        "tone": "reflective, hopeful, mysterious",
+        "available_beats": [
+          {"id": "new_threat", "name": "A New Threat", "type": "foreshadowing", "weight": 8},
+          {"id": "reward_ceremony", "name": "The Reward", "type": "resolution", "weight": 6},
+          {"id": "mysterious_message", "name": "The Message", "type": "hook", "weight": 7},
+          {"id": "world_changed", "name": "A Changed World", "type": "world_state", "weight": 5}
+        ]
+      }
+    ]
+  },
+  "pods": {
+    "description": "Self-contained story modules that can be inserted into any phase. Each pod has entry conditions, beats, and exit states.",
+    "entries": [
+      {
+        "id": "the_lost_child",
+        "name": "The Lost Child",
+        "phases": ["arrival", "rising_pressure"],
+        "entry_trigger": {"location": "village", "time": "day", "quest_count_min": 1},
+        "beats": [
+          "A villager begs you to find their missing child.",
+          "Tracks lead to the forest. Signs of a struggle.",
+          "The child is found hiding from wolves. Or taken by goblins.",
+          "Resolution: rescue the child, or find only evidence of their fate."
+        ],
+        "exit_states": {
+          "success": {"reputation": 10, "reward": "family_heirloom", "companion_potential": true},
+          "failure": {"reputation": -5, "narrative_hook": "vengeance_quest"},
+          "partial": {"reputation": 3, "narrative_hook": "guilt_subplot"}
+        }
+      },
+      {
+        "id": "the_haunted_mine",
+        "name": "The Haunted Mine",
+        "phases": ["rising_pressure", "convergence"],
+        "entry_trigger": {"location": "mountains", "min_reputation": 20},
+        "beats": [
+          "Miners report strange sounds from the abandoned shaft.",
+          "Investigation reveals undead presence.",
+          "The source is a cursed artifact buried deep.",
+          "Choice: destroy it, take it, or seal the mine."
+        ],
+        "exit_states": {
+          "destroy": {"reputation_scholars": 10, "xp": 200},
+          "take": {"item": "cursed_artifact", "reputation_iron_guild": -10, "narrative_hook": "corruption_arc"},
+          "seal": {"reputation_iron_guild": 5, "reputation_scholars": 5, "area_locked": "haunted_mine"}
+        }
+      },
+      {
+        "id": "the_double_agent",
+        "name": "The Double Agent",
+        "phases": ["rising_pressure", "convergence"],
+        "entry_trigger": {"reputation_thieves_circle": 25, "quest_count_min": 8},
+        "beats": [
+          "A trusted NPC is revealed to be working for the enemy.",
+          "Evidence can be gathered through investigation.",
+          "Confrontation leads to confession or fight.",
+          "The information reveals a larger conspiracy."
+        ],
+        "exit_states": {
+          "expose": {"reputation_thieves_circle": 15, "reputation_iron_guild": 5},
+          "forgive": {"companion_gain": "reformed_spy", "reputation_thieves_circle": -5},
+          "blackmail": {"gold_income": "monthly", "narrative_hook": "moral_compromise"}
+        }
+      }
+    ]
+  },
+  "consequence_guide": {
+    "description": "How player actions ripple through the world",
+    "categories": {
+      "reputation": {
+        "positive_thresholds": [25, 50, 75, 95],
+        "negative_thresholds": [-25, -50, -75, -95],
+        "effects": ["shop_prices", "quest_availability", "npc_attitude", "faction_access"]
+      },
+      "moral_alignment": {
+        "spectrum": ["lawful_good", "neutral_good", "chaotic_good", "lawful_neutral", "true_neutral", "chaotic_neutral", "lawful_evil", "neutral_evil", "chaotic_evil"],
+        "shift_triggers": ["quest_choices", "combat_initiation", "npc_interactions", "faction_alignment"]
+      },
+      "world_state": {
+        "trackable_events": ["boss_defeated", "area_cleared", "faction_leader_changed", "npc_alive_status", "trade_route_status"],
+        "cascade_rules": "Each event triggers updates to related NPCs, quests, and locations"
+      }
+    }
+  },
+  "flag_patterns": {
+    "description": "Standard story flags used by the narrative engine",
+    "patterns": {
+      "quest_flag": "quest_{quest_id}_{state}",
+      "boss_flag": "boss_{boss_id}_{state}",
+      "faction_flag": "faction_{faction_id}_{relationship}",
+      "npc_flag": "npc_{npc_id}_{state}",
+      "area_flag": "area_{area_id}_{state}",
+      "story_flag": "story_{phase}_{beat}",
+      "choice_flag": "choice_{context}_{decision}",
+      "event_flag": "event_{event_id}_{state}"
+    },
+    "states": {
+      "quest": ["available", "active", "completed", "failed", "abandoned"],
+      "boss": ["alive", "defeated", "escaped", "reformed"],
+      "npc": ["alive", "dead", "missing", "hostile", "allied", "romanced"],
+      "area": ["locked", "unlocked", "cleared", "destroyed", "corrupted"]
+    }
+  }
+}

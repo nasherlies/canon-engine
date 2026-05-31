@@ -1,0 +1,179 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Trap definitions for Canon Engine RPG",
+    "difficulty_scale": "DC 8 (trivial) to DC 25 (nearly impossible)"
+  },
+  "traps": [
+    {
+      "id": "tripwire_snare",
+      "name": "Tripwire Snare",
+      "type": "mechanical",
+      "dc": 10,
+      "detection_dc": 12,
+      "damage": "1d4 bludgeoning",
+      "status_effect": {
+        "name": "Prone",
+        "duration": 1,
+        "description": "Target falls prone"
+      },
+      "description": "A thin wire stretched across the path. Tripping it sends the victim sprawling.",
+      "disarm_dc": 10,
+      "locations": ["dungeon", "forest", "ruins"],
+      "craftable": true,
+      "craft_recipe": "tripwire_snare_craft"
+    },
+    {
+      "id": "poison_dart_trap",
+      "name": "Poison Dart Trap",
+      "type": "mechanical",
+      "dc": 14,
+      "detection_dc": 15,
+      "damage": "1d6 piercing + 1d6 poison",
+      "status_effect": {
+        "name": "Poisoned",
+        "duration": 3,
+        "save": "DC 13 CON negates poison",
+        "description": "Disadvantage on attack rolls and ability checks"
+      },
+      "description": "A pressure plate triggers a volley of tiny poison-tipped darts from the wall.",
+      "disarm_dc": 14,
+      "locations": ["dungeon", "tomb", "ruins"],
+      "craftable": true,
+      "craft_recipe": "poison_dart_trap_craft"
+    },
+    {
+      "id": "pit_trap",
+      "name": "Pit Trap",
+      "type": "mechanical",
+      "dc": 13,
+      "detection_dc": 14,
+      "damage": "2d6 bludgeoning (fall)",
+      "status_effect": {
+        "name": "Trapped",
+        "description": "Stuck in a 10ft deep pit. DC 13 Athletics to climb out.",
+        "escape_dc": 13
+      },
+      "description": "A concealed pit covered with a thin layer of dirt and debris.",
+      "disarm_dc": null,
+      "locations": ["dungeon", "forest", "cave"],
+      "craftable": false
+    },
+    {
+      "id": "fire_glyph",
+      "name": "Fire Glyph",
+      "type": "magical",
+      "dc": 16,
+      "detection_dc": 17,
+      "damage": "3d8 fire",
+      "status_effect": {
+        "name": "Burning",
+        "duration": 2,
+        "damage_per_turn": "1d4 fire",
+        "save": "DC 13 DEX action to extinguish",
+        "description": "Takes fire damage each turn until extinguished"
+      },
+      "description": "A glowing rune inscribed on the floor. When triggered, it erupts in a blast of flame.",
+      "disarm_dc": 16,
+      "locations": ["dungeon", "tower", "temple"],
+      "craftable": true,
+      "craft_recipe": "fire_glyph_craft",
+      "requires_magic": true
+    },
+    {
+      "id": "frost_rune",
+      "name": "Frost Rune",
+      "type": "magical",
+      "dc": 15,
+      "detection_dc": 16,
+      "damage": "2d8 cold",
+      "status_effect": {
+        "name": "Frozen",
+        "duration": 2,
+        "save": "DC 14 CON reduces to Slowed",
+        "description": "Speed halved, disadvantage on DEX saves and attacks"
+      },
+      "description": "An icy rune that flash-freezes anything that crosses its threshold.",
+      "disarm_dc": 15,
+      "locations": ["dungeon", "tower", "crypt"],
+      "craftable": true,
+      "craft_recipe": "frost_rune_craft",
+      "requires_magic": true
+    },
+    {
+      "id": "net_trap",
+      "name": "Net Trap",
+      "type": "mechanical",
+      "dc": 12,
+      "detection_dc": 13,
+      "damage": "0",
+      "status_effect": {
+        "name": "Restrained",
+        "duration": null,
+        "escape_dc": 14,
+        "description": "Caught in a heavy net. DC 14 STR or DEX check to escape."
+      },
+      "description": "A weighted net drops from above, ensnaring the victim.",
+      "disarm_dc": 12,
+      "locations": ["forest", "dungeon", "bandit_camp"],
+      "craftable": true,
+      "craft_recipe": "net_trap_craft"
+    },
+    {
+      "id": "alarm_trap",
+      "name": "Alarm Trap",
+      "type": "mechanical",
+      "dc": 11,
+      "detection_dc": 13,
+      "damage": "0",
+      "status_effect": {
+        "name": "Alerted",
+        "description": "Alerts nearby enemies to the party's presence. Stealth advantage lost."
+      },
+      "description": "A string of bells or chimes that ring loudly when disturbed.",
+      "disarm_dc": 11,
+      "locations": ["dungeon", "bandit_camp", "tower"],
+      "craftable": true,
+      "craft_recipe": "alarm_trap_craft"
+    },
+    {
+      "id": "necrotic_circle",
+      "name": "Necrotic Circle",
+      "type": "magical",
+      "dc": 17,
+      "detection_dc": 18,
+      "damage": "4d8 necrotic",
+      "status_effect": {
+        "name": "Necrotic Wound",
+        "duration": 5,
+        "effect": "Max HP reduced by damage taken. Cannot be healed above reduced max.",
+        "removal": "Greater Restoration or similar magic"
+      },
+      "description": "A circle of dark runes that drains life force from anyone who steps inside.",
+      "disarm_dc": 18,
+      "locations": ["crypt", "temple", "shadow_realm"],
+      "craftable": false,
+      "requires_magic": true,
+      "boss_encounter_trap": true
+    },
+    {
+      "id": "caltrops",
+      "name": "Caltrops",
+      "type": "mechanical",
+      "dc": 8,
+      "detection_dc": 10,
+      "damage": "1d4 piercing",
+      "status_effect": {
+        "name": "Slowed",
+        "duration": null,
+        "description": "Speed reduced by 10ft until healed",
+        "save": "DC 10 DEX to avoid"
+      },
+      "description": "Scattered metal spikes that puncture feet and slow movement.",
+      "disarm_dc": 8,
+      "locations": ["dungeon", "bandit_camp", "ruins"],
+      "craftable": true,
+      "craft_recipe": "caltrops_craft"
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Faction definitions for Canon Engine RPG",
+    "reputation_scale": {
+      "hated": {"min": -100, "max": -51},
+      "disliked": {"min": -50, "max": -21},
+      "neutral": {"min": -20, "max": 20},
+      "friendly": {"min": 21, "max": 50},
+      "allied": {"min": 51, "max": 80},
+      "revered": {"min": 81, "max": 100}
+    }
+  },
+  "factions": [
+    {
+      "id": "iron_guild",
+      "name": "The Iron Guild",
+      "description": "A powerful consortium of warriors, mercenaries, and soldiers. They value strength, honor, and martial prowess above all else.",
+      "motto": "Steel speaks louder than words.",
+      "base_reputation": 0,
+      "alignment_tendency": "lawful_neutral",
+      "headquarters": "iron_fortress",
+      "leader": {
+        "name": "Commander Theron Ashvale",
+        "title": "Grand Marshal"
+      },
+      "tiers": [
+        {"name": "Outsider", "reputation_required": -100, "benefits": [], "description": "Unknown or hostile to the guild"},
+        {"name": "Recruit", "reputation_required": 0, "benefits": ["basic_training_access"], "description": "Accepted into basic training"},
+        {"name": "Soldier", "reputation_required": 25, "benefits": ["weapon_discount_10", "combat_quests"], "description": "Proven combatant"},
+        {"name": "Veteran", "reputation_required": 50, "benefits": ["armor_discount_15", "elite_quests", "guild_quarter_access"], "description": "Battle-hardened warrior"},
+        {"name": "Champion", "reputation_required": 75, "benefits": ["master_training", "legendary_weapon_access", "command_respect"], "description": "Among the guild's finest"},
+        {"name": "Marshal", "reputation_required": 95, "benefits": ["full_armory_access", "command_troops", "faction_leader_audience"], "description": "Commands armies in the guild's name"}
+      ],
+      "rival_factions": ["thieves_circle"],
+      "allied_factions": ["merchant_union"],
+      "joinable": true,
+      "join_requirements": {
+        "minimum_level": 3,
+        "stat_requirement": {"str": 12},
+        "quest": "prove_your_mettle"
+      }
+    },
+    {
+      "id": "thieves_circle",
+      "name": "The Thieves' Circle",
+      "description": "A shadowy network of rogues, smugglers, and information brokers. They operate in the grey areas of society and deal in secrets.",
+      "motto": "Every lock has a key. Every person has a price.",
+      "base_reputation": -10,
+      "alignment_tendency": "chaotic_neutral",
+      "headquarters": "undercity_hideout",
+      "leader": {
+        "name": "The Faceless",
+        "title": "Shadowmaster"
+      },
+      "tiers": [
+        {"name": "Unknown", "reputation_required": -100, "benefits": [], "description": "Not on their radar"},
+        {"name": "Contact", "reputation_required": 0, "benefits": ["fence_access"], "description": "Known associate"},
+        {"name": "Associate", "reputation_required": 25, "benefits": ["lockpick_discount", "heist_quests"], "description": "Trusted enough for jobs"},
+        {"name": "Operative", "reputation_required": 50, "benefits": ["blackmarket_access", "poison_access", "safe_house_access"], "description": "Full member of the Circle"},
+        {"name": "Shadow", "reputation_required": 75, "benefits": ["assassination_quests", "master_stealth_training", "spy_network_access"], "description": "Elite operative"},
+        {"name": "Shadowmaster", "reputation_required": 95, "benefits": ["full_network_access", "faction_control_options"], "description": "Inner circle leadership"}
+      ],
+      "rival_factions": ["iron_guild", "scholars_order"],
+      "allied_factions": [],
+      "joinable": true,
+      "join_requirements": {
+        "minimum_level": 5,
+        "stat_requirement": {"dex": 14},
+        "quest": "the_initiation",
+        "hidden": true,
+        "discovery_method": "Speak to Whisper in the undercity"
+      }
+    },
+    {
+      "id": "scholars_order",
+      "name": "The Scholars' Order",
+      "description": "An ancient order dedicated to the preservation and pursuit of knowledge. They maintain libraries, study the arcane, and seek to understand the world's mysteries.",
+      "motto": "Knowledge is the light that banishes darkness.",
+      "base_reputation": 5,
+      "alignment_tendency": "neutral_good",
+      "headquarters": "great_library",
+      "leader": {
+        "name": "Arch-Sage Lyria Dawnquill",
+        "title": "Keeper of Scrolls"
+      },
+      "tiers": [
+        {"name": "Visitor", "reputation_required": -100, "benefits": ["library_basic_access"], "description": "May browse basic texts"},
+        {"name": "Student", "reputation_required": 0, "benefits": ["library_extended_access", "basic_spell_training"], "description": "Enrolled in studies"},
+        {"name": "Scholar", "reputation_required": 25, "benefits": ["spell_discount", "research_quests", "identification_services"], "description": "Recognized academic"},
+        {"name": "Sage", "reputation_required": 50, "benefits": ["advanced_spell_access", "lore_quests", "enchanting_access"], "description": "Accomplished researcher"},
+        {"name": "Lorekeeper", "reputation_required": 75, "benefits": ["rare_spell_access", "artifact_study", "secret_archive_access"], "description": "Guardian of rare knowledge"},
+        {"name": "Arch-Sage", "reputation_required": 95, "benefits": ["full_archive_access", "forbidden_knowledge", "faction_leadership"], "description": "Among the wisest living beings"}
+      ],
+      "rival_factions": [],
+      "allied_factions": ["merchant_union"],
+      "joinable": true,
+      "join_requirements": {
+        "minimum_level": 3,
+        "stat_requirement": {"int": 14},
+        "quest": "the_first_thesis"
+      }
+    },
+    {
+      "id": "merchant_union",
+      "name": "The Merchant Union",
+      "description": "A powerful trade guild that controls commerce across the realm. They value wealth, negotiation, and economic influence.",
+      "motto": "Gold flows where wisdom guides.",
+      "base_reputation": 0,
+      "alignment_tendency": "lawful_neutral",
+      "headquarters": "trade_hall",
+      "leader": {
+        "name": "Guildmistress Selene Blackwood",
+        "title": "Trade Princess"
+      },
+      "tiers": [
+        {"name": "Customer", "reputation_required": -100, "benefits": [], "description": "Regular shopper"},
+        {"name": "Trader", "reputation_required": 0, "benefits": ["buy_discount_5", "trade_quests"], "description": "Registered trader"},
+        {"name": "Merchant", "reputation_required": 25, "benefits": ["buy_discount_10", "sell_bonus_10", "caravan_access"], "description": "Licensed merchant"},
+        {"name": "Broker", "reputation_required": 50, "benefits": ["buy_discount_15", "rare_goods_access", "trade_route_quests"], "description": "Established broker"},
+        {"name": "Magnate", "reputation_required": 75, "benefits": ["buy_discount_20", "exclusive_auctions", "economic_influence"], "description": "Economic powerhouse"},
+        {"name": "Trade Prince", "reputation_required": 95, "benefits": ["monopoly_rights", "faction_control", "unlimited_credit"], "description": "Controls vast trade networks"}
+      ],
+      "rival_factions": ["thieves_circle"],
+      "allied_factions": ["iron_guild", "scholars_order"],
+      "joinable": true,
+      "join_requirements": {
+        "minimum_level": 2,
+        "stat_requirement": {"cha": 12},
+        "quest": "the_first_deal"
+      }
+    }
+  ]
+}

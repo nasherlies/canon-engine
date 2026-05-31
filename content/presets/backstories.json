@@ -1,0 +1,114 @@
+{
+  "knight": [
+    {
+      "title": "The Exile's Oath",
+      "text": "Once a champion of the Silver Order, you were stripped of rank after refusing to execute prisoners of war. Branded a traitor, you wandered the frontier — until a dying messenger pressed a sealed letter into your hands and whispered: 'The kingdom falls without you.' Now you ride toward a capital that wants you dead, carrying a secret that could save them all."
+    },
+    {
+      "title": "The Last Wall",
+      "text": "You were stationed at Fort Greywall, the last bastion against the Blighted Horde. When the walls fell, you alone survived — pulled from the rubble by a mysterious healer. Your body is scarred, your sword arm still strong, and the Horde is advancing. Someone must stand. Why not you?"
+    },
+    {
+      "title": "The Errant Knight",
+      "text": "You took a vow to find the Holy Grail of Aethermoor, a relic lost for centuries. Your squire left you. Your horse died in the Ashlands. Your armor is dented and your faith is shaken. But in every tavern, in every village, you ask: 'Have you seen it?' And one day, someone will say yes."
+    }
+  ],
+  "rogue": [
+    {
+      "title": "The Debt Collector",
+      "text": "The Thieves' Guild calls in your marker: infiltrate the Duke's vault and steal the Crimson Ledger, a book that names every corrupt official in the province. Fail, and your past — every job, every alias — gets mailed to the City Watch. Success means freedom. The Duke's vault has never been breached."
+    },
+    {
+      "title": "The Double Cross",
+      "text": "You were hired to steal a necklace from a merchant. Simple job. But the necklace whispered to you, the merchant turned out to be a lich, and your employer vanished. Now you're holding an artifact of immense power, hunted by both the living and the dead, and your only ally is the voice in the jewelry."
+    },
+    {
+      "title": "The Orphan's Game",
+      "text": "Raised on the streets of Ashwick, you learned early: trust no one, take everything. You've built a reputation as the best pickpocket in the city. But when your childhood friend is kidnapped by slavers, you realize some things are worth more than coin — and some risks are worth taking."
+    }
+  ],
+  "mage": [
+    {
+      "title": "The Burned Scholar",
+      "text": "The Arcanum — the greatest magical academy in the known world — burned to ash in a single night. You were the only survivor. In your mind, you carry the complete Arcanum Library: every spell, every formula, every forbidden secret. Multiple factions will kill to possess that knowledge. You just want to find out who lit the match."
+    },
+    {
+      "title": "The Wild Talent",
+      "text": "Magic manifested in you late and violently. At sixteen, you accidentally leveled your family's farmhouse. Since then, you've been running — from the Mage Hunters who want to 'neutralize' you, from the Academies who want to study you, and from the guilt of what you can do. A wandering hedge-wizard offered to teach you control. The price: a favor, to be named later."
+    },
+    {
+      "title": "The Pact-Bound",
+      "text": "To save your dying sister, you made a pact with an entity from the Outer Dark. It granted you immense power — and a debt. Every spell you cast feeds it. Every life you take with magic strengthens it. You're searching for a way to sever the bond before the entity fully manifests through you."
+    }
+  ],
+  "ranger": [
+    {
+      "title": "The Last Scout",
+      "text": "The northern border has gone silent. Villages that once sent trade caravans now send nothing. You volunteered to investigate. Three weeks into the wilderness, you found the answer: an army of creatures that shouldn't exist, marching south. Now you must get back alive with the warning."
+    },
+    {
+      "title": "The Wolf's Companion",
+      "text": "You were raised by wolves after your parents' caravan was destroyed. The forest is your home, the pack your family. But something is killing the wolves — a sickness that spreads from bite to bite, turning them feral and then dead. The source lies deeper in the forest than you've ever dared to go."
+    },
+    {
+      "title": "The Tracker",
+      "text": "A bounty was placed on a legendary outlaw known as the Ghost of Thornwood. Every ranger who's tried to track them has vanished. You're the best tracker alive — and you have a personal reason: the Ghost killed your mentor. This hunt will take you into the deepest, darkest corners of the wild."
+    }
+  ],
+  "cleric": [
+    {
+      "title": "The Crisis of Faith",
+      "text": "Your god went silent three moons ago. No divine magic. No answered prayers. The other clerics pretend nothing has changed, but you know the truth. You've left the temple to find out why — and whether your god is dead, imprisoned, or something far worse."
+    },
+    {
+      "title": "The Undying Plague",
+      "text": "A plague sweeps the land — not one that kills, but one that prevents death. The afflicted cannot die, but they can suffer endlessly. Your order calls it divine punishment. You call it a crisis that needs solving. The source appears to be an ancient tomb, and you're the only one brave — or foolish — enough to enter."
+    },
+    {
+      "title": "The Fallen Temple",
+      "text": "Your temple was destroyed in a siege. Your brothers and sisters are dead or scattered. In the ruins, you found a hidden chamber containing a relic of immense power — and a prophecy that names you as the one who must either restore the faith or destroy it forever."
+    }
+  ],
+  "bard": [
+    {
+      "title": "The Unfinished Song",
+      "text": "Your master died mid-performance, whispering the last line of the greatest ballad ever composed into your ear. The song is incomplete, and its magic is unstable — causing reality to warp around you in unpredictable ways. You must find the missing verse before the song's power tears the world apart."
+    },
+    {
+      "title": "The Muse Hunter",
+      "text": "You've lost your inspiration. Not just artistic block — the literal, magical muse that fueled your performances has vanished. Without it, your music is flat, your magic is gone, and your reputation is crumbling. You've heard rumors of a muse trapped in a crystal prison deep in the Feywild. Time to go get her back."
+    },
+    {
+      "title": "The Secret Keeper",
+      "text": "As a bard, you trade in stories. A dying noble entrusted you with a secret that could topple the kingdom: the heir to the throne is an imposter. Now every faction wants what you know — some to expose it, some to bury it. You must decide who to trust, and whether the truth is worth the chaos it will cause."
+    }
+  ],
+  "barbarian": [
+    {
+      "title": "The Blood Debt",
+      "text": "Your clan was destroyed by a rival warband. You are the last of your people. The warband's chieftain wears your father's armor and carries your mother's axe. You will have them back — or die trying. The trail leads south, into civilized lands where your ways are feared and your rage is your only ally."
+    },
+    {
+      "title": "The Beast Within",
+      "text": "You carry the blood of the ancient beast-gods. In battle, the rage takes you — and you become something more (and less) than human. Each time, it's harder to come back. A shaman told you of a place where the beast-gods were bound: a mountain temple, guarded by trials that test body, mind, and spirit. Fail, and the beast consumes you forever."
+    },
+    {
+      "title": "The Exile's Journey",
+      "text": "You were cast out of your tribe for refusing to kill an unarmed child. Alone, with nothing but your weapon and your honor, you've wandered the lowlands. You've seen wonders your people only whispered about. Now a vision from the spirit world calls you back — not for revenge, but to save the tribe that rejected you from a threat they cannot see."
+    }
+  ],
+  "default": [
+    {
+      "title": "The Wandering Soul",
+      "text": "You woke up on a dirt road with no memory of how you got there. Your clothes are strange, your pockets are empty, and a voice in your head says: 'The world needs you. Start walking.' You don't know where to go, but your feet seem to know the way."
+    },
+    {
+      "title": "The Chosen One (Maybe)",
+      "text": "A prophecy says a hero will rise in this age of darkness. You've been told you're that hero. You're not so sure — you can barely swing a sword, and your magic is mediocre at best. But the prophecy doesn't care about your self-doubt, and neither does the Dark Lord who's already sent assassins."
+    },
+    {
+      "title": "The Fresh Start",
+      "text": "You left your old life behind. Whatever you were — farmer, thief, soldier, scholar — that person is gone. You've arrived in a new land with new opportunities and new dangers. What you do next is entirely up to you."
+    }
+  ]
+}

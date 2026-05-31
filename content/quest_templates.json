@@ -1,0 +1,144 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Quest templates for Canon Engine RPG",
+    "note": "Templates are procedurally populated with specific targets, locations, and rewards"
+  },
+  "quest_templates": [
+    {
+      "id": "fetch_basic",
+      "name": "{item_name} Retrieval",
+      "type": "fetch",
+      "description": "Retrieve {item_name} from {location} and return it to {quest_giver}.",
+      "objectives_template": [
+        {"type": "travel", "target": "{location}", "description": "Travel to {location}"},
+        {"type": "retrieve", "target": "{item_name}", "source": "{source_type}", "description": "Obtain {item_name} from {source_type}"},
+        {"type": "return", "target": "{quest_giver}", "description": "Return {item_name} to {quest_giver}"}
+      ],
+      "reward_template": {
+        "gold": {"min": 20, "max": 100, "formula": "level * 15 + random(10, 50)"},
+        "xp": {"min": 50, "max": 200, "formula": "level * 30"},
+        "reputation": {"faction": "{quest_giver_faction}", "amount": 5},
+        "item_chance": 0.3,
+        "item_rarity_weights": {"common": 0.6, "uncommon": 0.3, "rare": 0.1}
+      },
+      "difficulty_range": [1, 10],
+      "time_limit": null,
+      "failure_conditions": ["item_lost", "quest_giver_dead"],
+      "variables": {
+        "item_name": {"source": "item_database", "filter": "quest_items"},
+        "location": {"source": "location_database", "filter": "explorable"},
+        "source_type": ["chest", "enemy_drop", "npc_held", "hidden_cache"],
+        "quest_giver": {"source": "npc_database", "filter": "quest_givers"}
+      }
+    },
+    {
+      "id": "kill_hunt",
+      "name": "{enemy_name} Hunt",
+      "type": "kill",
+      "description": "Slay {count} {enemy_name}(s) that have been threatening {location}.",
+      "objectives_template": [
+        {"type": "kill", "target": "{enemy_id}", "count": "{count}", "description": "Defeat {count} {enemy_name}(s)"},
+        {"type": "return", "target": "{quest_giver}", "description": "Report back to {quest_giver}"}
+      ],
+      "reward_template": {
+        "gold": {"min": 30, "max": 150, "formula": "level * 20 + enemy_xp * 0.5"},
+        "xp": {"min": 80, "max": 400, "formula": "enemy_xp * count * 0.8"},
+        "reputation": {"faction": "{quest_giver_faction}", "amount": 8},
+        "item_chance": 0.4,
+        "item_rarity_weights": {"common": 0.4, "uncommon": 0.4, "rare": 0.15, "epic": 0.05}
+      },
+      "difficulty_range": [1, 15],
+      "time_limit": null,
+      "failure_conditions": ["all_party_dead"],
+      "variables": {
+        "enemy_id": {"source": "enemy_database", "filter": "huntable"},
+        "count": {"min": 3, "max": 12, "formula": "clamp(level/2, 3, 12)"},
+        "location": {"source": "location_database", "filter": "wilderness_or_dungeon"},
+        "quest_giver": {"source": "npc_database", "filter": "affected_by_monsters"}
+      }
+    },
+    {
+      "id": "deliver_package",
+      "name": "Delivery to {destination}",
+      "type": "deliver",
+      "description": "Deliver a sealed package from {origin} to {destination} without opening it.",
+      "objectives_template": [
+        {"type": "retrieve", "target": "sealed_package", "source": "{quest_giver}", "description": "Pick up the sealed package from {quest_giver}"},
+        {"type": "travel", "target": "{destination}", "description": "Travel to {destination}"},
+        {"type": "deliver", "target": "sealed_package", "destination": "{recipient}", "description": "Deliver the package to {recipient}"}
+      ],
+      "reward_template": {
+        "gold": {"min": 40, "max": 120, "formula": "level * 18 + distance_bonus"},
+        "xp": {"min": 60, "max": 250, "formula": "level * 25"},
+        "reputation": {"faction": "{quest_giver_faction}", "amount": 6},
+        "item_chance": 0.2
+      },
+      "difficulty_range": [2, 12],
+      "time_limit": {"type": "days", "min": 3, "max": 7},
+      "failure_conditions": ["package_opened", "package_lost", "time_expired", "recipient_dead"],
+      "twist_chance": 0.25,
+      "twists": [
+        {"type": "ambush", "description": "Bandits intercept the party mid-route"},
+        {"type": "contents_revealed", "description": "Package contains something morally questionable"},
+        {"type": "rival_delivery", "description": "Another courier is trying to deliver first"}
+      ]
+    },
+    {
+      "id": "explore_ruins",
+      "name": "Explore {location_name}",
+      "type": "explore",
+      "description": "Investigate the {location_type} at {location_name} and report your findings.",
+      "objectives_template": [
+        {"type": "travel", "target": "{location_name}", "description": "Travel to {location_name}"},
+        {"type": "explore", "target": "{location_name}", "rooms_to_clear": "{room_count}", "description": "Explore {room_count} areas within {location_name}"},
+        {"type": "discover", "target": "{discovery_target}", "description": "Find {discovery_target}"},
+        {"type": "return", "target": "{quest_giver}", "description": "Report findings to {quest_giver}"}
+      ],
+      "reward_template": {
+        "gold": {"min": 50, "max": 200, "formula": "level * 25 + room_count * 10"},
+        "xp": {"min": 100, "max": 500, "formula": "level * 40 + room_count * 15"},
+        "reputation": {"faction": "{quest_giver_faction}", "amount": 10},
+        "item_chance": 0.5,
+        "item_rarity_weights": {"common": 0.2, "uncommon": 0.35, "rare": 0.3, "epic": 0.1, "legendary": 0.05}
+      },
+      "difficulty_range": [3, 15],
+      "time_limit": null,
+      "failure_conditions": ["party_retreats", "location_destroyed"],
+      "variables": {
+        "location_name": {"source": "location_database", "filter": "explorable"},
+        "location_type": ["ruins", "cave", "tomb", "tower", "dungeon", "fortress"],
+        "room_count": {"min": 3, "max": 8},
+        "discovery_target": ["ancient_artifact", "hidden_lore", "boss_weakness", "secret_passage", "treasure_vault"]
+      }
+    },
+    {
+      "id": "escort_npc",
+      "name": "Escort {npc_name}",
+      "type": "escort",
+      "description": "Protect {npc_name} as they travel from {origin} to {destination}.",
+      "objectives_template": [
+        {"type": "meet", "target": "{npc_name}", "location": "{origin}", "description": "Meet {npc_name} at {origin}"},
+        {"type": "escort", "target": "{npc_name}", "destination": "{destination}", "description": "Escort {npc_name} safely to {destination}"},
+        {"type": "protect", "target": "{npc_name}", "condition": "survive", "description": "Ensure {npc_name} survives the journey"}
+      ],
+      "reward_template": {
+        "gold": {"min": 60, "max": 180, "formula": "level * 22 + encounter_count * 15"},
+        "xp": {"min": 80, "max": 350, "formula": "level * 35"},
+        "reputation": {"faction": "{npc_faction}", "amount": 8},
+        "item_chance": 0.3,
+        "bonus_reward_chance": 0.2,
+        "bonus_reward": "npc_gift"
+      },
+      "difficulty_range": [3, 14],
+      "time_limit": null,
+      "failure_conditions": ["npc_dead", "npc_abandoned"],
+      "encounter_count": {"min": 1, "max": 4, "formula": "clamp(distance/2, 1, 4)"},
+      "variables": {
+        "npc_name": {"source": "npc_database", "filter": "escortable"},
+        "origin": {"source": "location_database"},
+        "destination": {"source": "location_database", "filter": "not_origin"}
+      }
+    }
+  ]
+}

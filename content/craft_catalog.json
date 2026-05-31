@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Extended craft catalog for Canon Engine RPG",
+    "note": "Supplements recipes.json with additional crafting options and material definitions"
+  },
+  "material_categories": {
+    "herbs": {
+      "description": "Natural ingredients gathered from the wild",
+      "items": [
+        {"id": "herb_wild_mint", "name": "Wild Mint", "rarity": "common", "base_value": 3, "gather_skill": "herbalism", "gather_dc": 8},
+        {"id": "herb_sunpetal", "name": "Sunpetal", "rarity": "common", "base_value": 5, "gather_skill": "herbalism", "gather_dc": 10},
+        {"id": "herb_charcoal_root", "name": "Charcoal Root", "rarity": "uncommon", "base_value": 8, "gather_skill": "herbalism", "gather_dc": 12},
+        {"id": "herb_life_root", "name": "Life Root", "rarity": "uncommon", "base_value": 12, "gather_skill": "herbalism", "gather_dc": 14},
+        {"id": "herb_void_moss", "name": "Void Moss", "rarity": "rare", "base_value": 30, "gather_skill": "herbalism", "gather_dc": 18}
+      ]
+    },
+    "metals": {
+      "description": "Ores and ingots for smithing",
+      "items": [
+        {"id": "iron_ore", "name": "Iron Ore", "rarity": "common", "base_value": 5, "gather_skill": "mining", "gather_dc": 10},
+        {"id": "iron_ingot", "name": "Iron Ingot", "rarity": "common", "base_value": 12, "requires_smelting": true, "input": "iron_ore", "input_qty": 2},
+        {"id": "steel_ingot", "name": "Steel Ingot", "rarity": "uncommon", "base_value": 30, "requires_smelting": true, "input": "iron_ingot", "input_qty": 2},
+        {"id": "silver_ore", "name": "Silver Ore", "rarity": "uncommon", "base_value": 25, "gather_skill": "mining", "gather_dc": 14},
+        {"id": "mithril_ore", "name": "Mithril Ore", "rarity": "rare", "base_value": 100, "gather_skill": "mining", "gather_dc": 20}
+      ]
+    },
+    "cloth_materials": {
+      "description": "Textiles and fibers for tailoring",
+      "items": [
+        {"id": "cloth_scrap", "name": "Cloth Scrap", "rarity": "dirt", "base_value": 1, "description": "Common cloth fragments"},
+        {"id": "thread", "name": "Thread Spool", "rarity": "dirt", "base_value": 2},
+        {"id": "linen", "name": "Linen Cloth", "rarity": "common", "base_value": 8},
+        {"id": "silk", "name": "Silk", "rarity": "uncommon", "base_value": 25},
+        {"id": "enchanted_thread", "name": "Enchanted Thread", "rarity": "rare", "base_value": 60, "description": "Thread woven with arcane fibers"}
+      ]
+    },
+    "monster_materials": {
+      "description": "Parts harvested from defeated creatures",
+      "items": [
+        {"id": "wolf_pelt", "name": "Wolf Pelt", "rarity": "common", "base_value": 8},
+        {"id": "spider_silk", "name": "Spider Silk", "rarity": "uncommon", "base_value": 20},
+        {"id": "goblin_ear", "name": "Goblin Ear", "rarity": "dirt", "base_value": 3, "description": "Proof of goblin slaying"},
+        {"id": "bone_fragment", "name": "Bone Fragment", "rarity": "common", "base_value": 5},
+        {"id": "essence_shadow", "name": "Shadow Essence", "rarity": "rare", "base_value": 80}
+      ]
+    }
+  },
+  "crafting_stations": [
+    {
+      "id": "basic_workbench",
+      "name": "Workbench",
+      "description": "A sturdy wooden table for basic crafting",
+      "supported_categories": ["survival", "tailoring"],
+      "bonus": 0,
+      "cost": 50
+    },
+    {
+      "id": "forge",
+      "name": "Forge",
+      "description": "A coal-fired forge for metalworking",
+      "supported_categories": ["smithing"],
+      "bonus": 2,
+      "cost": 200
+    },
+    {
+      "id": "alchemy_station",
+      "name": "Alchemy Station",
+      "description": "Equipped with burners, beakers, and distillation equipment",
+      "supported_categories": ["alchemy"],
+      "bonus": 2,
+      "cost": 150
+    },
+    {
+      "id": "enchanting_altar",
+      "name": "Enchanting Altar",
+      "description": "A rune-inscribed altar that channels arcane energy",
+      "supported_categories": ["enchanting"],
+      "bonus": 3,
+      "cost": 500
+    }
+  ]
+}
