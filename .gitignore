@@ -36,3 +36,9 @@ htmlcov/
 saves/
 data/chroma/
 *.log
+fix*.py
+test_*.py
+*.pyc
+__pycache__/
+.venv/
+*.egg-info/

@@ -78,6 +78,8 @@ def heal(state: dict[str, Any], amount: int) -> int:
 def level_up(state: dict[str, Any]) -> dict[str, Any]:
     """Attempt to level up if enough XP.  Returns event dict."""
     char = state.get("character", state)
+    char.setdefault("level", 1)
+    char.setdefault("xp", 0)
     needed = xp_to_next(char["level"])
     if char["xp"] < needed:
         return {"leveled": False, "xp_needed": needed}

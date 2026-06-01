@@ -1,0 +1,63 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Lorebook entries — keyword-triggered lore injection into AI context",
+    "usage": "When a keyword appears in narration or player input, the matching entry is injected into the AI system prompt"
+  },
+  "entries": [
+    {
+      "id": "the_crossroads_inn",
+      "keywords": ["crossroads", "inn", "tavern"],
+      "priority": 5,
+      "content": "The Crossroads Inn sits at the junction of three ancient trade roads. Run by a retired adventurer named Mira, it serves as a neutral meeting ground for travelers, merchants, and mercenaries. The ale is cheap, the beds are clean, and the walls have ears."
+    },
+    {
+      "id": "ashenvale",
+      "keywords": ["ashenvale", "village", "ashen"],
+      "priority": 5,
+      "content": "Ashenvale is a small farming village on the edge of the Darkwood. Recently plagued by goblin raids from the forest, the villagers are desperate for help. The elder, Borin Stonehelm, offers a bounty for every goblin ear brought to the village hall."
+    },
+    {
+      "id": "the_darkwood",
+      "keywords": ["darkwood", "forest", "woods"],
+      "priority": 4,
+      "content": "The Darkwood is an ancient forest choked with gnarled oaks and perpetual mist. Goblins and worse creatures make their dens among the roots. Deep within lies the Broken Crypt, an entrance to the Underdark."
+    },
+    {
+      "id": "broken_crypt",
+      "keywords": ["crypt", "dungeon", "underdark", "tomb"],
+      "priority": 4,
+      "content": "The Broken Crypt is a half-collapsed tomb from the Age of Kings. Its lower levels descend into the Underdark, where the undead walk and ancient treasures lie unclaimed. The skeleton guardian Garros once protected its entrance."
+    },
+    {
+      "id": "the_kings_road",
+      "keywords": ["king's road", "kings road", "highway", "trade road"],
+      "priority": 3,
+      "content": "The King's Road is the main highway connecting the capital to the frontier towns. Bandits have been more active lately, and merchant caravans now travel with armed escorts."
+    },
+    {
+      "id": "goblin_warrens",
+      "keywords": ["goblin", "warrens", "goblin camp"],
+      "priority": 4,
+      "content": "The Goblin Warrens are a network of tunnels beneath the Darkwood, home to the Redfang tribe. Their shaman, Gutripper, has been rallying the tribes for something big. Goblin scouts have been seen near Ashenvale in increasing numbers."
+    },
+    {
+      "id": "the_arcanum",
+      "keywords": ["arcanum", "magic school", "mages guild", "arcane"],
+      "priority": 3,
+      "content": "The Arcanum was the greatest school of magic in the realm, until it burned three years ago. The cause was never determined. Thalric Ashborn, one of the few survivors, carries forbidden knowledge from its vaults."
+    },
+    {
+      "id": "currency_system",
+      "keywords": ["gold", "coins", "money", "currency", "buy", "sell", "shop"],
+      "priority": 2,
+      "content": "The realm uses a simple currency: copper (1cp), silver (10cp), gold (100cp), and platinum (1000cp). Common items cost a few silver. A room at an inn is 5sp. A health potion is 25gp."
+    },
+    {
+      "id": "combat_rules",
+      "keywords": ["attack", "fight", "combat", "battle", "strike"],
+      "priority": 2,
+      "content": "Combat follows d20 rules: roll 1d20 + modifier vs target AC. On hit, roll damage dice. Natural 20 is a critical hit (double damage). Natural 1 is a fumble."
+    }
+  ]
+}

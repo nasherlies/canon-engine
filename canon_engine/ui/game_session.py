@@ -183,6 +183,210 @@ def _apply_parsed(state: Dict[str, Any], parsed: Dict[str, Any], *, config: Conf
         result["narration"] = f"⚠ {parsed.get('error', 'Unknown error.')}"
         return result
 
+    # ── Character creation ─────────────────────────────────────────────────
+    if kind == "start_character":
+        result["narration"] = _handle_start_character(state, parsed)
+        return result
+
+    # ── Random encounter ──────────────────────────────────────────────────
+    if kind == "encounter":
+        result["narration"] = _handle_encounter(state)
+        return result
+
+    # ── Display commands (formatted output, no AI call) ──────────────────
+    if kind == "stats":
+        player = state.get("player", {})
+        stats = player.get("stats", {})
+        name = player.get("name", "Adventurer")
+        level = player.get("level", 1)
+        hp = player.get("hp", 0)
+        max_hp = player.get("max_hp", 0)
+        xp = player.get("xp", 0)
+        from canon_engine.systems.character import xp_to_next
+        xp_needed = xp_to_next(level)
+        lines = [
+            f"**{name}** — Level {level}",
+            f"HP: {hp}/{max_hp}",
+            f"XP: {xp}/{xp_needed}",
+            "",
+            "**Stats:**",
+        ]
+        for stat in ("STR", "DEX", "INT", "CHA", "CON", "LCK"):
+            val = stats.get(stat, 10)
+            from canon_engine.systems.character import score_to_modifier
+            mod = score_to_modifier(val)
+            sign = "+" if mod >= 0 else ""
+            lines.append(f"  {stat}: {val} ({sign}{mod})")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    if kind == "inv":
+        items = state.get("player", {}).get("inventory", [])
+        if not items:
+            result["narration"] = "🎒 Your inventory is empty."
+            return result
+        lines = ["**Inventory:**"]
+        for i, item in enumerate(items):
+            name = item.get("name", "Unknown") if isinstance(item, dict) else str(item)
+            rarity = item.get("rarity", "Common") if isinstance(item, dict) else "Common"
+            qty = item.get("quantity", 1) if isinstance(item, dict) else 1
+            qty_str = f" x{qty}" if qty > 1 else ""
+            lines.append(f"  {i+1}. {name} [{rarity}]{qty_str}")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    if kind == "companions":
+        comps = state.get("companions", [])
+        if not comps:
+            result["narration"] = "👥 You have no companions."
+            return result
+        lines = ["**Companions:**"]
+        for c in comps:
+            cname = c.get("name", "Unknown")
+            loyalty = c.get("loyalty", 0)
+            status = c.get("status", "active")
+            lines.append(f"  • {cname} — Loyalty: {loyalty}, Status: {status}")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    if kind == "quests":
+        quests = state.get("quests", [])
+        if not quests:
+            result["narration"] = "📜 No active quests."
+            return result
+        lines = ["**Active Quests:**"]
+        for q in quests:
+            qname = q.get("name", "Unknown")
+            status = q.get("status", "active")
+            lines.append(f"  • {qname} [{status}]")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    if kind == "skills":
+        player = state.get("player", {})
+        skills = player.get("skills", [])
+        points = player.get("skill_points", 0)
+        if not skills:
+            result["narration"] = f"🎯 No skills unlocked. Skill points available: {points}"
+            return result
+        lines = [f"**Skills** (Points: {points}):"]
+        for s in skills:
+            sname = s.get("name", "Unknown") if isinstance(s, dict) else str(s)
+            lines.append(f"  • {sname}")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    if kind == "factions":
+        facs = state.get("factions", {})
+        if not facs:
+            result["narration"] = "🏴 No known factions."
+            return result
+        lines = ["**Factions:**"]
+        for fid, fdata in facs.items():
+            rep = fdata.get("reputation", 0) if isinstance(fdata, dict) else 0
+            lines.append(f"  • {fid}: Reputation {rep}")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    if kind == "world":
+        world = state.get("world", {})
+        loc = world.get("location_id", "Unknown")
+        weather = world.get("weather", "clear")
+        minutes = world.get("minutes_total", 0)
+        hour = (minutes // 60) % 24
+        day = minutes // 1440
+        result["narration"] = f"**World State:**\nLocation: {loc}\nWeather: {weather}\nTime: {hour}:00 (Day {day})"
+        return result
+
+    if kind == "map":
+        world = state.get("world", {})
+        locations = world.get("locations", {})
+        current = world.get("location_id", "Unknown")
+        if not locations:
+            result["narration"] = f"📍 Current location: {current}\nNo map data available."
+            return result
+        lines = [f"**Map** (Current: {current}):"]
+        for lid, ldata in locations.items():
+            marker = " ← YOU" if lid == current else ""
+            lines.append(f"  • {lid}{marker}")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    # ── Combat state (needed by handlers below) ──────────────────────
+    combat = state.get("combat", {})
+    in_combat = bool(combat.get("active", False))
+
+    # ── Author's Note / Tone Control ──────────────────────────────────
+    if kind == "author":
+        note = parsed.get("text", "").strip()
+        if note:
+            state.setdefault("settings", {})["author_note"] = note
+            result["narration"] = f"📝 Author's note set: \"{note}\"\nThis will guide the narrator's tone and style."
+        else:
+            current = state.get("settings", {}).get("author_note", "")
+            if current:
+                result["narration"] = f"📝 Current author's note: \"{current}\"\nUse /author <text> to change."
+            else:
+                result["narration"] = "📝 No author's note set.\nUse /author <text> to set tone/style guidance.\nExample: /author Write in dark fantasy style, keep responses under 200 words."
+        return result
+
+    # ── Session Summary ────────────────────────────────────────────────
+    if kind == "summary":
+        world_log = state.get("world_log", [])
+        if not world_log:
+            result["narration"] = "📖 No story yet. Start an adventure first!"
+            return result
+        recent = world_log[-10:]
+        lines = ["📖 **Previously on Canon Engine...**\n"]
+        for entry in recent:
+            narr = (entry.get("narration", "")[:150] if isinstance(entry, dict) else str(entry)[:150])
+            if narr:
+                lines.append(f"• {narr}")
+        result["narration"] = "\n".join(lines)
+        return result
+
+    # ── Encounter command ──────────────────────────────────────────────
+    if kind == "encounter" or (kind == "fight" and not in_combat):
+        encounter_result = _handle_encounter(state)
+        result["narration"] = encounter_result
+        return result
+
+        # ── AI narration commands ────────────────────────────────────────
+    if kind in ("say", "do", "look"):
+        from canon_engine.narrator import narrate as ai_narrate
+        from canon_engine.openai_client import MissingAPIKeyError
+
+        if kind == "look":
+            player_input = "/look around carefully. Describe the scene cinematically."
+        else:
+            player_input = parsed.get("text", parsed.get("raw", ""))
+
+        try:
+            narr_resp = ai_narrate(state, player_input)
+            narration = narr_resp.narration if hasattr(narr_resp, "narration") else str(narr_resp)
+            if not narration or narration.strip() == "":
+                raise ValueError("Empty narration")
+
+            # Apply state updates if narrator provided them
+            if hasattr(narr_resp, "state_updates") and narr_resp.state_updates:
+                for k, v in narr_resp.state_updates.items():
+                    if isinstance(v, dict) and isinstance(state.get(k), dict):
+                        state[k].update(v)
+                    else:
+                        state[k] = v
+
+            # Append to world log
+            state.setdefault("world_log", []).append({"input": player_input, "narration": narration[:200]})
+            result["narration"] = narration
+            return result
+        except (MissingAPIKeyError, Exception) as e:
+            if kind == "look":
+                from canon_engine.systems.world import describe_location
+                result["narration"] = describe_location(state)
+                return result
+            result["narration"] = f"[Narrator unavailable: {e}]\nYou said: {player_input}"
+            return result
+
     # ── Engine-delegated commands ────────────────────────────────────────
     # Combat routing
     combat = state.get("combat", {})
@@ -267,6 +471,185 @@ def _handle_help(parsed: Dict[str, Any], state: Dict[str, Any]) -> str:
         "**System:** /save, /load, /quicksave, /help, /menu, /quit\n\n"
         "Type `/help <topic>` for details on a specific topic."
     )
+
+
+# ── Handler: start_character ──────────────────────────────────────────────────
+
+def _handle_start_character(state: Dict[str, Any], parsed: Dict[str, Any]) -> str:
+    """Handle /start_character: rebuild state from parsed character data.
+
+    The ``parsed`` dict may contain character data injected by the API
+    endpoint or by the command parser.  Fields: name, archetype, stats,
+    speech_style, setting_primary, setting_secondary, starting_location,
+    preset_id.
+    """
+    from canon_engine.systems.character import (
+        create_character as _create_char,
+        max_hp as _max_hp,
+        score_to_modifier,
+    )
+
+    # If a preset_id is provided, load it
+    preset_data: Dict[str, Any] = {}
+    preset_id = parsed.get("preset_id")
+    if preset_id:
+        from pathlib import Path
+        import json
+        presets_path = Path(__file__).resolve().parent.parent.parent / "content" / "presets" / "characters.json"
+        if presets_path.exists():
+            try:
+                all_presets = json.loads(presets_path.read_text(encoding="utf-8"))
+                preset_data = all_presets.get(preset_id, {})
+            except Exception:
+                pass
+
+    char_name = parsed.get("name") or preset_data.get("name", "Adventurer")
+    archetype = parsed.get("archetype") or preset_data.get("archetype", "Adventurer")
+    stats = parsed.get("stats") or preset_data.get("stats", {})
+    speech_style = parsed.get("speech_style") or preset_data.get("speech_style", "default")
+    starting_gear = preset_data.get("starting_gear", [])
+    setting_primary = parsed.get("setting_primary", "medieval_fantasy")
+    setting_secondary = parsed.get("setting_secondary")
+
+    # Generate random stats if none provided
+    if not stats:
+        fresh = _create_char(char_name, klass=archetype)
+        stats = fresh["stats"]
+
+    for s in ("STR", "DEX", "INT", "CHA", "CON", "LCK"):
+        stats.setdefault(s, 10)
+
+    con = stats.get("CON", 10)
+    hp = _max_hp(con)
+    dex = stats.get("DEX", 10)
+
+    inventory = [{"name": g, "rarity": "common", "qty": 1} for g in starting_gear]
+    if not inventory:
+        inventory = [{"name": "health_potion", "rarity": "common", "qty": 2}]
+
+    # Starting location
+    location = parsed.get("starting_location")
+    if not location:
+        _genres = {
+            "medieval_fantasy": "The Crossroads Inn",
+            "space_opera": "Starport Delta",
+            "gothic_horror": "Ravenmoor Manor Gate",
+            "western": "Dusty Gulch Train Station",
+            "anime_dramatic": "Academy Courtyard",
+        }
+        location = _genres.get(setting_primary, "The Crossroads Inn")
+
+    # Rebuild state
+    new = state_manager.new_state()
+    state.clear()
+    state.update(new)
+
+    state["player"] = {
+        "name": char_name,
+        "archetype": archetype,
+        "level": 1,
+        "xp": 0,
+        "xp_next": 100,
+        "stats": stats,
+        "hp": hp,
+        "max_hp": hp,
+        "mp": stats.get("INT", 10) * 3,
+        "max_mp": stats.get("INT", 10) * 3,
+        "stamina": 80,
+        "max_stamina": 80,
+        "ac": 10 + score_to_modifier(dex),
+        "proficiency_bonus": 2,
+        "skill_points": 0,
+        "skills": [],
+        "conditions": [],
+        "gold": 50,
+        "inventory": inventory,
+        "speech_style": speech_style,
+    }
+    state["world"] = {
+        "setting_primary": setting_primary,
+        "setting_secondary": setting_secondary,
+        "location_id": location.lower().replace(" ", "_"),
+        "location_name": location,
+        "weather": "clear",
+        "minutes_total": 480,
+        "locations": {
+            location.lower().replace(" ", "_"): {"name": location, "discovered": True}
+        },
+    }
+    state["combat"] = {"active": False, "enemies": [], "active_enemy_index": 0, "round": 0, "turn": "player"}
+    state["companions"] = []
+    state["quests"] = []
+    state["world_log"] = [f"{char_name} awakens at {location}."]
+
+    narration = (
+        f"**{char_name}** the {archetype} enters the world.\n\n"
+        f"📍 {location}  |  HP: {hp}/{hp}  |  AC: {state['player']['ac']}\n\n"
+    )
+    if inventory:
+        item_names = ", ".join(i["name"] for i in inventory)
+        narration += f"🎒 Starting gear: {item_names}\n\n"
+    narration += "Your adventure begins. Type `/help` for commands."
+    return narration
+
+
+# ── Handler: encounter ───────────────────────────────────────────────────────
+
+def _handle_encounter(state: Dict[str, Any]) -> str:
+    """Handle /encounter: load enemies.json, pick weighted random enemies,
+    and start combat via combat.start_combat()."""
+    import random as _random
+    import json
+    from pathlib import Path
+
+    enemies_path = Path(__file__).resolve().parent.parent.parent / "content" / "enemies.json"
+    if not enemies_path.exists():
+        return "⚠ No enemies data found."
+
+    try:
+        enemies_data = json.loads(enemies_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return f"⚠ Failed to load enemies: {exc}"
+
+    enemy_pool = enemies_data.get("enemies", [])
+    if not enemy_pool:
+        return "⚠ No enemies defined."
+
+    # Filter out zero-weight enemies (e.g. tutorial dummy)
+    eligible = [e for e in enemy_pool if e.get("encounter_weight", 0) > 0]
+    if not eligible:
+        eligible = enemy_pool
+
+    weights = [e.get("encounter_weight", 1) for e in eligible]
+    count = _random.randint(1, 3)
+
+    try:
+        from canon_engine.systems.combat import start_combat as _start_combat
+    except ImportError:
+        return "⚠ Combat system not available."
+
+    chosen = []
+    for _ in range(count):
+        pick = _random.choices(eligible, weights=weights, k=1)[0]
+        enemy_copy = {
+            "name": pick["name"],
+            "hp": pick["hp"],
+            "max_hp": pick["max_hp"],
+            "ac": pick["ac"],
+            "attack_bonus": pick.get("str", 10) // 2 + 2,
+            "damage_dice": "1d6",
+            "xp_value": pick.get("xp_value", 10),
+        }
+        chosen.append(enemy_copy)
+
+    _start_combat(state, chosen)
+
+    enemy_names = ", ".join(e["name"] for e in chosen)
+    narration = f"⚔ **Encounter!**\n\nYou are ambushed by: {enemy_names}!\n\n"
+    for e in chosen:
+        narration += f"• **{e['name']}** — HP: {e['hp']}/{e['max_hp']}, AC: {e['ac']}\n"
+    narration += "\nUse `/attack` to strike, `/block` to defend, or `/flee` to run!"
+    return narration
 
 
 # ── GameSession class ────────────────────────────────────────────────────────

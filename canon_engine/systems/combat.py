@@ -73,7 +73,11 @@ def resolve_player_attack(state: dict[str, Any], parsed: dict[str, Any]) -> dict
     narration = f"You strike {enemy['name']} for {dmg} damage!"
     if enemy["hp"] <= 0:
         narration += f" {enemy['name']} is defeated!"
-        _advance_enemy(c)
+        _advance_enemy(state, c)
+        rewards = c.get("last_rewards", {})
+        if rewards.get("narration"):
+            narration += rewards["narration"]
+            c.pop("last_rewards", None)
     # Enemy turn
     enemy_result = _do_enemy_turn(state)
     narration += "\n" + enemy_result.get("narration", "")
@@ -125,10 +129,48 @@ def _do_enemy_turn(state: dict[str, Any]) -> dict[str, Any]:
     return {"narration": f"{enemy['name']} hits you for {dmg} damage!"}
 
 
-def _advance_enemy(c: dict[str, Any]) -> None:
-    """Move to next enemy or end combat."""
+def grant_combat_rewards(state: dict[str, Any], defeated_enemies: list[dict[str, Any]]) -> dict[str, Any]:
+    """Grant XP and loot after defeating enemies."""
+    import random
+    total_xp = sum(e.get("xp_value", 10) for e in defeated_enemies)
+    char = state.get("player", state.get("character", {}))
+    char["xp"] = char.get("xp", 0) + total_xp
+
+    from canon_engine.systems.character import level_up
+    level_result = level_up(state)
+
+    reward_text = f"\n\n🏆 **Victory!** +{total_xp} XP"
+    if level_result.get("leveled"):
+        reward_text += f"\n⬆ **LEVEL UP!** Level {level_result['new_level']}!"
+
+    loot_table = [
+        {"name": "Health Potion", "rarity": "common"},
+        {"name": "Gold Coins", "rarity": "common"},
+        {"name": "Iron Ring", "rarity": "uncommon"},
+        {"name": "Enchanted Shard", "rarity": "rare"},
+    ]
+    roll = random.random()
+    item = loot_table[3] if roll > 0.95 else loot_table[2] if roll > 0.85 else loot_table[1] if roll > 0.6 else loot_table[0]
+
+    inventory = char.setdefault("inventory", [])
+    existing = next((i for i in inventory if isinstance(i, dict) and i.get("name") == item["name"]), None)
+    if existing:
+        existing["qty"] = existing.get("qty", 1) + 1
+    else:
+        inventory.append({**item, "qty": 1})
+
+    reward_text += f"\n🎒 Loot: **{item['name']}** [{item['rarity']}]"
+    return {"xp_gained": total_xp, "narration": reward_text}
+
+
+def _advance_enemy(state: dict[str, Any], c: dict[str, Any]) -> None:
+    """Move to next enemy or end combat. Grants rewards when combat ends."""
+    defeated = [e for e in c["enemies"] if e.get("hp", 0) <= 0]
     c["enemies"] = [e for e in c["enemies"] if e.get("hp", 0) > 0]
     if not c["enemies"]:
         c["active"] = False
+        if defeated:
+            rewards = grant_combat_rewards(state, defeated)
+            c["last_rewards"] = rewards
     else:
         c["active_enemy_index"] = min(c["active_enemy_index"], len(c["enemies"]) - 1)

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CANON ENGINE</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0a0f;color:#c8c8d0;font-family:'Courier New',monospace;font-size:18px;overflow:hidden}
+.screen{display:none;position:fixed;inset:0;background:#0a0a0f;z-index:100;flex-direction:column;align-items:center;justify-content:center}
+.screen.show{display:flex}
+h1.title{color:#e8b84b;font-size:28px;margin-bottom:8px;letter-spacing:3px}
+.sub{color:#555;margin-bottom:40px;font-size:14px}
+.menu{display:flex;flex-direction:column;gap:10px;width:240px}
+.menu button,.btn{background:transparent;border:1px solid #333;color:#c8c8d0;font-family:inherit;font-size:16px;padding:12px 20px;cursor:pointer;text-align:center;transition:all .15s}
+.menu button:hover,.btn:hover{border-color:#e8b84b;color:#e8b84b}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:90;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.modal-box{background:#111118;border:1px solid #e8b84b;padding:24px;width:400px;max-width:90%}
+.modal-box h2{color:#e8b84b;font-size:14px;margin-bottom:16px;text-align:center}
+.modal-box label{color:#666;font-size:12px;display:block;margin:12px 0 4px}
+.modal-box input,.modal-box select{width:100%;background:#0a0a0f;border:1px solid #333;color:#c8c8d0;font-family:inherit;font-size:16px;padding:8px;outline:none}
+.modal-box input:focus,.modal-box select:focus{border-color:#e8b84b}
+.modal-box select option{background:#111118}
+.modal-btns{margin-top:20px;display:flex;gap:8px;justify-content:flex-end}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
+.presets button{font-size:14px;padding:8px;text-align:left;border-color:#222}
+.presets button.sel{border-color:#e8b84b;color:#e8b84b}
+#game{display:none;flex-direction:column;height:100vh}
+.topbar{display:grid;grid-template-columns:1fr 2fr 1fr;gap:1px;height:90px;min-height:90px;border-bottom:1px solid #222}
+.topbar .p{background:#111118;border:1px solid #1a1a1a;padding:6px 10px;overflow:hidden}
+.topbar .p h3{color:#e8b84b;font-size:10px;margin-bottom:4px}
+.main{flex:1;display:grid;grid-template-columns:1fr 280px;gap:1px;min-height:0}
+.world{background:#111118;border:1px solid #1a1a1a;display:flex;flex-direction:column}
+.world h3{color:#e8b84b;font-size:10px;padding:6px 10px;border-bottom:1px solid #1a1a1a}
+.narr{flex:1;overflow-y:auto;padding:12px;line-height:1.5}
+.narr::-webkit-scrollbar{width:5px}.narr::-webkit-scrollbar-thumb{background:#333}
+.msg{margin-bottom:8px}.msg-sys{color:#e8b84b;font-style:italic}.msg-nar{color:#c8c8d0}.msg-inp{color:#66ccff}.msg-inp::before{content:"> ";color:#555}
+.side{display:flex;flex-direction:column;gap:1px}
+.side .p{background:#111118;border:1px solid #1a1a1a;overflow:hidden;display:flex;flex-direction:column}
+.side .p h3{color:#e8b84b;font-size:10px;padding:6px 8px;border-bottom:1px solid #1a1a1a}
+.side .p .c{flex:1;overflow-y:auto;padding:6px 8px;font-size:15px;line-height:1.3}
+.side .p .c::-webkit-scrollbar{width:4px}.side .p .c::-webkit-scrollbar-thumb{background:#333}
+.comp-panel{flex:0 0 100px}.inv-panel{flex:1;min-height:0}.sys-panel{flex:0 0 80px}
+.bar{display:flex;align-items:center;gap:4px;margin:2px 0}
+.bar .bl{width:28px;text-align:right;color:#555;font-size:11px}
+.bar .bt{flex:1;height:14px;background:#1a1a2a;border:1px solid #222;position:relative;overflow:hidden}
+.bar .bf{height:100%;transition:width .4s}
+.bar .bf.hp{background:#cc3333}.bar .bf.mp{background:#3366cc}.bar .bf.stm{background:#33aa33}
+.bar .bv{position:absolute;right:4px;top:0;line-height:14px;font-size:10px;color:#fff;text-shadow:0 0 2px #000}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-top:4px}
+.stat{text-align:center;padding:2px;background:#1a1a2a;border:1px solid #222}
+.stat .sn{font-size:9px;color:#555}.stat .sv{font-size:18px;color:#e8b84b}.stat .sm{font-size:10px;color:#555}
+.inv-item{padding:2px 0;border-bottom:1px solid #1a1a2a;font-size:15px}
+.cbar{display:flex;align-items:center;background:#111118;border-top:1px solid #222;padding:8px 12px;gap:8px}
+.cbar .gt{color:#e8b84b;font-size:16px}
+#cinput{flex:1;background:transparent;border:none;color:#c8c8d0;font-family:inherit;font-size:18px;outline:none;caret-color:#e8b84b}
+#cinput::placeholder{color:#333}
+.empty{color:#444;font-style:italic}
+#auth{z-index:200}
+#auth .modal-box{max-width:320px;text-align:center}
+#auth input{text-align:center;margin-bottom:12px}
+#auth .err{color:#cc3333;font-size:13px;margin-bottom:8px;display:none}
+</style>
+</head>
+<body>
+
+<div id="auth" class="modal">
+ <div class="modal-box">
+  <h2>PASSWORD REQUIRED</h2>
+  <div class="err" id="auth-err">Wrong password</div>
+  <input type="password" id="auth-pw" placeholder="Password...">
+  <button class="btn" style="width:100%" onclick="doAuth()">CONNECT</button>
+ </div>
+</div>
+
+<div id="boot" class="screen show">
+ <h1 class="title">CANON ENGINE</h1>
+ <div class="sub">v0.5.2 &mdash; AI-Powered Infinite RPG</div>
+ <div class="menu">
+  <button onclick="doNewGame()">NEW GAME</button>
+  <button onclick="doLoad()">LOAD SAVE</button>
+  <button onclick="doQuick()">QUICK PLAY</button>
+ </div>
+</div>
+
+<div id="setup" class="modal">
+ <div class="modal-box">
+  <h2>CHARACTER CREATION</h2>
+  <label>NAME</label>
+  <input type="text" id="c-name" value="Adventurer">
+  <label>ARCHETYPE</label>
+  <select id="c-arch">
+   <option value="knight">Knight</option><option value="rogue">Rogue</option>
+   <option value="mage">Mage</option><option value="ranger">Ranger</option>
+   <option value="barbarian">Barbarian</option><option value="skeleton">Skeleton</option>
+  </select>
+  <label>PRESET</label>
+  <div class="presets">
+   <button data-p="garros" onclick="pickPreset(this)"><b>GARROS</b><br>Western Knight</button>
+   <button data-p="lyra" onclick="pickPreset(this)"><b>LYRA</b><br>Rogue</button>
+   <button data-p="thalric" onclick="pickPreset(this)"><b>THALRIC</b><br>Mage</button>
+   <button data-p="custom" class="sel" onclick="pickPreset(this)"><b>CUSTOM</b><br>Your own</button>
+  </div>
+  <label>WORLD</label>
+  <select id="c-world">
+   <option value="medieval_fantasy">Medieval Fantasy</option><option value="sci_fi">Sci-Fi</option>
+   <option value="modern">Modern</option><option value="post_apocalyptic">Post-Apocalyptic</option>
+   <option value="anime_shonen">Anime</option><option value="horror">Horror</option>
+  </select>
+  <label>LOCATION</label>
+  <select id="c-loc">
+   <option value="crypt">Crypt</option><option value="tavern">Tavern</option>
+   <option value="forest_clearing">Forest</option><option value="space_station">Space Station</option>
+   <option value="supermarket">Supermarket</option>
+  </select>
+  <div class="modal-btns">
+   <button class="btn" onclick="closeModal('setup')">BACK</button>
+   <button class="btn" style="border-color:#e8b84b;color:#e8b84b" onclick="doStart()">BEGIN</button>
+  </div>
+ </div>
+</div>
+
+<div id="game">
+ <div class="topbar">
+  <div class="p"><h3>MINIMAP</h3><span id="t-loc" style="color:#e8b84b">Unknown</span></div>
+  <div class="p">
+   <h3>STATUS</h3>
+   <div id="t-name" style="color:#e8b84b;font-size:14px">Adventurer &middot; Lv 1</div>
+   <div class="bar"><span class="bl">HP</span><div class="bt"><div class="bf hp" id="b-hp" style="width:0"></div><span class="bv" id="v-hp">0/0</span></div></div>
+   <div class="bar"><span class="bl">MP</span><div class="bt"><div class="bf mp" id="b-mp" style="width:0"></div><span class="bv" id="v-mp">0/0</span></div></div>
+   <div class="bar"><span class="bl">STM</span><div class="bt"><div class="bf stm" id="b-stm" style="width:0"></div><span class="bv" id="v-stm">0/0</span></div></div>
+   <div class="stats" id="stats-grid"></div>
+  </div>
+  <div class="p"><h3>EVENTS</h3><div id="t-events"><span class="empty">None</span></div></div>
+ </div>
+ <div class="main">
+  <div class="world">
+   <h3>WORLD VIEW</h3>
+   <div class="narr" id="narr"></div>
+  </div>
+  <div class="side">
+   <div class="p comp-panel"><h3>COMPANIONS</h3><div class="c" id="s-comp"><span class="empty">None</span></div></div>
+   <div class="p inv-panel"><h3>INVENTORY</h3><div class="c" id="s-inv"><span class="empty">Empty</span></div></div>
+   <div class="p sys-panel"><h3>SYSTEM</h3><div class="c" id="s-sys" style="font-size:13px">
+    <div id="s-loc">Unknown</div><div id="s-weather">Clear</div><div id="s-time">0:00</div><div id="s-turn">Turn 0</div>
+   </div></div>
+  </div>
+ </div>
+ <div class="cbar">
+  <span class="gt">&gt;</span>
+  <input type="text" id="cinput" placeholder="/help for commands" autocomplete="off" spellcheck="false">
+ </div>
+</div>
+
+<script>
+var API=window.location.origin;
+var TOKEN = '';
+var SLOT='playtest';
+var HIST=[];var HPOS=-1;
+var P={garros:{name:'Garros',arch:'knight'},lyra:{name:'Lyra Shadowveil',arch:'rogue'},thalric:{name:'Thalric Ashborn',arch:'mage'},custom:null};
+
+function doAuth(){
+ var pw=document.getElementById('auth-pw').value;
+ if(!pw)return;
+ TOKEN = pw;
+ testToken(function(ok){
+  if(ok){closeModal('auth');document.getElementById('auth-err').style.display='none';if(window._acb){window._acb();window._acb=null;}}
+  else{document.getElementById('auth-err').style.display='block';document.getElementById('auth-pw').value='';}
+ });
+}
+function testToken(cb){
+ fetch(API+'/action',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},body:JSON.stringify({command:'/help',slot:'test'})})
+ .then(function(r){cb(r.ok);}).catch(function(){cb(false);});
+}
+function needAuth(cb){
+ if(TOKEN){testToken(function(ok){if(ok)cb();else showAuth(cb);});}
+ else{showAuth(cb);}
+}
+function showAuth(cb){
+ document.getElementById('auth').classList.add('show');
+ document.getElementById('auth-pw').focus();
+ window._acb=cb;
+}
+function closeModal(id){var e=document.getElementById(id);if(e)e.classList.remove('show');}
+function showScreen(id){
+ var b=document.getElementById('boot');if(b)b.classList.remove('show');
+ var g=document.getElementById('game');
+ if(id==='boot'){if(b)b.classList.add('show');if(g)g.style.display='none';}
+ if(id==='game'){if(g)g.style.display='flex';setTimeout(function(){var ci=document.getElementById('cinput');if(ci)ci.focus();},50);}
+}
+function doNewGame(){needAuth(function(){document.getElementById('setup').classList.add('show');});}
+function doLoad(){needAuth(function(){var s=prompt('Slot name:');if(s){SLOT=s;showScreen('game');cmd('/load '+s);}});}
+function doQuick(){needAuth(function(){showScreen('game');cmd('/godmode');narr('Quick Play - all stats maxed. Type /help.','sys');});}
+var P={garros:{name:'Garros the Western Knight',arch:'knight',speech:'western_drawl'},lyra:{name:'Lyra Shadowveil',arch:'rogue',speech:'sly_whisper'},thalric:{name:'Thalric Ashborn',arch:'mage',speech:'arcane_verbose'},custom:null};
+var PRESET=null;
+
+function pickPreset(b){
+ document.querySelectorAll('.presets button').forEach(function(x){x.classList.remove('sel');});
+ b.classList.add('sel');
+ var k=b.dataset.p;
+ PRESET=(k!=='custom')?k:null;
+ if(P[k]){document.getElementById('c-name').value=P[k].name;document.getElementById('c-arch').value=P[k].arch;}
+ else{document.getElementById('c-name').value='Adventurer';document.getElementById('c-arch').value='knight';}
+}
+function doStart(){
+ needAuth(function(){
+  var name=document.getElementById('c-name').value||'Adventurer';
+  var arch=document.getElementById('c-arch').value;
+  var world=document.getElementById('c-world').value;
+  var loc=document.getElementById('c-loc').value;
+  var speech=(PRESET&&P[PRESET])?P[PRESET].speech:'default';
+  var body={slot:SLOT,setting_primary:world,starting_location:loc,speech_style:speech};
+  if(PRESET){body.preset_id=PRESET;}else{body.name=name;body.archetype=arch;}
+  closeModal('setup');showScreen('game');
+  narr('Starting adventure...','sys');
+  fetch(API+'/start_character',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},body:JSON.stringify(body)})
+  .then(function(r){return r.json();})
+  .then(function(d){
+   if(d.narration)narr(d.narration,'nar');
+   if(d.layout)updateLayout(d.layout);
+  })
+  .catch(function(e){narr('Error starting: '+e.message,'sys');});
+ });
+}
+function api(command,cb){
+ var h={'Content-Type':'application/json'};
+ if(TOKEN)h['Authorization']='Bearer '+TOKEN;
+ fetch(API+'/action',{method:'POST',headers:h,body:JSON.stringify({command:command,slot:SLOT})})
+ .then(function(r){return r.json();}).then(function(d){cb(d);}).catch(function(e){cb({narration:'Error: '+e.message});});
+}
+function cmd(text){
+ if(!text)return;
+ var inp=document.getElementById('cinput');
+ narr(text,'inp');if(inp)inp.value='';
+ HIST.unshift(text);if(HIST.length>50)HIST.pop();HPOS=-1;
+ var lid=loadId();
+ api(text,function(r){
+  removeLoad(lid);
+  if(r.narration==='__QUIT__'){narr('Session ended.','sys');return;}
+  if(r.narration)narr(r.narration,'nar');
+  if(r.layout)updateLayout(r.layout);
+  if(r.state)updateState(r.state);
+ });
+}
+function narr(text,type){
+ var a=document.getElementById('narr');if(!a)return;
+ var d=document.createElement('div');d.className='msg msg-'+type;
+ d.innerHTML=fmt(text);a.appendChild(d);a.scrollTop=a.scrollHeight;
+}
+function loadId(){
+ var a=document.getElementById('narr');if(!a)return'';
+ var d=document.createElement('div');d.className='msg msg-sys';d.id='ld-'+Date.now();
+ d.innerHTML='<em>Thinking...</em>';a.appendChild(d);a.scrollTop=a.scrollHeight;return d.id;
+}
+function removeLoad(id){var e=document.getElementById(id);if(e)e.remove();}
+function fmt(t){
+ if(!t)return'';
+ return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+  .replace(/\*(.*?)\*/g,'<i>$1</i>')
+  .replace(/`(.*?)`/g,'<code style="color:#e8b84b;background:#1a1a2a;padding:0 3px">$1</code>')
+  .replace(/\n/g,'<br>');
+}
+function updateLayout(L){
+ if(L.status){
+  var s=L.status;
+  var nl=document.getElementById('t-name');if(nl)nl.textContent=(s.name||'Adventurer')+' - Lv '+(s.level||1);
+  if(s.max_hp>0){var hb=document.getElementById('b-hp'),hv=document.getElementById('v-hp');if(hb)hb.style.width=Math.round(s.hp/s.max_hp*100)+'%';if(hv)hv.textContent=s.hp+'/'+s.max_hp;}
+  if(s.max_mp>0){var mb=document.getElementById('b-mp'),mv=document.getElementById('v-mp');if(mb)mb.style.width=Math.round(s.mp/s.max_mp*100)+'%';if(mv)mv.textContent=s.mp+'/'+s.max_mp;}
+  if(s.max_stamina>0){var sb=document.getElementById('b-stm'),sv=document.getElementById('v-stm');if(sb)sb.style.width=Math.round(s.stamina/s.max_stamina*100)+'%';if(sv)sv.textContent=s.stamina+'/'+s.max_stamina;}
+  if(s.stats&&Object.keys(s.stats).length>0)renderStats(s.stats);
+  if(s.location){var tl=document.getElementById('t-loc'),sl=document.getElementById('s-loc');if(tl)tl.textContent=s.location;if(sl)sl.textContent=s.location;}
+ }
+ if(L.companions!==undefined)renderComp(L.companions);
+ if(L.inventory!==undefined)renderInv(L.inventory);
+}
+function renderStats(st){
+ var g=document.getElementById('stats-grid');if(!g)return;
+ var h='';['STR','DEX','INT','CHA','CON','LCK'].forEach(function(s){
+  var v=st[s]||10,m=Math.floor((v-10)/2),sg=m>=0?'+':'';
+  h+='<div class="stat"><div class="sn">'+s+'</div><div class="sv">'+v+'</div><div class="sm">'+sg+m+'</div></div>';
+ });g.innerHTML=h;
+}
+function renderComp(c){
+ var e=document.getElementById('s-comp');if(!e)return;
+ if(!c||!c.length){e.innerHTML='<span class="empty">None</span>';return;}
+ e.innerHTML=c.map(function(x){return'<div><b>'+(x.name||'?')+'</b> Loyalty:'+(x.loyalty||0)+'</div>';}).join('');
+}
+function renderInv(items){
+ var e=document.getElementById('s-inv');if(!e)return;
+ if(!items||!items.length){e.innerHTML='<span class="empty">Empty</span>';return;}
+ e.innerHTML=items.map(function(i){
+  var n=typeof i==='string'?i:(i.name||'?');
+  var r=typeof i==='object'&&i.rarity?i.rarity:'Common';
+  return'<div class="inv-item"><b>'+n+'</b> ['+r+']</div>';
+ }).join('');
+}
+function updateState(S){
+ if(S.world){
+  var w=S.world,m=w.minutes_total||0,h=Math.floor(m/60%24),d=Math.floor(m/1440);
+  var st=document.getElementById('s-time');if(st)st.textContent=h+':00 Day '+d;
+  var sw=document.getElementById('s-weather');if(sw)sw.textContent=w.weather||'Clear';
+  if(w.location_id){var tl=document.getElementById('t-loc'),sl=document.getElementById('s-loc');if(tl)tl.textContent=w.location_id;if(sl)sl.textContent=w.location_id;}
+ }
+ if(S.turn!==undefined){var st2=document.getElementById('s-turn');if(st2)st2.textContent='Turn '+S.turn;}
+ if(S.player){
+  var p=S.player;
+  if(p.name){var nl=document.getElementById('t-name');if(nl)nl.textContent=p.name+' - Lv '+(p.level||1);}
+  if(p.stats&&Object.keys(p.stats).length>0)renderStats(p.stats);
+  if(p.hp!==undefined&&p.max_hp){var hb=document.getElementById('b-hp'),hv=document.getElementById('v-hp');if(hb)hb.style.width=Math.round(p.hp/p.max_hp*100)+'%';if(hv)hv.textContent=p.hp+'/'+p.max_hp;}
+  if(p.inventory)renderInv(p.inventory);
+ }
+ if(S.companions)renderComp(S.companions);
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+ var ci=document.getElementById('cinput');
+ if(ci){ci.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){e.preventDefault();cmd(ci.value);}
+  else if(e.key==='ArrowUp'){e.preventDefault();if(HPOS<HIST.length-1){HPOS++;ci.value=HIST[HPOS];}}
+  else if(e.key==='ArrowDown'){e.preventDefault();if(HPOS>0){HPOS--;ci.value=HIST[HPOS];}else{HPOS=-1;ci.value='';}}
+ });}
+ var ap=document.getElementById('auth-pw');
+ if(ap){ap.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doAuth();}});}
+ document.addEventListener('click',function(e){
+  if(!e.target.closest('button')&&!e.target.closest('select')&&!e.target.closest('input')){
+   var ci2=document.getElementById('cinput');
+   if(ci2&&document.getElementById('game').style.display==='flex')ci2.focus();
+  }
+ });
+ narr('Canon Engine loaded. Click NEW GAME to begin.','sys');
+});
+</script>
+</body>
+</html>

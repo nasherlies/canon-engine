@@ -1,3 +1,78 @@
+from __future__ import annotations
+
+import json
+import logging
+import re
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Sequence
+
+from canon_engine.constants import ENGINE_NAME, MAX_NARRATIVE_TOKENS
+from canon_engine.memory import get_memory_context
+from canon_engine.openai_client import chat_completion, resolve_model
+
+logger = logging.getLogger(__name__)
+
+
+def _inject_lorebook(state: Dict[str, Any]) -> str:
+    """Inject relevant lorebook entries based on recent context.
+
+    Loads content/lorebook.json and matches keywords against the recent
+    world log and player input.  Returns a formatted string of matching
+    entries, or empty string if no matches.
+    """
+    import json as _json
+    from pathlib import Path
+
+    lorebook_path = Path(__file__).resolve().parent.parent / "content" / "lorebook.json"
+    if not lorebook_path.exists():
+        return ""
+
+    try:
+        data = _json.loads(lorebook_path.read_text(encoding="utf-8"))
+        entries = data.get("entries", [])
+    except Exception:
+        return ""
+
+    if not entries:
+        return ""
+
+    # Build context text from recent world log + player input
+    world_log = state.get("world_log", [])
+    recent_entries = world_log[-5:] if world_log else []
+    context_text = " ".join(
+        (entry.get("narration", "") + " " + entry.get("input", "")) if isinstance(entry, dict) else str(entry)
+        for entry in recent_entries
+    ).lower()
+
+    # Also include current location and player input
+    location = state.get("world", {}).get("location_id", "")
+    context_text += " " + location.lower()
+
+    # Match keywords
+    matched = []
+    for entry in entries:
+        keywords = entry.get("keywords", [])
+        for kw in keywords:
+            if kw.lower() in context_text:
+                matched.append(entry)
+                break
+
+    if not matched:
+        return ""
+
+    # Sort by priority (higher = more important)
+    matched.sort(key=lambda e: e.get("priority", 0), reverse=True)
+
+    # Limit to top 5 entries to save tokens
+    matched = matched[:5]
+
+    lines = ["## Lorebook (Active Context)"]
+    for entry in matched:
+        lines.append(f"- **{entry['id']}**: {entry['content']}")
+
+    return "\n".join(lines)
+
+
 """Narrator – the AI storyteller for Canon Engine.
 
 The narrator is the bridge between player input and game state.  It:
@@ -16,19 +91,7 @@ Public API
 * ``parse_narration(raw_text) -> NarratorResponse``
 """
 
-from __future__ import annotations
 
-import json
-import logging
-import re
-from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
-
-from canon_engine.constants import ENGINE_NAME, MAX_NARRATIVE_TOKENS
-from canon_engine.memory import get_memory_context
-from canon_engine.openai_client import chat_completion, resolve_model
-
-logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -210,6 +273,16 @@ def build_system_prompt(state: Dict[str, Any]) -> str:
     bible_text = _format_world_bible(state.get("world_bible", {}))
     if bible_text:
         parts.append(bible_text)
+
+    # ── Lorebook (keyword-triggered lore injection) ──────────────────
+    lorebook_text = _inject_lorebook(state)
+    if lorebook_text:
+        parts.append(lorebook_text)
+
+    # ── Author's Note (tone control) ─────────────────────────────────
+    author_note = state.get("settings", {}).get("author_note", "")
+    if author_note:
+        parts.append(f"## Author's Note\n{author_note}")
 
     # ── Character sheet ───────────────────────────────────────────────
     char_text = _format_character_sheet(state.get("player", {}))
