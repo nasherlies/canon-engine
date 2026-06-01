@@ -187,6 +187,10 @@ h1.title{color:var(--gold);font-size:28px;margin-bottom:8px;letter-spacing:3px}
 .jump-bottom{display:none;position:absolute;bottom:60px;right:20px;background:var(--gold);color:#000;border:none;padding:8px 16px;cursor:pointer;font-family:inherit;font-size:12px;z-index:10;min-height:36px;letter-spacing:1px}
 .jump-bottom:hover{background:#ddd4a0}
 .jump-bottom.show{display:block}
+.tut-next{display:none;position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;border:2px solid #b8a050;padding:10px 32px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:bold;z-index:10;min-height:44px;letter-spacing:2px;animation:pulse 2s infinite}
+.tut-next:hover{background:#ddd4a0}
+.tut-next.show{display:block}
+@keyframes pulse{0%,100%{box-shadow:0 0 5px rgba(200,177,108,0.3)}50%{box-shadow:0 0 15px rgba(200,177,108,0.6)}}
 
 /* === ANIMATIONS === */
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -231,6 +235,7 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
   .toggle-btn{min-height:48px}
   #settings-modal .modal-box{width:100%;max-width:none;max-height:100dvh;border:none}
   .jump-bottom{bottom:120px}
+  .tut-next{bottom:120px}
 }
 
 /* Safe area */
@@ -513,6 +518,7 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
    <h3>WORLD VIEW</h3>
    <div class="narr" id="narr"></div>
    <button class="jump-bottom" id="jump-bottom" onclick="scrollToBottom()">&#x25BC; JUMP TO BOTTOM</button>
+   <button class="tut-next" id="tut-next">NEXT ▸</button>
   </div>
   <div class="side" id="side-panel">
    <div class="side-tabs">
@@ -1141,22 +1147,23 @@ function renameSave(slot){
   .then(function(r){return r.json();}).then(function(){doLoad();});
 }
 var TUTORIAL_STEPS=[
- {msg:"Welcome to Canon Engine! I'm Tutorial Bot, your guide. This is a text-based RPG where your imagination is the limit.",delay:0},
- {msg:"**THE COMMAND INPUT**\n\nAt the bottom of the screen, you'll see a text box. Type anything to interact with the world — describe actions, talk to characters, explore.\n\nTry typing: *I look around the tavern*",delay:3000},
- {msg:"**SLASH COMMANDS**\n\nType / to see all available commands. Here are the essentials:\n\n• /help — Show all commands\n• /stats — View your character sheet\n• /inv — Check your inventory\n• /look — Examine surroundings\n• /map — View the world map\n• /fight — Start combat\n• /save — Save your game",delay:3000},
- {msg:"**THE SIDE PANEL**\n\nOn the right side, you'll see tabs:\n\n⚔ **Stats** — Your character's attributes and HP\n⚒ **Inventory** — Items you've collected\n☺ **Party** — Your companions\n★ **Skills** — Your abilities\n☠ **Quests** — Your active quests\n\nClick any tab or press 1-5 to toggle it!",delay:3000},
- {msg:"**QUICK ACTIONS**\n\nBelow the game output, you'll see quick action buttons: LOOK, INVENTORY, STATS, MAP, REST, and HELP. These are shortcuts for common commands.",delay:3000},
- {msg:"**COMBAT**\n\nWhen enemies appear, use:\n• /attack — Strike the enemy\n• /block — Defend yourself\n• /flee — Run away\n• /fight — Trigger a random encounter\n\nCombat is turn-based. Choose wisely!",delay:3000},
- {msg:"**SAVING & LOADING**\n\nYour game auto-saves after each action. To manually save, type /save. To load a save, click LOAD SAVE from the main menu — you can load, copy, rename, or delete saves from there.",delay:3000},
- {msg:"**SETTINGS**\n\nClick SETTINGS from the main menu to customize:\n• Themes (Dark, Ocean, Forest, Blood)\n• Font size and style\n• Audio levels\n• API settings for custom AI models",delay:3000},
- {msg:"**TIPS & TRICKS**\n\n• Be creative! Describe your actions in detail for better narration\n• Use /author to set the story's tone (dark, comedic, epic)\n• Use /summary to get a recap of your adventure\n• Use /choices to see branching story options\n• Mix genres with /collide for wild mashups\n• Your companions will react to your choices!\n\nYou're ready. Type anything to begin your adventure!",delay:3000}
+ {msg:"Welcome to Canon Engine! I'm Tutorial Bot, your guide. This is a text-based RPG where your imagination is the limit.\n\nPress **NEXT** below to continue through each lesson."},
+ {msg:"**THE COMMAND INPUT**\n\nAt the bottom of the screen, you'll see a text box. Type anything to interact with the world — describe actions, talk to characters, explore.\n\nTry typing: *I look around the tavern*"},
+ {msg:"**SLASH COMMANDS**\n\nType / to see all available commands. Here are the essentials:\n\n• /help — Show all commands\n• /stats — View your character sheet\n• /inv — Check your inventory\n• /look — Examine surroundings\n• /map — View the world map\n• /fight — Start combat\n• /save — Save your game"},
+ {msg:"**THE SIDE PANEL**\n\nOn the right side, you'll see tabs:\n\n⚔ **Stats** — Your character's attributes and HP\n⚒ **Inventory** — Items you've collected\n☺ **Party** — Your companions\n★ **Skills** — Your abilities\n☠ **Quests** — Your active quests\n\nClick any tab or press 1-5 to toggle it!"},
+ {msg:"**QUICK ACTIONS**\n\nBelow the game output, you'll see quick action buttons: LOOK, INVENTORY, STATS, MAP, REST, and HELP. These are shortcuts for common commands."},
+ {msg:"**THE PAUSE MENU**\n\nClick the **☰ MENU** button in the top-left corner, or press **ESC** to open the pause menu. From there you can:\n\n• Resume the game\n• Open Settings\n• Load or Save games\n• Return to Main Menu"},
+ {msg:"**COMBAT**\n\nWhen enemies appear, use:\n• /attack — Strike the enemy\n• /block — Defend yourself\n• /flee — Run away\n• /fight — Trigger a random encounter\n\nCombat is turn-based. Choose wisely!"},
+ {msg:"**SAVING & LOADING**\n\nYour game auto-saves after each action. To manually save, type /save or use the pause menu. To load a save, click LOAD SAVE from the main menu — you can load, copy, rename, or delete saves from there."},
+ {msg:"**SETTINGS**\n\nClick SETTINGS from the main menu (or the pause menu) to customize:\n• Themes (Dark, Ocean, Forest, Blood)\n• Font size and style\n• Audio levels\n• API settings for custom AI models"},
+ {msg:"**TIPS & TRICKS**\n\n• Be creative! Describe your actions in detail for better narration\n• Use /author to set the story's tone (dark, comedic, epic)\n• Use /summary to get a recap of your adventure\n• Use /choices to see branching story options\n• Mix genres with /collide for wild mashups\n• Your companions will react to your choices!\n\nYou're ready. Type anything to begin your adventure!"}
 ];
 var TUTIDX=0;
-var TUTTIMER=null;
+var TUTACTIVE=false;
 
 function doTutorial(){
  needAuth(function(){
-  TUTIDX=0;
+  TUTIDX=0;TUTACTIVE=true;
   var body={slot:'tutorial',name:'Tutorial Bot',race:'Robot-Android',archetype:'Engineer',
    traits:'helpful, knowledgeable, patient',setting_primary:'medieval_fantasy',
    setting_secondary:'',starting_location:'',speech_style:'default',preset_id:''};
@@ -1166,7 +1173,7 @@ function doTutorial(){
     SLOT='tutorial';
     showScreen('game');
     if(d.narration)narr(d.narration,'ai');
-    setTimeout(function(){playTutorialStep();},1500);
+    setTimeout(function(){playTutorialStep();},800);
    }).catch(function(e){
     alert('Tutorial error: '+e.message);
    });
@@ -1174,19 +1181,32 @@ function doTutorial(){
 }
 
 function playTutorialStep(){
- if(TUTIDX>=TUTORIAL_STEPS.length)return;
+ if(TUTIDX>=TUTORIAL_STEPS.length){endTutorial();return;}
  var step=TUTORIAL_STEPS[TUTIDX];
- narr(step.msg,'sys');
+ var progress='\n\n`[Step '+(TUTIDX+1)+' of '+TUTORIAL_STEPS.length+']`';
+ narr(step.msg+progress,'sys');
  TUTIDX++;
- if(TUTIDX<TUTORIAL_STEPS.length){
-  TUTTIMER=setTimeout(function(){playTutorialStep();},step.delay||3000);
+ /* Show/hide next button */
+ var btn=document.getElementById('tut-next');
+ if(btn){
+  if(TUTIDX>=TUTORIAL_STEPS.length){btn.textContent='DONE ✓';btn.onclick=endTutorial;}
+  else{btn.textContent='NEXT ▸';btn.onclick=playTutorialStep;}
+  btn.classList.add('show');
  }
 }
 
+function endTutorial(){
+ TUTACTIVE=false;
+ var btn=document.getElementById('tut-next');
+ if(btn)btn.classList.remove('show');
+ narr('Tutorial complete! You\'re on your own now, adventurer. Type /help if you need a refresher.','sys');
+}
+
 function stopTutorial(){
- if(TUTTIMER)clearTimeout(TUTTIMER);
- TUTIDX=TUTORIAL_STEPS.length;
- narr('Tutorial ended. You\'re on your own now, adventurer. Type /help if you need a refresher.','sys');
+ TUTACTIVE=false;
+ var btn=document.getElementById('tut-next');
+ if(btn)btn.classList.remove('show');
+ narr('Tutorial skipped. Type /help if you need a refresher.','sys');
 }
 function doQuick(){needAuth(function(){showScreen('game');cmd('/godmode');narr('Quick Play - all stats maxed. Type /help.','sys');});}
 
