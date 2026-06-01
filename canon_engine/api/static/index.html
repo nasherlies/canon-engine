@@ -1057,10 +1057,10 @@ function doLoad(){
      html+='<div class="save-slot-name">Slot: '+s.slot+'</div>';
      html+='</div>';
      html+='<div class="save-actions">';
-     html+='<button class="btn-sm btn-load" onclick="loadSave(\''+s.slot+'')">LOAD</button>';
-     html+='<button class="btn-sm" onclick="duplicateSave(\''+s.slot+'\')">COPY</button>';
-     html+='<button class="btn-sm" onclick="renameSave(\''+s.slot+'\')">RENAME</button>';
-     html+='<button class="btn-sm btn-danger" onclick="deleteSave(\''+s.slot+'\')">DELETE</button>';
+     html+='<button class="btn-sm btn-load" onclick="loadSave('+JSON.stringify(s.slot)+')">LOAD</button>';
+     html+='<button class="btn-sm" onclick="duplicateSave('+JSON.stringify(s.slot)+')">COPY</button>';
+     html+='<button class="btn-sm" onclick="renameSave('+JSON.stringify(s.slot)+')">RENAME</button>';
+     html+='<button class="btn-sm btn-danger" onclick="deleteSave('+JSON.stringify(s.slot)+')">DELETE</button>';
      html+='</div></div>';
     });
     list.innerHTML=html;
