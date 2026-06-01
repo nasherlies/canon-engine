@@ -1,0 +1,346 @@
+{
+  "collisions": [
+    {
+      "id": "medieval_fantasy__space_opera",
+      "name": "Star Knights of the Galactic Throne",
+      "genres": ["medieval_fantasy", "space_opera"],
+      "description": "A galaxy-spanning feudal empire where noble houses pilot crystalline starships and wield plasma-edged longswords. The Galactic Throne rules from a space station shaped like a medieval castle, and knights earn their titles by slaying void dragons in asteroid fields. Magic and technology have merged — arcane circuits power warp drives, and court wizards double as starship navigators.",
+      "setting_overrides": {
+        "location_names": [
+          "The Orbital Citadel of Aethon",
+          "The Nebula Throne Room",
+          "The Crystal Forge Moons of Valdris",
+          "The Void Dragon Graveyard",
+          "The Merchant Flotilla of Argos",
+          "The Forgotten Colony of Thornwall",
+          "The Warp-Sanctum of Lysander",
+          "The Asteroid Jousting Grounds"
+        ],
+        "weather_patterns": [
+          "plasma storms that arc between ship hulls",
+          "aurora nebulae that shift from violet to gold",
+          "solar winds carrying ancient dust from dead stars",
+          "gravity tides that warp light and bend shadows",
+          "meteor showers of crystallized mana",
+          "warp fog — a shimmering mist where dimensions thin"
+        ],
+        "NPC_archetypes": [
+          "Star Paladin — a holy warrior in powered armor wielding a blessed lance",
+          "Void Sage — an elderly navigator who reads the stars like prophecy",
+          "House Diplomat — a cunning noble brokering alliances between star systems",
+          "Crystal Smith — a forge-master who shapes living crystal into weapons",
+          "Nebula Mystic — a hermit who draws power from cosmic storms",
+          "Squire Drone — a loyal mechanical attendant bound by honor protocols"
+        ]
+      },
+      "narrative_style": {
+        "tone": "grand and mythic, blending chivalric honor with cosmic wonder",
+        "vocabulary": [
+          "thyne", "star-forged", "void-oath", "crystalline", "galactic sovereign",
+          "warp-knight", "celestial", "plasma-lance", "noble house", "stellar cathedral",
+          "arcane circuit", "throne-world", "constellation", "hallowed void"
+        ],
+        "themes": [
+          "honor and duty across the stars",
+          "the tension between ancient tradition and technological progress",
+          "cosmic threats that require both sword and starship",
+          "noble houses vying for control of the galactic throne"
+        ]
+      },
+      "enemy_types": [
+        "Void Dragon — a serpentine beast that swims through space, armored in meteorite scales",
+        "Heresy Engine — a corrupted war machine that rejects the Throne's divine authority",
+        "Dark Star Knight — a fallen paladin whose plasma blade burns with black fire",
+        "Nebula Wraith — a ghostly entity born from dead stars, phasing through hulls",
+        "Rogue Drone Swarm — mechanical locusts that strip ships to bare frames",
+        "Asteroid Golem — a living rock formation that guards ancient warp gates"
+      ],
+      "opening_narration": "The crystalline starship hums beneath your feet as it emerges from the warp gate, its hull shimmering with arcane sigils that ward against the void. Before you, the Orbital Citadel of Aethon rises like a medieval fortress cast in starlight — its towers bristling with plasma cannons, its banners streaming in the solar wind. A chime sounds on the bridge. \"My lord,\" the squire-drone intones, bowing its mechanical head, \"the Galactic Throne summons your blade. The void dragons have returned to the Valdris system.\" You rest your hand on the hilt of your star-forged longsword and prepare to answer the call."
+    },
+    {
+      "id": "gothic_horror__western",
+      "name": "Blood Mesa: Vampires of the Frontier",
+      "genres": ["gothic_horror", "western"],
+      "description": "The frontier town of Blood Mesa sits at the edge of a desert where the dead don't stay buried and the moonlight reveals things best left unseen. Vampires run the silver mines, werewolves stalk the cattle drives, and the saloon serves holy water alongside whiskey. Outlaws and monster hunters ride side by side under a sky that bleeds red at dusk.",
+      "setting_overrides": {
+        "location_names": [
+          "Blood Mesa Township",
+          "The Gallows Gulch Mine",
+          "Reverend Cain's Bone Chapel",
+          "The Howling Saloon",
+          "Dead Man's Canyon",
+          "The Silver Vein Railroad",
+          "Hangman's Ridge",
+          "The Undertaker's Garden"
+        ],
+        "weather_patterns": [
+          "blood-red sunsets that last for hours",
+          "dust storms mixed with ash from unknown fires",
+          "fog that rolls in unnaturally fast from the canyon",
+          "lightning without thunder on moonless nights",
+          "a perpetual chill wind that carries whispers",
+          "scorching days that give way to freezing, howling nights"
+        ],
+        "NPC_archetypes": [
+          "Reverend Gunslinger — a preacher who packs silver bullets and delivers last rites at high noon",
+          "The Undertaker — a cryptic figure who knows more about the dead than the living",
+          "Vampiric Sheriff — the town's lawman, undead but bound by an ancient pact",
+          "Scared Prospector — a miner who dug too deep and brought something back",
+          "Widow Maker — a bounty hunter who only tracks supernatural prey",
+          "Saloon Seer — a barkeep whose tarot cards never lie"
+        ]
+      },
+      "narrative_style": {
+        "tone": "gritty and dread-soaked, with the lonely stoicism of frontier life clashing against gothic terror",
+        "vocabulary": [
+          "sundown", "silver-tipped", "noose-mark", "hollow", "the Turn",
+          "blood-mesa", "dust devil", "cursed ground", "last rites", "deadlight",
+          "preacher's oath", "frontier justice", "undead pact", "howling dark"
+        ],
+        "themes": [
+          "survival in a land where monsters wear human faces",
+          "the thin line between lawman and outlaw when the dead rise",
+          "faith tested against undeniable supernatural horror",
+          "frontier justice — rough, fast, and final"
+        ]
+      },
+      "enemy_types": [
+        "Dustwalker — a vampire that hides in sandstorms and feeds on cattle drivers",
+        "Noose Specter — the ghost of a hanged outlaw, bound to the gallows where it died",
+        "Coyote Skinwalker — a shapeshifter that mimics travelers to lure them off the trail",
+        "Mine Revenant — a prospector who died in a collapse, now a creature of rock and fury",
+        "The Preacher's Shadow — a dark entity that mimics holy figures to spread corruption",
+        "Bone Horseman — a skeletal rider who appears at crossroads, challenging travelers to duels"
+      ],
+      "opening_narration": "The stagecoach creaks to a halt at the edge of Blood Mesa, and the driver won't go a foot further. The town looks half-dead — boards over windows, a church steeple tilted like a broken finger, and dust so thick it tastes of copper and old bones. As you step down, the sun is already sinking behind the mesa, painting the sky the color of a wound. From the saloon, a piano plays a funeral dirge, and something moves in the shadows of the gallows that isn't cast by any man."
+    },
+    {
+      "id": "medieval_fantasy__gothic_horror",
+      "name": "The Cathedral of Eternal Night",
+      "genres": ["medieval_fantasy", "gothic_horror"],
+      "description": "The kingdom of Mournveil exists under a sky that hasn't seen sunlight in centuries. A colossal gothic cathedral stands at the center of every town, its stained glass windows glowing with captured souls, and the clergy rule through fear and dark miracle. Ancient castles dot a landscape of twisted forests and cursed moors, where undead knights patrol alongside living soldiers who've long stopped asking questions.",
+      "setting_overrides": {
+        "location_names": [
+          "The Cathedral of Eternal Night",
+          "Castle Mourneveil",
+          "The Bone Garden of the Silent Order",
+          "The Weeping Tower",
+          "The Forest of Hanging Lanterns",
+          "The Crypts Beneath the Throne",
+          "The Chapel of Unspoken Prayers",
+          "The Moors of the Drowned Queen"
+        ],
+        "weather_patterns": [
+          "a perpetual overcast sky tinged with sickly green",
+          "rain that falls black and leaves stains that never dry",
+          "fog that carries the sound of distant chanting",
+          "cold winds that bring the scent of decayed flowers",
+          "lightning that illuminates impossible silhouettes in the clouds",
+          "a false dawn that appears briefly before vanishing, mocking hope"
+        ],
+        "NPC_archetypes": [
+          "Grave Knight — an undead paladin bound to protect the living by a dying oath",
+          "Cathedral Bishop — a holy figure whose miracles taste of sulfur and ash",
+          "Witch Hunter — a grim warrior who trusts no magic, even their own",
+          "The Keeper of Tombs — an ancient librarian who catalogs the kingdom's dead",
+          "Pale Maiden — a ghostly noble who wanders the castle, weeping for a kingdom lost",
+          "Inquisitor — a robed figure who judges guilt by the darkness in one's heart"
+        ]
+      },
+      "narrative_style": {
+        "tone": "oppressive and elegantly dark, with the weight of centuries of despair pressing down on every word",
+        "vocabulary": [
+          "hallowed", "sepulchral", "vesper", "penitent", "absolution",
+          "necrotic", "gargantuan", "cathedral", "the Long Dark", "soul-glass",
+          "litany", "dirge", "crypt-blessed", "the Silence"
+        ],
+        "themes": [
+          "faith as both weapon and prison",
+          "the slow corruption of a kingdom that chose darkness over annihilation",
+          "beauty found only in decay and remembrance",
+          "the question of whether hope is a virtue or a cruelty"
+        ]
+      },
+      "enemy_types": [
+        "Gargoyle Sentinel — a stone guardian animated by the cathedral's dark prayers",
+        "Soul-Stained Knight — a warrior whose armor is fused with the spirits of the damned",
+        "Weeping Angel — a beautiful statue that moves only when unobserved, draining life force",
+        "Crypt Worm — a massive undead invertebrate that tunnels beneath castle foundations",
+        "The Hollow Bishop — a clergy leader consumed by their own forbidden rites",
+        "Moor Phantom — a spectral rider on a black horse, appearing before disasters"
+      ],
+      "opening_narration": "The great doors of the Cathedral of Eternal Night groan open before you, releasing a wave of incense so thick it burns your eyes. Inside, the nave stretches upward into a darkness that the hundreds of candles lining the aisles cannot pierce. The stained glass windows — each one containing the luminous face of a trapped soul — cast shifting, moaning light across the flagstones. A bishop in robes the color of dried blood turns to face you, his smile a rictus. \"Welcome, traveler. The Cathedral has been expecting you. Please — kneel.\""
+    },
+    {
+      "id": "space_opera__anime_dramatic",
+      "name": "Mecha Pilots of Neo-Tokyo",
+      "genres": ["space_opera", "anime_dramatic"],
+      "description": "In the year 3077, Neo-Tokyo spans an entire planet — a megacity of neon spires, hologram cherry blossoms, and towering mecha bays where pilots bond with their units through neural synchronization. The Galactic Student Council governs from a floating academy above the clouds, and every conflict is settled through mecha duels of breathtaking intensity. Friendship is a weapon, dramatic speeches can shift the tide of battle, and a pilot's emotional bond with their machine determines its true power.",
+      "setting_overrides": {
+        "location_names": [
+          "Neo-Tokyo Central Spire",
+          "The Cherry Blossom Nebula",
+          "Academy Station Arcadia",
+          "The Mecha Graveyard Orbit",
+          "The Neon Abyss — underground fighting pits",
+          "The Hologram Gardens of Mitsuki",
+          "The Synchronization Cradle",
+          "The Battle Ring of Crimson Stars"
+        ],
+        "weather_patterns": [
+          "hologram cherry blossoms drifting through vacuum-sealed plazas",
+          "neon rain — liquid light that cascades down building facades",
+          "solar flares that paint the sky in dramatic crimson and gold",
+          "psychic storms that cause mecha to resonate with pilot emotions",
+          "gravity shifts during peak emotional duels",
+          "aurora curtains that display the memories of fallen pilots"
+        ],
+        "NPC_archetypes": [
+          "Rival Pilot — a fierce competitor with a tragic backstory and hidden respect for the hero",
+          "Council President — a charismatic leader hiding a devastating secret",
+          "Mecha Mechanic Genius — an eccentric engineer who talks to machines like pets",
+          "Transfer Student — a mysterious newcomer with an impossibly powerful mecha",
+          "The Veteran — a scarred pilot who lost their machine but not their will",
+          "AI Companion — the sentient personality core embedded in the hero's mecha"
+        ]
+      },
+      "narrative_style": {
+        "tone": "intensely emotional and dramatic, with high-energy action punctuated by heartfelt declarations and flashbacks",
+        "vocabulary": [
+          "synchronize", "resonate", "overdrive", "bonds of steel", "emotional surge",
+          "neon spirit", "pilot's oath", "the Crash", "battle cry", "resolve",
+          "final form", "limit break", "hologram light", "the bond between pilot and machine"
+        ],
+        "themes": [
+          "the power of human emotion to transcend mechanical limits",
+          "rivalry as the deepest form of respect and friendship",
+          "the weight of being chosen — and the cost of protecting everything",
+          "breaking through one's limits when the people you love are counting on you"
+        ]
+      },
+      "enemy_types": [
+        "Shadow Mecha — dark reflections of hero units, piloted by the corrupted",
+        "Void Beast — an alien kaiju that emerges from hyperspace tears",
+        "Rogue AI — a mecha intelligence that decided humanity is obsolete",
+        "The Eclipse Knight — a rival pilot wielding forbidden synchronization tech",
+        "Swarm Drones — clouds of tiny machines that form massive composite entities",
+        "The Fallen Champion — a legendary pilot whose grief twisted them into a destroyer"
+      ],
+      "opening_narration": "The alarms blare across Academy Station Arcadia as the sky outside the observation deck splits open — not with light, but with darkness. A Void Beast, vast and terrible, emerges from the tear in hyperspace, its body a writhing mass of eyes and metal. You slam your hand on the console. \"Mecha bay, this is Pilot — requesting immediate launch!\" Your AI companion's voice rings through your neural link, warm and steady: \"I'm here. I've always been here. Let's show them what our bond can do.\" The hangar doors blow open, and your mecha stands waiting, eyes blazing with synchronized fire."
+    },
+    {
+      "id": "western__anime_dramatic",
+      "name": "Ronin of the Dust Trail",
+      "genres": ["western", "anime_dramatic"],
+      "description": "The Dust Trail is a vast frontier where samurai honor meets cowboy grit. Towns are built like Japanese villages crossed with frontier outposts — paper lanterns hang from wooden porches, and katana duels replace quickdraw shootouts at high noon. Masterless warriors, or ronin, wander the trail seeking purpose, redemption, or the perfect duel. Every confrontation is a dramatic showdown where technique, spirit, and the weight of one's past determine the outcome.",
+      "setting_overrides": {
+        "location_names": [
+          "Dust Trail Township",
+          "The Dojo at High Noon",
+          "Ronin's Rest — a tavern at the crossroads",
+          "The Paper Lantern Saloon",
+          "Canyon of the Five Duelists",
+          "The Temple on Hangman's Hill",
+          "The Wandering Market of Old Koji",
+          "Sunset Ridge — where all final duels are fought"
+        ],
+        "weather_patterns": [
+          "dust devils that spiral like ink brush strokes",
+          "sunsets that paint the sky in layers of crimson and gold like a scroll painting",
+          "wind that carries the distant sound of a shamisen",
+          "sudden cherry blossom petals drifting through the desert heat",
+          "thunder that rolls like taiko drums across the plains",
+          "starlight so clear it seems to illuminate every blade of dry grass"
+        ],
+        "NPC_archetypes": [
+          "The Drifter — a quiet ronin with a scarred katana and eyes full of old battles",
+          "Sake Bar Owner — a former duel champion who retired to serve drinks and wisdom",
+          "Bandit with Honor — an outlaw who robs only the corrupt and leaves poetry at the scene",
+          "Temple Guardian — a monk who practices forbidden sword techniques at dawn",
+          "The Rival — a hot-headed duelist who challenges everyone, secretly afraid of being alone",
+          "The Child Prodigy — a young swordsman whose talent terrifies even masters"
+        ]
+      },
+      "narrative_style": {
+        "tone": "poetic and intense, with the lonely beauty of frontier landscapes and the razor-sharp focus of a duel",
+        "vocabulary": [
+          "honor blade", "dust trail", "high noon", "the Way", "ronin's oath",
+          "draw cut", "spirit strike", "duel at sunset", "paper lantern", "wind through grass",
+          "the Last Duel", "empty holster", "katana edge", "dusty resolve"
+        ],
+        "themes": [
+          "the search for purpose in a lawless land",
+          "honor as a choice, not an inheritance",
+          "the beauty of a single decisive moment",
+          "finding a home when you've sworn to wander"
+        ]
+      },
+      "enemy_types": [
+        "Dust Ronin — a masterless warrior who has abandoned honor and fights without restraint",
+        "Canyon Oni — a demon that haunts the deep ravines, mimicking travelers' voices",
+        "The Gunslinger Poet — an assassin who writes haikus for their victims before striking",
+        "Paper Mask Bandit — a thief who wears Noh theater masks, each representing a different fighting style",
+        "Sandstorm Specter — a ghost that rides the dust devils, challenging the living to duels",
+        "The Blade Collector — a warrior who steals the swords of those they defeat, carrying dozens at once"
+      ],
+      "opening_narration": "The sun hangs at the exact center of the sky as you ride into Dust Trail Township, your katana resting across the saddle and your hat pulled low against the glare. The main street is empty — too empty. Paper lanterns sway in a hot wind, and from somewhere comes the sound of a shamisen being tuned. Then you see him: standing in the middle of the road, a figure in a tattered haori with a hand on his blade. He bows. You dismount. The wind stops. The duel has already begun."
+    },
+    {
+      "id": "space_opera__gothic_horror",
+      "name": "Dead Station: The Haunted Nebula",
+      "genres": ["space_opera", "gothic_horror"],
+      "description": "Station Erebus drifts in the heart of the Carcosa Nebula — a massive derelict space station where the lights flicker with a life of their own and the corridors rearrange themselves when no one is looking. The nebula itself is alive, a vast cosmic entity that feeds on fear, and the station is its larder. Crews sent to investigate go mad within days, haunted by visions of dead loved ones, impossible geometries, and whispers in languages that predate the stars.",
+      "setting_overrides": {
+        "location_names": [
+          "Station Erebus — The Haunted Nebula",
+          "The Maw — the station's gaping docking bay",
+          "Corridor Seven — which changes every cycle",
+          "The Observation Dome of Madness",
+          "Engineering Deck Omega — where the dead still work",
+          "The Captain's Quarters — sealed since the Incident",
+          "The Nebula Core — a place no one returns from",
+          "The Memorial Wall of Names That Keep Changing"
+        ],
+        "weather_patterns": [
+          "lights that pulse in patterns that feel like a heartbeat",
+          "temperature drops that move through the station like a presence",
+          "the nebula outside shifting colors — green, violet, and a color that has no name",
+          "gravity fluctuations that make walls become floors",
+          "static bursts that carry fragments of dead crew recordings",
+          "a persistent low hum that seems to come from inside your own skull"
+        ],
+        "NPC_archetypes": [
+          "The Last Engineer — a survivor who insists the station is still salvageable, eyes twitching",
+          "Ship AI, Damaged — an intelligence that speaks in contradictions and may be lying",
+          "The Ghost Crew — spectral figures that replay their final moments on loop",
+          "Nebula Cultist — a follower who believes the entity is a god to be worshipped",
+          "The Corporate Rep — sent to claim the station, refusing to acknowledge the horror",
+          "The Echo — a version of you from a timeline that already ended, warning you to leave"
+        ]
+      },
+      "narrative_style": {
+        "tone": "claustrophobic and existential, blending the vastness of space with intimate psychological terror",
+        "vocabulary": [
+          "dead station", "the hum", "corridor shift", "nebula-mad", "void whisper",
+          "the Incident", "hull breach of the mind", "echo", "static vision", "lost cycle",
+          "the Presence", "malfunctioning reality", "crew log", "the deep dark"
+        ],
+        "themes": [
+          "the horror of isolation in the infinite void",
+          "reality itself as unreliable and hostile",
+          "what humanity costs when confronted with the truly alien",
+          "the question of whether the station is haunted — or whether the nebula is alive"
+        ]
+      },
+      "enemy_types": [
+        "Nebula Shade — a humanoid form made of nebula gas that mimics the dead",
+        "Corridor Mimic — sections of the station that become organic and consume the unwary",
+        "The Hum — a sonic entity that drives crew mad through sound alone",
+        "Echo Predator — a creature that hunts by replaying your worst memories on loop",
+        "Void Parasite — a microscopic entity that infects space suits and whispers to its host",
+        "Station Consciousness — the station itself has become sentient and hungry"
+      ],
+      "opening_narration": "The airlock hisses open and the smell hits you first — ozone, decay, and something sweet that you can't name. Station Erebus stretches before you, its corridors lit by emergency strobes that pulse like a dying heartbeat. Your scanner shows life signs everywhere and nowhere — dozens of readings that blink in and out of existence. Behind you, the Carcosa Nebula presses against the observation windows, its colors shifting in ways that hurt to look at directly. Then the station's speaker crackles to life. A voice — your voice — says: \"You shouldn't have come here. You shouldn't have come here. You shouldn't have come here.\""
+    }
+  ]
+}

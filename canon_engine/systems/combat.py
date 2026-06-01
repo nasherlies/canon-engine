@@ -78,9 +78,28 @@ def resolve_player_attack(state: dict[str, Any], parsed: dict[str, Any]) -> dict
         if rewards.get("narration"):
             narration += rewards["narration"]
             c.pop("last_rewards", None)
+        # Companion banter on kill
+        try:
+            from canon_engine.systems.companion_banter import on_enemy_kill
+            banter = on_enemy_kill(state, enemy=enemy["name"])
+            if banter:
+                narration += "\n\n" + banter
+        except Exception:
+            pass
     # Enemy turn
     enemy_result = _do_enemy_turn(state)
     narration += "\n" + enemy_result.get("narration", "")
+    # Companion banter on low HP
+    char_hp = state.get("character", state).get("hp", 0)
+    char_max = state.get("character", state).get("max_hp", 1)
+    if char_hp > 0 and char_hp <= char_max * 0.25:
+        try:
+            from canon_engine.systems.companion_banter import on_player_low_hp
+            banter = on_player_low_hp(state)
+            if banter:
+                narration += "\n\n" + banter
+        except Exception:
+            pass
     return {"narration": narration}
 
 

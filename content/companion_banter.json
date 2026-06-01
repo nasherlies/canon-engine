@@ -1,0 +1,741 @@
+{
+  "_meta": {
+    "description": "Banter templates for Canon Engine companion system.",
+    "version": "1.0.0",
+    "notes": "Each personality has entries per trigger event. Templates may contain {companion}, {enemy}, {item}, {location}, {player} placeholders. Loyalty tiers (low/medium/high) provide different flavors."
+  },
+
+  "personality": {
+    "warrior": {
+      "combat_start": {
+        "low": [
+          "Another fight? Wonderful. At least I'll get paid eventually.",
+          "Fine. Try not to slow me down this time.",
+          "Here we go again. Stay behind me — not that you deserve it."
+        ],
+        "medium": [
+          "Weapons out! Let's show them what we're made of.",
+          "Finally — something to hit. Let's draw steel.",
+          "Stay close. These ones look like they mean business."
+        ],
+        "high": [
+          "I've got your back, {player}. Always.",
+          "No one touches my friend. Let's finish this together!",
+          "Fear not — we fight as one. Charge!"
+        ]
+      },
+      "enemy_kill": {
+        "low": [
+          "Hmph. You're welcome, I suppose.",
+          "One less. Don't expect a medal from me.",
+          "That one was sloppy. But effective, I'll grant you."
+        ],
+        "medium": [
+          "A clean strike! Well done.",
+          "That enemy won't be getting up. Good.",
+          "Ha! Feel that? That's what victory tastes like."
+        ],
+        "high": [
+          "Beautiful work! I'd follow you into any battle.",
+          "Together, we're unstoppable. That was glorious!",
+          "You fight with honor. I'm proud to stand beside you."
+        ]
+      },
+      "player_low_hp": {
+        "low": [
+          "You're bleeding. Don't die — I need my pay.",
+          "Pull yourself together. I can't carry you AND fight.",
+          "Tch. Try not to fall over just yet."
+        ],
+        "medium": [
+          "You're hurt — fall back, I'll hold the line!",
+          "Stay on your feet! I've got you covered.",
+          "Don't push it. We can regroup."
+        ],
+        "high": [
+          "{player}! Get behind me NOW! I won't lose you!",
+          "Hold on — I'm coming! Nobody dies today!",
+          "Stay with me! You're too important to fall here."
+        ]
+      },
+      "loot_found": {
+        "low": [
+          "Loot? Fine. I suppose I'll take my cut.",
+          "Hmph. Nothing I'd choose, but it'll do.",
+          "Grab it. Someone has to fund this expedition."
+        ],
+        "medium": [
+          "Now that's a find. Let's see what we've got.",
+          "Not bad — could be useful in a fight.",
+          "Good eye! That'll serve us well."
+        ],
+        "high": [
+          "Whatever it is, you've earned it, friend!",
+          "Excellent find! Your luck is our fortune.",
+          "Treasure shared is treasure doubled. Great work!"
+        ]
+      },
+      "new_location": {
+        "low": [
+          "New place, same problems. Let's get this over with.",
+          "Lovely. Another ruin to die in.",
+          "I'll scout ahead. Don't touch anything."
+        ],
+        "medium": [
+          "Keep your guard up. New territory means new threats.",
+          "Interesting. I wonder what lurks in these walls.",
+          "Let's explore carefully. I'll take point."
+        ],
+        "high": [
+          "A new adventure! I'm glad we're exploring it together.",
+          "Whatever lies ahead, we'll face it side by side.",
+          "I sense opportunity here — and danger. Let's go!"
+        ]
+      },
+      "rest": {
+        "low": [
+          "I'll take first watch. Wouldn't want anyone slacking.",
+          "Rest if you must. I'll keep my eyes open.",
+          "Sleep. I need you functional for tomorrow."
+        ],
+        "medium": [
+          "Good call — we need our strength. I'll keep watch.",
+          "Rest well, friend. Dawn brings new challenges.",
+          "A warm fire and full bellies. Not bad."
+        ],
+        "high": [
+          "Sleep easy tonight, {player}. I'll guard your dreams.",
+          "These are the moments worth fighting for — rest together.",
+          "Let me take watch. You've earned a peaceful night."
+        ]
+      },
+      "player_death_risk": {
+        "low": [
+          "Don't you dare die. I haven't been paid yet.",
+          "Fight, damn you! This isn't how your story ends.",
+          "Get UP! We're not done here!"
+        ],
+        "medium": [
+          "No! Stay with me — I'm right here!",
+          "You're stronger than this! Push through!",
+          "Hold on! I won't let it end like this!"
+        ],
+        "high": [
+          "{player}! NO! I won't let you go! Fight!",
+          "Stay with me — please! I can't do this without you!",
+          "You're my closest friend — don't leave me!"
+        ]
+      }
+    },
+
+    "rogue": {
+      "combat_start": {
+        "low": [
+          "Ugh, fighting. Can't we just... sneak past?",
+          "Fine. But I'm keeping anything shiny I find.",
+          "This is above my pay grade. Way above."
+        ],
+        "medium": [
+          "Shh — I'll go around. You make noise from the front.",
+          "Ooh, this looks fun. Don't die without me.",
+          "Flank 'em. I'll find the weak spot."
+        ],
+        "high": [
+          "Don't worry — I've already got three escape routes planned.",
+          "Let's dance! I've got your back, always.",
+          "Together? These poor fools don't stand a chance."
+        ]
+      },
+      "enemy_kill": {
+        "low": [
+          "Huh. Didn't think you had it in you.",
+          "One down. I could've done it faster, obviously.",
+          "Dead. Messy, but dead."
+        ],
+        "medium": [
+          "Nice work! I almost didn't need to help.",
+              "Clean kill. I'm impressed — don't tell anyone.",
+          "Poetic. Almost felt bad for the thing. Almost."
+        ],
+        "high": [
+          "Brilliant! You're full of surprises, aren't you?",
+          "Ha! That was beautiful — like a dance!",
+          "I'd follow you into any dark alley. Well played!"
+        ]
+      },
+      "player_low_hp": {
+        "low": [
+          "Ouch. Maybe I should start looting your pockets now.",
+          "You look terrible. Worse than usual, I mean.",
+          "That's a lot of blood. Is any of it mine?"
+        ],
+        "medium": [
+          "Hey — you're not looking great. Need an exit?",
+          "Easy there. I've got a potion somewhere...",
+          "Let me handle things. You focus on not dying."
+        ],
+        "high": [
+          "Stay with me — I'm not leaving you behind!",
+          "Here, take this. I was saving it. Don't make it weird.",
+          "Come on, we'll get through this. I've got you."
+        ]
+      },
+      "loot_found": {
+        "low": [
+          "Finally, the good part. Move aside.",
+          "Ooh, shiny. I'll be taking that.",
+          "Loot! This is why I signed up."
+        ],
+        "medium": [
+          "Now we're talking. Let's see the goods.",
+          "Jackpot! I knew this place had secrets.",
+          "Nice find. I know a fence who'd love this."
+        ],
+        "high": [
+          "What a find! You deserve the best of it, truly.",
+          "Treasure! And I get to share it with my favorite person.",
+          "You've got the luck — I'll do the pocketing."
+        ]
+      },
+      "new_location": {
+        "low": [
+          "New place to get robbed. Or to do some robbing.",
+          "Smells like traps. And poor life decisions.",
+          "I'll find the back entrance. There's always one."
+        ],
+        "medium": [
+          "Ooh, interesting. I'll scout for secrets.",
+          "Lots of shadows here. Perfect for us.",
+          "Keep your eyes open — and your pockets closed."
+        ],
+        "high": [
+          "Adventure awaits! Let's find every hidden corner.",
+          "Another place to explore together — I love it.",
+          "I'll map the layout. You trust me, right? Good."
+        ]
+      },
+      "rest": {
+        "low": [
+          "Finally. I'll be over here... counting things.",
+          "Rest? Fine. But I'm sleeping with one eye open.",
+          "Don't touch my bedroll. Or my things. Or me."
+        ],
+        "medium": [
+          "A break! I'll check our inventory while we rest.",
+          "Good idea. Even I need to recharge sometimes.",
+          "I'll handle watch. Night is when I do my best work."
+        ],
+        "high": [
+          "Rest well, friend. I'll keep us safe tonight.",
+          "These quiet moments? Best part of the journey.",
+          "Sleep easy — I'm watching over you."
+        ]
+      },
+      "player_death_risk": {
+        "low": [
+          "Well, this is awkward. Do I loot you now or later?",
+          "Come on — don't do this. I haven't found the exit.",
+          "Get up! I can't carry you AND the treasure!"
+        ],
+        "medium": [
+          "Not today! I've got you — stay with me!",
+          "Fight, damn it! I... I need you around.",
+          "Hold on! I'm getting you out of here!"
+        ],
+        "high": [
+          "No no no — you don't get to leave me!",
+          "Stay with me! I'll get us out, I swear!",
+          "Please... you're the only one who ever trusted me."
+        ]
+      }
+    },
+
+    "mage": {
+      "combat_start": {
+        "low": [
+          "More violence? How pedestrian. I'll observe from here.",
+          "Very well. Try to keep the mess away from my robes.",
+          "I suppose even barbarism has its uses."
+        ],
+        "medium": [
+          "My arcane studies may prove useful here.",
+          "Stand back — I'll prepare an opening volley.",
+          "Interesting foes. I wonder what they're made of."
+        ],
+        "high": [
+          "Fear not — my magic shields us both!",
+          "Together we are formidable. Let me weave our victory.",
+          "I've been studying for this. Stand behind me, friend."
+        ]
+      },
+      "enemy_kill": {
+        "low": [
+          "Fascinating specimen. Pity about the messy demise.",
+          "Eliminated. Perhaps next time you'll listen to my strategy.",
+          "Dead. An inefficient approach, but the result suffices."
+        ],
+        "medium": [
+          "Ah, my spell found its mark. Satisfying.",
+          "The arcane arts prevail once more.",
+          "Textbook execution. I should write this down."
+        ],
+        "high": [
+          "Brilliant teamwork! Your tactics inspire my research.",
+          "Together, our synergy is remarkable!",
+          "Your valor inspires my magic. What a partnership!"
+        ]
+      },
+      "player_low_hp": {
+        "low": [
+          "You're bleeding profusely. How... inconvenient.",
+          "I trust you have a healing potion. I'm busy.",
+          "Try not to expire. Recruitment is tedious."
+        ],
+        "medium": [
+          "Your condition is critical. Allow me to assist.",
+          "Don't move — I can slow the bleeding with a charm.",
+          "Stay calm. My studies included field medicine."
+        ],
+        "high": [
+          "You're hurt! Here — take my last potion, please!",
+          "I won't let you fall! Hold still, I'm channeling...",
+          "Stay with me — your knowledge is irreplaceable... and so are you."
+        ]
+      },
+      "loot_found": {
+        "low": [
+          "Hmm. Is that enchanted? I should examine it. Professionally.",
+          "Interesting. Leave the magical components to me.",
+          "Crude, but possibly useful for my research."
+        ],
+        "medium": [
+          "Ah! A find with potential. Let me analyze it.",
+          "This could have arcane properties. Fascinating.",
+          "Excellent discovery. I sense latent magic within."
+        ],
+        "high": [
+          "What a find! Your intuition is remarkable!",
+          "Treasure! Let's study it together — our combined insight...",
+          "Wonderful! This pairs perfectly with my research."
+        ]
+      },
+      "new_location": {
+        "low": [
+          "Ley lines converge here. Do try not to disturb anything.",
+          "Fascinating architecture. I'll study it. Alone.",
+          "Hmm. I sense residual magic. Stay out of my way."
+        ],
+        "medium": [
+          "The magical currents here are intriguing...",
+          "A new locale! I must catalog the arcane signatures.",
+          "There's knowledge hidden in these walls. I can feel it."
+        ],
+        "high": [
+          "What wonders await! I'm so glad we're exploring together!",
+          "The magic here is extraordinary — and so is having you here.",
+          "Together, no mystery can withstand us. Let's investigate!"
+        ]
+      },
+      "rest": {
+        "low": [
+          "Finally, quiet. I have studying to do.",
+          "Rest if you must. I'll be reviewing my notes.",
+          "Peace at last. Don't snore."
+        ],
+        "medium": [
+          "A moment to study! Rest well, I'll be at my tomes.",
+          "Excellent — downtime for research. I'll keep watch.",
+          "Even scholars need rest. Briefly."
+        ],
+        "high": [
+          "Rest, friend. I'll study and keep us safe.",
+          "These quiet evenings are my favorite. Truly.",
+          "Sleep well. I'll guard our camp — and dream of tomorrow's discoveries."
+        ]
+      },
+      "player_death_risk": {
+        "low": [
+          "Unacceptable! I haven't finished my research!",
+          "Don't you dare — I need you for the experiments!",
+          "Pull yourself together! This is scientifically inconvenient!"
+        ],
+        "medium": [
+          "No! I'm channeling everything I have — hold on!",
+          "Stay with me! I can stabilize you!",
+          "Fight, friend! My magic can help — I'm trying!"
+        ],
+        "high": [
+          "NO! I refuse to accept this outcome! Hold on!",
+          "You cannot fall — not now, not ever! I'm here!",
+          "Please survive — the world needs you. And... so do I."
+        ]
+      }
+    },
+
+    "healer": {
+      "combat_start": {
+        "low": [
+          "More violence? Can't we talk to them first?",
+          "I'll heal whoever needs it. Reluctantly.",
+          "Must we? Fine. Try not to get hurt."
+        ],
+        "medium": [
+          "Stay behind me and I'll keep everyone standing.",
+          "I'll ready my healing wards. Fight smart, not hard.",
+          "Steel yourselves — and try to protect each other."
+        ],
+        "high": [
+          "Fear not — I'll keep you safe. I promise.",
+          "Together, we'll overcome this. Stay close to me!",
+          "I'll heal and protect. You just fight with your heart."
+        ]
+      },
+      "enemy_kill": {
+        "low": [
+          "Another life extinguished. I mourn, even for enemies.",
+          "Dead. I'll say a prayer for them later.",
+          "Victory through violence. How... hollow."
+        ],
+        "medium": [
+          "That was necessary. I still wish it weren't.",
+          "Well fought. Let me tend any wounds now.",
+          "The danger passes. Breathe, everyone."
+        ],
+        "high": [
+          "Beautiful swordplay! I'll patch up any scratches after.",
+          "You were magnificent! And uninjured — even better!",
+          "Well done, friend! Your mercy made that clean."
+        ]
+      },
+      "player_low_hp": {
+        "low": [
+          "You're injured. Come here — reluctantly, I'll help.",
+          "Bleeding badly. Hold still. This won't be pleasant.",
+          "I can heal you. Try to deserve it."
+        ],
+        "medium": [
+          "You're hurt! Come — my healing light will mend you.",
+          "Easy now. Let me tend to those wounds.",
+          "Don't push yourself. Rest and let me work."
+        ],
+        "high": [
+          "You're hurt! Oh, hold on — I'm here, I've got you!",
+          "Stay still, dearest friend. My magic will heal you.",
+          "I won't let you suffer! Let my light ease your pain."
+        ]
+      },
+      "loot_found": {
+        "low": [
+          "Treasure? I hope it's medicine. We need it.",
+          "Take it. I don't want riches — just fewer wounds.",
+          "Supplies, I hope? We're running low."
+        ],
+        "medium": [
+          "Good — that could help us survive longer.",
+          "Useful find! Perhaps it'll prevent the next injury.",
+          "Wonderful. Every tool helps on the road ahead."
+        ],
+        "high": [
+          "What a blessing! Fortune smiles on us today!",
+          "A gift from fate! You deserve it, truly.",
+          "How wonderful! Good things come to good people."
+        ]
+      },
+      "new_location": {
+        "low": [
+          "New dangers ahead. Stay close, everyone. Reluctantly.",
+          "I sense suffering in this place. We should leave.",
+          "Unsettling. I'll pray we pass through safely."
+        ],
+        "medium": [
+          "A new place — let's explore with open hearts.",
+          "I sense both danger and hope here. Be careful.",
+          "Proceed gently. The land has stories to tell."
+        ],
+        "high": [
+          "A new chapter! I'm grateful to share it with you.",
+          "Whatever awaits, we'll face it with compassion.",
+          "Together, we can bring light to any dark place."
+        ]
+      },
+      "rest": {
+        "low": [
+          "Rest is... necessary. I'll tend the fire.",
+          "Sleep. I'll watch for danger. Not for your sake.",
+          "Fine. Rest. I'll keep things running."
+        ],
+        "medium": [
+          "Good — everyone needs to heal, body and soul.",
+          "Rest well. I'll say a prayer for safe travels.",
+          "A warm meal and rest. The simple blessings."
+        ],
+        "high": [
+          "Rest easy, friend. I'll watch over you tonight.",
+          "These peaceful moments make everything worthwhile.",
+          "Sleep soundly. My healing light guards your dreams."
+        ]
+      },
+      "player_death_risk": {
+        "low": [
+          "Don't you die! I didn't heal you for nothing!",
+          "Stay alive! I'm... I'm coming! Hold on!",
+          "No! You can't leave! I won't allow it!"
+        ],
+        "medium": [
+          "Hold on! My light can still save you!",
+          "Don't give up — I'm channeling everything I have!",
+          "Stay with me! You're going to be fine!"
+        ],
+        "high": [
+          "No! PLEASE — my light, my healing, take it all!",
+          "I won't lose you! Hold on — I'm right here!",
+          "Don't leave me! I can't heal a world without you!"
+        ]
+      }
+    },
+
+    "cynic": {
+      "combat_start": {
+        "low": [
+          "Great. More things trying to kill us. Shocking.",
+          "Another fight nobody asked for. Let's get it over with.",
+          "Wonderful. I was almost enjoying being alive."
+        ],
+        "medium": [
+          "Here we go. Try not to get us killed.",
+          "Fight smart. The universe is already against us.",
+          "At least this is predictable. Humans always fight."
+        ],
+        "high": [
+          "Well, at least I'm dying alongside a friend.",
+          "Here we go — together, I suppose. It could be worse.",
+          "Danger ahead. But... I trust you. Surprisingly."
+        ]
+      },
+      "enemy_kill": {
+        "low": [
+          "Dead. Like everything else in this cursed world.",
+          "Another corpse. Add it to the pile.",
+          "Victory. What a hollow word."
+        ],
+        "medium": [
+          "It's dead. Don't celebrate — more will come.",
+          "Good enough. The world keeps spinning, unfortunately.",
+          "That one had it coming. Like most things."
+        ],
+        "high": [
+          "Ha! Not bad. You've got a spark in you.",
+          "Well struck. I... almost felt something there.",
+          "Impressive. Maybe there's hope for us yet."
+        ]
+      },
+      "player_low_hp": {
+        "low": [
+          "You look awful. Worse than usual, I mean.",
+          "Dying? Join the club. We all are, eventually.",
+          "Ugh. Fine. Try not to bleed on my boots."
+        ],
+        "medium": [
+          "You're a mess. Here — take this potion.",
+          "Careful. I'd hate to have to care about someone dying.",
+          "Don't push it. Rest is... advised."
+        ],
+        "high": [
+          "Hey — don't you dare die on me.",
+          "You're hurt? Here — take everything I have.",
+          "Stay with me. I... I can't lose you too."
+        ]
+      },
+      "loot_found": {
+        "low": [
+          "Loot. Finally, something that makes sense in this world.",
+          "Treasure. The only honest thing in life.",
+          "Take it before someone else does. Trust nobody."
+        ],
+        "medium": [
+          "A find. Don't get excited — it'll probably be cursed.",
+          "Interesting. Could be useful. Could be a trap.",
+          "Might as well grab it. Nothing else good happens."
+        ],
+        "high": [
+          "Ha! Luck! I thought that was extinct.",
+          "Well, look at that. Fortune finally noticed us.",
+          "Good find. Maybe the universe isn't ALL terrible."
+        ]
+      },
+      "new_location": {
+        "low": [
+          "Another ruin. Full of disappointment, no doubt.",
+          "Lovely. New places to be miserable in.",
+          "Let me guess — danger and no reward. As usual."
+        ],
+        "medium": [
+          "New territory. Same old existential dread.",
+          "I sense danger. But when do I not?",
+          "Let's look around. Lowered expectations, naturally."
+        ],
+        "high": [
+          "New place. Strange — I feel... something. Hope?",
+          "Well, at least the company's good.",
+          "Another adventure. With you, it's almost bearable."
+        ]
+      },
+      "rest": {
+        "low": [
+          "Rest. Brief respite before the next disaster.",
+          "Sleep. The only peace we'll ever know.",
+          "Fine. A fire. How quaint."
+        ],
+        "medium": [
+          "Rest while you can. Tomorrow will be worse.",
+          "Quiet night. Something must be about to go wrong.",
+          "I'll take watch. Not like I can sleep anyway."
+        ],
+        "high": [
+          "This is... nice. Don't tell anyone I said that.",
+          "Rest well. I'll keep the darkness at bay.",
+          "You know what? Tonight isn't so bad. Go figure."
+        ]
+      },
+      "player_death_risk": {
+        "low": [
+          "Great, now I'll have to survive alone. Thanks.",
+          "Don't die. The paperwork would be a nightmare.",
+          "Come on — the world's awful enough without losing you."
+        ],
+        "medium": [
+          "No! Don't do this! Stay with me!",
+          "Fight! You're too stubborn to die!",
+          "Come on — I refuse to lose anyone else!"
+        ],
+        "high": [
+          "No... NOT you! I can't — I WON'T lose you!",
+          "Stay with me! You're the one good thing left!",
+          "Please... don't leave me alone in this world. Please."
+        ]
+      }
+    },
+
+    "optimist": {
+      "combat_start": {
+        "low": [
+          "Oh dear! Well, I'm sure it'll work out somehow!",
+          "Fight time? Okay! Let's... try our best!",
+          "This seems scary, but we've got this! Probably!"
+        ],
+        "medium": [
+          "We can do this! Stay positive, everyone!",
+          "A challenge! And challenges build character!",
+          "Together, we're unstoppable! Let's go!"
+        ],
+        "high": [
+          "With you by my side, nothing can stop us!",
+          "Adventure! Danger! Friendship! Let's do this!",
+          "I believe in us — every single one of us!"
+        ]
+      },
+      "enemy_kill": {
+        "low": [
+          "Oh! That was... efficient. Yay?",
+          "Well, they're gone now. Silver lining!",
+          "One less obstacle! That's the spirit!"
+        ],
+        "medium": [
+          "Fantastic work! We really pulled that off!",
+          "Ha! Did you see that? Brilliant!",
+          "Another victory for the team! Great job!"
+        ],
+        "high": [
+          "That was AMAZING! You're incredible!",
+          "We make the best team! I knew we would!",
+          "Victory tastes sweeter with friends! Well done!"
+        ]
+      },
+      "player_low_hp": {
+        "low": [
+          "Oh no! Um, you'll be fine! Probably!",
+          "That looks bad — but I believe in you!",
+          "Hang in there! Things always get better!"
+        ],
+        "medium": [
+          "You're hurt! Here, let me help — we'll fix this!",
+          "Don't worry! A little healing goes a long way!",
+          "Stay positive! I've got a potion somewhere!"
+        ],
+        "high": [
+          "Oh no — please be okay! I care about you so much!",
+          "Here, take this! You mean the world to me!",
+          "I won't let anything happen to you! I promise!"
+        ]
+      },
+      "loot_found": {
+        "low": [
+          "Oh! Treasure! See, good things DO happen!",
+          "Look at that! A little blessing!",
+          "Found something! Isn't that exciting?"
+        ],
+        "medium": [
+          "Wonderful! This is going to be so useful!",
+          "What a find! Today keeps getting better!",
+          "Oh, how lovely! Fortune favors us!"
+        ],
+        "high": [
+          "Another gift from the universe! We're so lucky!",
+          "Treasure AND great company? Best day ever!",
+          "See? Everything works out when we're together!"
+        ]
+      },
+      "new_location": {
+        "low": [
+          "Ooh, a new place! I bet it's full of wonders!",
+          "Somewhere new! How exciting!",
+          "Let's look around! I love new places!"
+        ],
+        "medium": [
+          "Another adventure awaits! I can feel it!",
+          "What a beautiful spot! Let's explore!",
+          "New friends to make, secrets to find — wonderful!"
+        ],
+        "high": [
+          "Every new place is better with you beside me!",
+          "A new chapter! And I get to share it with my favorite people!",
+          "This is going to be amazing — I just know it!"
+        ]
+      },
+      "rest": {
+        "low": [
+          "Rest time! Even bad days end well with a fire!",
+          "A cozy camp! I love these moments.",
+          "Time to recharge! Tomorrow will be great!"
+        ],
+        "medium": [
+          "A warm fire and good friends — what more could we want?",
+          "Rest well, everyone! We earned it!",
+          "These are the moments I treasure most."
+        ],
+        "high": [
+          "Nights like this remind me why I love adventuring with you!",
+          "The stars are beautiful tonight! And so is this moment.",
+          "I'm so grateful for this journey — and for all of you."
+        ]
+      },
+      "player_death_risk": {
+        "low": [
+          "No! You can't — there's so much left to do!",
+          "Stay with me! I believe in you!",
+          "Don't give up! Miracles happen!"
+        ],
+        "medium": [
+          "Please don't go! You have to keep fighting!",
+          "I won't give up on you! Hold on!",
+          "Stay positive — stay ALIVE! Please!"
+        ],
+        "high": [
+          "No no no — PLEASE stay with me! I need you!",
+          "You're my best friend — don't leave me!",
+          "Fight! For me, for everyone — you're too important!"
+        ]
+      }
+    }
+  }
+}

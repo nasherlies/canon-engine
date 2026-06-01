@@ -1,0 +1,112 @@
+[
+  {
+    "id": "spare_the_bandit",
+    "description": "You chose to spare the bandit's life instead of turning them over to the guard.",
+    "category": "mercy",
+    "consequences": [
+      {
+        "description": "The bandit you spared intercepts a thief trying to rob you in the market, repaying the life you gave them.",
+        "trigger_after": 3,
+        "trigger_context": "market"
+      },
+      {
+        "description": "Word of your mercy spreads through the underground — criminals now hesitate before attacking you, unsure if you'll show the same compassion or demand justice.",
+        "trigger_after": 5,
+        "trigger_context": null
+      },
+      {
+        "description": "The spared bandit arrives at the gates of the besieged town, leading a company of reformed outlaws to fight at your side — the mercy you showed has become a rallying banner.",
+        "trigger_after": 8,
+        "trigger_context": "battle"
+      }
+    ]
+  },
+  {
+    "id": "steal_from_temple",
+    "description": "You stole the sacred relic from the Temple of the Silver Moon.",
+    "category": "transgression",
+    "consequences": [
+      {
+        "description": "A temple acolyte recognises the faint divine aura clinging to your belongings and confronts you in the street, demanding the relic's return.",
+        "trigger_after": 2,
+        "trigger_context": "city"
+      },
+      {
+        "description": "The moon's blessing no longer protects your camp at night — you are plagued by vivid nightmares of judgment, and your companions wake unrested.",
+        "trigger_after": 4,
+        "trigger_context": null
+      },
+      {
+        "description": "The High Priestess of the Silver Moon places a sacred bounty on your head; clerics across the realm now refuse to heal you, recognising the temple's mark upon your soul.",
+        "trigger_after": 10,
+        "trigger_context": null
+      }
+    ]
+  },
+  {
+    "id": "ally_with_nobles",
+    "description": "You accepted the Duke's offer of political alliance and swore fealty to the noble house.",
+    "category": "politics",
+    "consequences": [
+      {
+        "description": "Common folk eye you with suspicion in taverns and villages — to them, you are now one of the oppressors, regardless of your intentions.",
+        "trigger_after": 2,
+        "trigger_context": "village"
+      },
+      {
+        "description": "The Duke sends a retinue of soldiers to escort you, lending legitimacy but also making stealth and independent action nearly impossible.",
+        "trigger_after": 5,
+        "trigger_context": null
+      },
+      {
+        "description": "A rival noble family, enemies of the Duke, now considers you a threat; an assassin bearing their crest is found dead near your lodgings, and whispers of a coming purge fill the court.",
+        "trigger_after": 8,
+        "trigger_context": "royal_court"
+      }
+    ]
+  },
+  {
+    "id": "save_the_child",
+    "description": "You risked your life to pull the child from the burning building.",
+    "category": "heroism",
+    "consequences": [
+      {
+        "description": "The child's parent, a skilled blacksmith, offers to forge or repair your equipment free of charge — 'You gave me back my world; let me give you steel.'",
+        "trigger_after": 1,
+        "trigger_context": "blacksmith"
+      },
+      {
+        "description": "Bards in the region begin singing of 'The Flame-Scarred Hero' — strangers recognise you and some offer aid, though others wonder if you seek glory for yourself.",
+        "trigger_after": 4,
+        "trigger_context": null
+      },
+      {
+        "description": "The child, now a young apprentice mage, seeks you out years later to return the favour at the darkest hour — a shield of arcane fire stands between you and death.",
+        "trigger_after": 12,
+        "trigger_context": "battle"
+      }
+    ]
+  },
+  {
+    "id": "betray_ally",
+    "description": "You betrayed your companion's trust, revealing their secret to a mutual enemy.",
+    "category": "betrayal",
+    "consequences": [
+      {
+        "description": "Your former companion sends a cold letter: 'I know what you did. We are no longer friends.' The ink smells faintly of poison — a warning, not yet an attack.",
+        "trigger_after": 1,
+        "trigger_context": null
+      },
+      {
+        "description": "Other allies begin to keep secrets from you; information flows less freely, and NPCs you once trusted now hedge their words and avoid being alone with you.",
+        "trigger_after": 4,
+        "trigger_context": null
+      },
+      {
+        "description": "Your betrayed companion has risen in power and now commands a faction that opposes you at every turn — at a critical negotiation, they reveal *your* secrets to the room.",
+        "trigger_after": 10,
+        "trigger_context": "negotiation"
+      }
+    ]
+  }
+]

@@ -345,6 +345,40 @@ def _apply_parsed(state: Dict[str, Any], parsed: Dict[str, Any], *, config: Conf
         result["narration"] = "\n".join(lines)
         return result
 
+    # ── Choices command ────────────────────────────────────────────────
+    if kind == "choices":
+        from canon_engine.systems.story_branch import handle_choices_command
+        result["narration"] = handle_choices_command(state)
+        return result
+
+    # ── Consequences command ───────────────────────────────────────────
+    if kind == "consequences":
+        from canon_engine.systems.story_branch import handle_consequences_command
+        result["narration"] = handle_consequences_command(state)
+        return result
+
+    # ── Collide command ────────────────────────────────────────────────
+    if kind == "collide":
+        from canon_engine.systems.genre_collision import get_collision, list_collisions, apply_collision, describe_collision
+        args = parsed.get("text", "").strip().split()
+        if not args or args[0] == "list":
+            collisions = list_collisions()
+            lines = ["⚔ **Genre Collisions Available:**\n"]
+            for c in collisions:
+                lines.append(f"• **{c['name']}** — {c['genres'][0]} × {c['genres'][1]}")
+            lines.append("\nUse `/collide <genre1> <genre2>` to blend genres!")
+            result["narration"] = "\n".join(lines)
+        elif len(args) >= 2:
+            col = get_collision(args[0], args[1])
+            if col:
+                state = apply_collision(state, col["id"])
+                result["narration"] = col.get("opening_narration", f"Genre collision: {col['name']} activated!")
+            else:
+                result["narration"] = f"No collision template found for '{args[0]}' × '{args[1]}'.\nUse `/collide list` to see available collisions."
+        else:
+            result["narration"] = "Usage: `/collide <genre1> <genre2>` or `/collide list`"
+        return result
+
     # ── Encounter command ──────────────────────────────────────────────
     if kind == "encounter" or (kind == "fight" and not in_combat):
         encounter_result = _handle_encounter(state)
@@ -468,6 +502,8 @@ def _handle_help(parsed: Dict[str, Any], state: Dict[str, Any]) -> str:
         "**Stealth:** /scout, /stealth, /detect, /disarm\n"
         "**Crafting:** /craft\n"
         "**Soul:** /soul, /remember, /anchor, /bribe, /ascend, /descend, /rebirth\n"
+        "**Story:** /choices, /consequences, /author, /summary\n"
+        "**Genre:** /collide\n"
         "**System:** /save, /load, /quicksave, /help, /menu, /quit\n\n"
         "Type `/help <topic>` for details on a specific topic."
     )

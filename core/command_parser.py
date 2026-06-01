@@ -75,7 +75,7 @@ COMMAND_HEADS: frozenset[str] = frozenset({
     "tutorial",
     # Admin / dev
     "admin", "edit", "spawn", "retcon",
-    "author", "summary", "encounter",
+    "author", "summary", "encounter", "choices", "consequences", "collide",
     "model", "verbose", "lang",
     "dump", "godmode", "setseed",
     "start_character",
