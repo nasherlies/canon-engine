@@ -1236,23 +1236,43 @@ function doLoad(){
      html+='<div class="save-slot-name">Slot: '+s.slot+'</div>';
      html+='</div>';
      html+='<div class="save-actions">';
-     html+='<button class="btn-sm btn-load" onclick="loadSave('+JSON.stringify(s.slot)+')">LOAD</button>';
-     html+='<button class="btn-sm" onclick="duplicateSave('+JSON.stringify(s.slot)+')">COPY</button>';
-     html+='<button class="btn-sm" onclick="renameSave('+JSON.stringify(s.slot)+')">RENAME</button>';
-     html+='<button class="btn-sm btn-danger" onclick="deleteSave('+JSON.stringify(s.slot)+')">DELETE</button>';
+     html+='<button class="btn-sm btn-load" data-act="load" data-slot="'+s.slot+'">LOAD</button>';
+     html+='<button class="btn-sm" data-act="copy" data-slot="'+s.slot+'">COPY</button>';
+     html+='<button class="btn-sm" data-act="rename" data-slot="'+s.slot+'">RENAME</button>';
+     html+='<button class="btn-sm btn-danger" data-act="delete" data-slot="'+s.slot+'">DELETE</button>';
      html+='</div></div>';
     });
     list.innerHTML=html;
+    // event delegation for save action buttons
+    list.onclick=function(e){
+     var btn=e.target.closest('[data-act]');
+     if(!btn)return;
+     var act=btn.dataset.act, slot=btn.dataset.slot;
+     if(act==='load')loadSave(slot);
+     else if(act==='copy')duplicateSave(slot);
+     else if(act==='rename')renameSave(slot);
+     else if(act==='delete')deleteSave(slot);
+    };
    }
    document.getElementById('saves-modal').classList.add('show');
   }).catch(function(){alert('Could not load saves');});
  });
 }
 function loadSave(slot){
- SLOT=slot;
- closeModal('saves-modal');
- showScreen('game');
- cmd('/help');
+ fetch(API+'/saves/load',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot:slot})})
+  .then(function(r){return r.json();})
+  .then(function(d){
+   if(d.status==='loaded'){
+    SLOT=slot;
+    closeModal('saves-modal');
+    showScreen('game');
+    narr('💾 Loaded: '+slot,'sys');
+    cmd('/look');
+   } else {
+    alert('Failed to load save: '+JSON.stringify(d));
+   }
+  })
+  .catch(function(e){alert('Load error: '+e.message);});
 }
 function deleteSave(slot){
  if(!confirm('Delete save "'+slot+'"? This cannot be undone.'))return;

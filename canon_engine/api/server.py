@@ -378,8 +378,15 @@ async def start_character(
 
     Either supply ``preset_id`` to load from presets, or supply ``name``,
     ``archetype``, ``stats``, etc. for a custom character.
+
+    Auto-generates: opening scenario, starting gear, companions, skills,
+    and first quest — all contextualised by genre, location, race, and class.
     """
+    import random as _random
     from canon_engine.systems.character import create_character as _create_char, max_hp as _max_hp, score_to_modifier
+    from canon_engine.systems.auto_gen import generate_full_start
+
+    rng = _random.Random()
 
     # --- Load preset data if requested ---
     preset_data: Dict[str, Any] = {}
@@ -401,7 +408,6 @@ async def start_character(
     traits = req.traits or ""
     stats = req.stats or preset_data.get("stats", {})
     speech_style = req.speech_style or preset_data.get("speech_style", "default")
-    starting_gear = preset_data.get("starting_gear", [])
 
     # If still no stats, generate random ones via create_character
     if not stats:
@@ -415,11 +421,6 @@ async def start_character(
     con = stats.get("CON", 10)
     hp = _max_hp(con)
     dex = stats.get("DEX", 10)
-
-    # Build inventory from starting gear
-    inventory = [{"name": g, "rarity": "common", "qty": 1} for g in starting_gear]
-    if not inventory:
-        inventory = [{"name": "health_potion", "rarity": "common", "qty": 2}]
 
     # --- Build world ---
     setting_primary = req.setting_primary or "medieval_fantasy"
@@ -436,6 +437,26 @@ async def start_character(
             "anime_dramatic": "Academy Courtyard",
         }
         location = _genres.get(setting_primary, "The Crossroads Inn")
+
+    # ── AUTO-GENERATE starting content ───────────────────────────────────
+    gen = generate_full_start(
+        char_name=char_name,
+        race=race,
+        archetype=archetype,
+        genre=setting_primary,
+        location=location,
+        minutes=480,
+        rng=rng,
+    )
+
+    inventory = gen["inventory"]
+    companions = gen["companions"]
+    starter_skills = gen["skills"]
+    first_quest = gen["quest"]
+    opening_scenario = gen["scenario"]
+
+    # Apply starting gold from quest reward hint + base
+    starting_gold = 50 + (first_quest.get("reward_gold", 0) // 2)
 
     # --- Assemble state ---
     state = state_manager.new_state()
@@ -457,12 +478,17 @@ async def start_character(
         "ac": 10 + score_to_modifier(dex),
         "proficiency_bonus": 2,
         "skill_points": 0,
-        "skills": [],
+        "skills": starter_skills,
         "conditions": [],
-        "gold": 50,
+        "gold": starting_gold,
         "inventory": inventory,
         "speech_style": speech_style,
     }
+    # Apply auto-equip from kit
+    equip = gen.get("equip", {})
+    if equip:
+        state["player"]["equipment"] = equip
+
     state["world"] = {
         "setting_primary": setting_primary,
         "setting_secondary": setting_secondary,
@@ -475,23 +501,50 @@ async def start_character(
         },
     }
     state["combat"] = {"active": False, "enemies": [], "active_enemy_index": 0, "round": 0, "turn": "player", "initiative_order": [], "current_turn_index": 0, "player_dodging": False, "defeated_enemies": []}
-    state["companions"] = []
-    state["quests"] = {"active": {}, "completed": {}, "failed": {}}
-    state["world_log"] = [f"{char_name} awakens at {location}."]
 
-    # Generate narration
+    # Set companions
+    state["companions"] = companions
+
+    # Set first quest
+    quest_id = first_quest["id"]
+    state["quests"] = {
+        "active": {quest_id: first_quest},
+        "completed": {},
+        "failed": {},
+    }
+
+    state["world_log"] = [opening_scenario]
+
+    # ── Build rich narration ─────────────────────────────────────────────
     race_str = f" {race}" if race and race.lower() != "human" else ""
     traits_str = f" [{traits}]" if traits else ""
-    narration = (
-        f"**{char_name}** the{race_str} {archetype}{traits_str} has entered the world.\n\n"
-        f"Location: {location}\n"
-        f"HP: {hp}/{hp}  |  AC: {state['player']['ac']}\n"
-        f"Speech Style: {speech_style}\n\n"
-    )
+
+    narration = opening_scenario + "\n\n"
+    narration += f"═══ CHARACTER ═══\n"
+    narration += f"HP: {hp}/{hp}  |  AC: {state['player']['ac']}  |  Gold: {starting_gold}\n\n"
+
+    # Inventory summary
     if inventory:
-        item_names = ", ".join(i["name"] for i in inventory)
-        narration += f"Starting gear: {item_names}\n\n"
-    narration += "Your adventure begins. Type `/help` for commands."
+        item_names = ", ".join(f"{i['name']}" + (f" x{i['qty']}" if i.get('qty', 1) > 1 else "") for i in inventory)
+        narration += f"═══ INVENTORY ═══\n{item_names}\n\n"
+
+    # Skills summary
+    if starter_skills:
+        skill_names = ", ".join(s["name"] for s in starter_skills)
+        narration += f"═══ SKILLS ═══\n{skill_names}\n\n"
+
+    # Companion summary
+    if companions:
+        for c in companions:
+            narration += f"═══ COMPANION ═══\n**{c['name']}** — {c['description'].capitalize()}\n"
+            narration += f"HP: {c['hp']}/{c['max_hp']}  |  Loyalty: {c['loyalty']}/100\n\n"
+
+    # Quest summary
+    narration += f"═══ QUEST ═══\n**{first_quest['title']}**\n{first_quest['description']}\n"
+    obj_text = "\n".join(f"  □ {o['text']}" for o in first_quest['objectives'])
+    narration += f"{obj_text}\n"
+    narration += f"Reward: {first_quest['reward_gold']}g + {first_quest['reward_xp']} XP\n\n"
+    narration += "Type `/help` for commands. Your adventure begins."
 
     # Layout + save
     from canon_engine.ui.game_layout import render_layout_dict
@@ -695,6 +748,28 @@ async def rename_save(
 
 
 # ── Codex ───────────────────────────────────────────────────────────────────
+
+@app.post("/saves/load")
+async def load_save_endpoint(
+    req: SaveActionRequest,
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Load a save file into the active game session."""
+    from canon_engine.state_manager import load_state
+    try:
+        state = load_state(req.slot)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail=f"Save '{req.slot}' not found.")
+    # Fix legacy state shapes
+    for k, default in [("memory", {"summary": "", "last_summary_turn": 0}),
+                        ("quests", {"active": {}, "completed": {}, "failed": {}}),
+                        ("saga", {"phase": 0, "flags": []})]:
+        if isinstance(state.get(k), list):
+            state[k] = default
+        elif k not in state:
+            state[k] = default
+    _sessions[req.slot] = state
+    return {"status": "loaded", "slot": req.slot, "state": state}
 
 @app.get("/codex")
 async def get_codex(
