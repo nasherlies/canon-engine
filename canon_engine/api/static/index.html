@@ -173,6 +173,11 @@ h1.title{color:var(--gold);font-size:28px;margin-bottom:8px;letter-spacing:3px}
 #cinput{flex:1;background:transparent;border:none;color:var(--text);font-family:inherit;font-size:18px;outline:none;caret-color:var(--gold);min-height:44px}
 #cinput::placeholder{color:#333}
 
+/* === QUICK ACTIONS === */
+.qactions{display:flex;gap:4px;padding:4px 12px;background:rgba(26,26,46,0.8);border-top:1px solid rgba(58,58,92,0.3);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.qbtn{background:transparent;border:1px solid var(--border);color:#666;font-family:inherit;font-size:11px;padding:4px 10px;cursor:pointer;white-space:nowrap;min-height:32px;letter-spacing:1px;transition:all .15s ease;flex-shrink:0}
+.qbtn:hover,.qbtn:active{border-color:var(--gold);color:var(--gold)}
+
 /* === AUTOCOMPLETE === */
 .autocomplete{display:none;position:absolute;bottom:100%;left:0;right:0;background:var(--panel);border:2px solid var(--border);border-bottom:none;max-height:280px;overflow-y:auto;z-index:50}
 .autocomplete.show{display:block}
@@ -222,12 +227,14 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
   .topbar .p{display:none}
   .topbar .p:nth-child(2){display:block;min-height:60px}
   .main{grid-template-columns:1fr}
-  .side{position:fixed;bottom:0;left:0;right:0;max-width:none;min-width:auto;height:auto;max-height:55dvh;z-index:80;border-left:none;border-top:2px solid var(--border);transform:translateY(100%);transition:transform .2s ease}
-  .side.open{transform:translateY(0)}
-  .side-tabs{order:1;border-bottom:none;border-top:2px solid var(--border)}
+  .side{position:fixed;bottom:0;left:0;right:0;max-width:none;min-width:auto;height:auto;max-height:55dvh;z-index:80;border-left:none;border-top:2px solid var(--border);transform:none}
+  .side-tabs{order:1;border-bottom:none;border-top:2px solid var(--border);display:flex}
   .side-tab{font-size:16px;padding:10px 2px;min-height:48px}
   .side-tab .tab-text{display:none}
   .side-pane{max-height:40dvh}
+  .side .side-tabs{display:flex !important}
+  .qactions{padding:6px 8px;gap:6px}
+  .qbtn{font-size:12px;padding:6px 12px;min-height:36px}
   .cbar{padding:10px 12px}
   #cinput{font-size:16px;min-height:48px}
   .settings-row{flex-direction:column;align-items:stretch;gap:6px}
@@ -572,6 +579,15 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
     <div id="journal-list"><span class="empty">No entries yet.</span></div>
    </div>
   </div>
+ </div>
+ <div class="qactions">
+  <button class="qbtn" onclick="cmd('/look')">LOOK</button>
+  <button class="qbtn" onclick="cmd('/inv')">INVENTORY</button>
+  <button class="qbtn" onclick="cmd('/stats')">STATS</button>
+  <button class="qbtn" onclick="cmd('/map')">MAP</button>
+  <button class="qbtn" onclick="cmd('/companions')">PARTY</button>
+  <button class="qbtn" onclick="cmd('/quests')">QUESTS</button>
+  <button class="qbtn" onclick="cmd('/help')">HELP</button>
  </div>
  <div class="cbar">
   <span class="gt">&gt;</span>
@@ -1151,7 +1167,7 @@ var TUTORIAL_STEPS=[
  {msg:"**THE COMMAND INPUT**\n\nAt the bottom of the screen, you'll see a text box. Type anything to interact with the world — describe actions, talk to characters, explore.\n\nTry typing: *I look around the tavern*"},
  {msg:"**SLASH COMMANDS**\n\nType / to see all available commands. Here are the essentials:\n\n• /help — Show all commands\n• /stats — View your character sheet\n• /inv — Check your inventory\n• /look — Examine surroundings\n• /map — View the world map\n• /fight — Start combat\n• /save — Save your game"},
  {msg:"**THE SIDE PANEL**\n\nOn the right side, you'll see tabs:\n\n⚔ **Stats** — Your character's attributes and HP\n⚒ **Inventory** — Items you've collected\n☺ **Party** — Your companions\n★ **Skills** — Your abilities\n☠ **Quests** — Your active quests\n\nClick any tab or press 1-5 to toggle it!"},
- {msg:"**QUICK ACTIONS**\n\nBelow the game output, you'll see quick action buttons: LOOK, INVENTORY, STATS, MAP, REST, and HELP. These are shortcuts for common commands."},
+ {msg:"**QUICK ACTIONS**\n\nAbove the text input, you'll see quick action buttons: LOOK, INVENTORY, STATS, MAP, PARTY, QUESTS, and HELP. Tap them to instantly run those commands — no typing needed!"},
  {msg:"**THE PAUSE MENU**\n\nClick the **☰ MENU** button in the top-left corner, or press **ESC** to open the pause menu. From there you can:\n\n• Resume the game\n• Open Settings\n• Load or Save games\n• Return to Main Menu"},
  {msg:"**COMBAT**\n\nWhen enemies appear, use:\n• /attack — Strike the enemy\n• /block — Defend yourself\n• /flee — Run away\n• /fight — Trigger a random encounter\n\nCombat is turn-based. Choose wisely!"},
  {msg:"**SAVING & LOADING**\n\nYour game auto-saves after each action. To manually save, type /save or use the pause menu. To load a save, click LOAD SAVE from the main menu — you can load, copy, rename, or delete saves from there."},

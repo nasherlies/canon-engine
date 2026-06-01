@@ -126,8 +126,23 @@ def _apply_parsed(
         return {"narration": result.get("narration", ""), "dirty": True}
 
     if kind == "block":
-        from canon_engine.systems.combat import resolve_player_block
-        result = resolve_player_block(state)
+        from canon_engine.systems.combat import resolve_player_dodge
+        result = resolve_player_dodge(state)
+        return {"narration": result.get("narration", ""), "dirty": True}
+
+    if kind == "dodge":
+        from canon_engine.systems.combat import resolve_player_dodge
+        result = resolve_player_dodge(state)
+        return {"narration": result.get("narration", ""), "dirty": True}
+
+    if kind == "turn":
+        from canon_engine.systems.combat import resolve_turn_status
+        result = resolve_turn_status(state)
+        return {"narration": result.get("narration", ""), "dirty": False}
+
+    if kind == "saving_throw":
+        from canon_engine.systems.combat import resolve_saving_throw
+        result = resolve_saving_throw(state, parsed)
         return {"narration": result.get("narration", ""), "dirty": True}
 
     if kind == "flee":
@@ -222,10 +237,10 @@ def _run_guards(state: dict[str, Any], parsed: dict[str, Any]) -> dict[str, Any]
     """Pre-flight guards.  Return a response dict to short-circuit, or None."""
     # During active combat only combat commands are allowed
     if state.get("combat", {}).get("active"):
-        allowed = {"attack", "block", "flee", "use_item", "status"}
+        allowed = {"attack", "block", "dodge", "flee", "use_item", "status", "turn", "saving_throw"}
         if parsed.get("kind") not in allowed:
             return {
-                "narration": "You're in the middle of combat! You can attack, block, flee, or use an item.",
+                "narration": "You're in the middle of combat! You can attack, dodge, flee, turn, or use an item.",
                 "layout": {},
                 "state_delta": {},
                 "dirty": False,

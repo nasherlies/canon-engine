@@ -114,7 +114,18 @@ def _apply_parsed(state: Dict[str, Any], parsed: Dict[str, Any], *, config: Conf
         return result
 
     if kind == "save":
-        slot = parsed.get("slot") or "quicksave"
+        slot = parsed.get("slot") or ""
+        # During combat, /save <ability> is a saving throw
+        combat_state = state.get("combat", {})
+        in_combat_now = bool(combat_state.get("active", False))
+        _save_abilities = {"STR", "DEX", "CON", "INT", "WIS", "CHA"}
+        if in_combat_now and slot.upper() in _save_abilities:
+            from canon_engine.systems.combat import resolve_saving_throw
+            save_parsed = {"kind": "saving_throw", "ability": slot.upper()}
+            save_result = resolve_saving_throw(state, save_parsed)
+            result["narration"] = save_result.get("narration", "")
+            return result
+        slot = slot or "quicksave"
         try:
             path = state_manager.save_state(state, slot)
             result["narration"] = f"💾 Game saved to slot '{slot}'."
@@ -426,9 +437,36 @@ def _apply_parsed(state: Dict[str, Any], parsed: Dict[str, Any], *, config: Conf
     combat = state.get("combat", {})
     in_combat = bool(combat.get("active", False))
 
-    combat_kinds = {"attack", "fight", "flee", "block", "item", "order"}
-    if in_combat and kind not in combat_kinds and kind not in {"look", "inv", "stats", "companions", "help", "save", "back"}:
-        result["narration"] = "⚔ You're in combat! Use /attack, /block, /flee, or /item."
+    combat_kinds = {"attack", "fight", "flee", "block", "dodge", "item", "order", "turn", "saving_throw"}
+    if in_combat and kind not in combat_kinds and kind not in {"look", "inv", "stats", "companions", "help", "save", "back", "dodge", "turn", "saving_throw"}:
+        result["narration"] = "⚔ You're in combat! Use /attack, /dodge, /flee, /turn, or /item."
+        return result
+
+    # ── D&D 5e combat commands (handled directly) ─────────────────────
+    if kind == "dodge" and in_combat:
+        from canon_engine.systems.combat import resolve_player_dodge
+        dodge_result = resolve_player_dodge(state)
+        result["narration"] = dodge_result.get("narration", "")
+        return result
+
+    if kind == "turn" and in_combat:
+        from canon_engine.systems.combat import resolve_turn_status
+        turn_result = resolve_turn_status(state)
+        result["narration"] = turn_result.get("narration", "")
+        return result
+
+    if kind == "turn" and not in_combat:
+        result["narration"] = "You're not in combat. Use /fight or /encounter to start one."
+        return result
+
+    if kind == "saving_throw":
+        from canon_engine.systems.combat import resolve_saving_throw
+        save_result = resolve_saving_throw(state, parsed)
+        result["narration"] = save_result.get("narration", "")
+        return result
+
+    if kind == "fight" and in_combat:
+        result["narration"] = "You're already in combat! Use /attack <target> to fight."
         return result
 
     # Encounter routing
@@ -613,7 +651,7 @@ def _handle_start_character(state: Dict[str, Any], parsed: Dict[str, Any]) -> st
             location.lower().replace(" ", "_"): {"name": location, "discovered": True}
         },
     }
-    state["combat"] = {"active": False, "enemies": [], "active_enemy_index": 0, "round": 0, "turn": "player"}
+    state["combat"] = {"active": False, "enemies": [], "active_enemy_index": 0, "round": 0, "turn": "player", "initiative_order": [], "current_turn_index": 0, "player_dodging": False, "defeated_enemies": []}
     state["companions"] = []
     state["quests"] = []
     state["world_log"] = [f"{char_name} awakens at {location}."]
@@ -667,24 +705,38 @@ def _handle_encounter(state: Dict[str, Any]) -> str:
     chosen = []
     for _ in range(count):
         pick = _random.choices(eligible, weights=weights, k=1)[0]
+        # Derive attack bonus from STR or DEX (whichever is higher)
+        e_str = pick.get("str", 10)
+        e_dex = pick.get("dex", 10)
+        from canon_engine.systems.character import score_to_modifier as _mod
+        attack_mod = max(_mod(e_str), _mod(e_dex))
         enemy_copy = {
             "name": pick["name"],
             "hp": pick["hp"],
             "max_hp": pick["max_hp"],
             "ac": pick["ac"],
-            "attack_bonus": pick.get("str", 10) // 2 + 2,
-            "damage_dice": "1d6",
+            "attack_bonus": attack_mod + 2,
+            "damage_dice": pick.get("damage_dice", "1d6+{}".format(attack_mod)),
+            "str": e_str,
+            "dex": e_dex,
             "xp_value": pick.get("xp_value", 10),
         }
         chosen.append(enemy_copy)
 
-    _start_combat(state, chosen)
+    # start_combat now handles initiative, auto-numbering, and returns narration
+    combat_result = _start_combat(state, chosen)
 
-    enemy_names = ", ".join(e["name"] for e in chosen)
+    # Build encounter preamble
+    enemy_names = ", ".join(e.get("display_name", e["name"]) for e in chosen)
     narration = f"⚔ **Encounter!**\n\nYou are ambushed by: {enemy_names}!\n\n"
     for e in chosen:
-        narration += f"• **{e['name']}** — HP: {e['hp']}/{e['max_hp']}, AC: {e['ac']}\n"
-    narration += "\nUse `/attack` to strike, `/block` to defend, or `/flee` to run!"
+        dn = e.get("display_name", e["name"])
+        narration += f"• **{dn}** — HP: {e['hp']}/{e['max_hp']}, AC: {e['ac']}\n"
+    narration += "\n"
+
+    # Append initiative narration from start_combat
+    narration += combat_result.get("narration", "")
+    narration += "\n\nUse `/attack <target>` to strike, `/dodge` to defend, or `/flee` to run!"
     return narration
 
 

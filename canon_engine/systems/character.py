@@ -31,6 +31,13 @@ def xp_to_next(level: int) -> int:
     return level * 100
 
 
+def proficiency_bonus(level: int) -> int:
+    """D&D 5e proficiency bonus scaling.
+    2 + (level - 1) // 4
+    L1-4=+2, L5-8=+3, L9-12=+4, L13-16=+5, L17-20=+6."""
+    return 2 + (level - 1) // 4
+
+
 # ---------------------------------------------------------------------------
 # Character creation
 # ---------------------------------------------------------------------------
@@ -59,7 +66,7 @@ def create_character(name: str, race: str = "Human", klass: str = "Adventurer") 
 
 def apply_damage(state: dict[str, Any], amount: int) -> dict[str, Any]:
     """Reduce HP by *amount*, returning damage result."""
-    char = state.get("character", state)
+    char = state.get("player", state.get("character", state))
     absorbed = min(amount, char.get("temp_hp", 0))
     char["temp_hp"] = max(0, char.get("temp_hp", 0) - absorbed)
     remaining = amount - absorbed
@@ -69,7 +76,7 @@ def apply_damage(state: dict[str, Any], amount: int) -> dict[str, Any]:
 
 def heal(state: dict[str, Any], amount: int) -> int:
     """Heal HP up to max_hp.  Returns actual amount healed."""
-    char = state.get("character", state)
+    char = state.get("player", state.get("character", state))
     before = char["hp"]
     char["hp"] = min(char["max_hp"], char["hp"] + amount)
     return char["hp"] - before
@@ -77,7 +84,7 @@ def heal(state: dict[str, Any], amount: int) -> int:
 
 def level_up(state: dict[str, Any]) -> dict[str, Any]:
     """Attempt to level up if enough XP.  Returns event dict."""
-    char = state.get("character", state)
+    char = state.get("player", state.get("character", state))
     char.setdefault("level", 1)
     char.setdefault("xp", 0)
     needed = xp_to_next(char["level"])
@@ -88,4 +95,6 @@ def level_up(state: dict[str, Any]) -> dict[str, Any]:
     char["max_hp"] = max_hp(char["stats"]["CON"], char["level"])
     char["hp"] = char["max_hp"]
     char["skill_points"] = char.get("skill_points", 0) + 2
+    # Update proficiency bonus on level up
+    char["proficiency_bonus"] = proficiency_bonus(char["level"])
     return {"leveled": True, "new_level": char["level"]}

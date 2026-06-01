@@ -40,6 +40,8 @@ COMMAND_HEADS: frozenset[str] = frozenset({
     "say", "do", "look", "move",
     # Combat
     "attack", "fight", "flee", "block",
+    "dodge", "turn",
+    # Saving throws (note: /save is overloaded with game save)
     # Inventory / gear
     "inv", "inventory", "use", "equip", "item", "inspect", "drop",
     "combine", "give",
@@ -82,7 +84,7 @@ COMMAND_HEADS: frozenset[str] = frozenset({
 })
 
 # Valid stat names for ``/addstat``
-_VALID_STATS = {"STR", "DEX", "INT", "CHA", "CON", "LCK"}
+_VALID_STATS = {"STR", "DEX", "INT", "CHA", "CON", "WIS", "LCK"}
 
 # Valid rebirth paths
 _VALID_REBIRTH_PATHS = {
@@ -160,8 +162,8 @@ def _parse_move(rest: str) -> dict[str, Any]:
 
 
 def _parse_attack(rest: str) -> dict[str, Any]:
-    """/attack <target> or /attack <n> — Combat action."""
-    return _build("attack", target=rest)
+    """/attack <target> — Attack a specific enemy by name or number."""
+    return _build("attack", target=rest.strip())
 
 
 def _parse_use(rest: str) -> dict[str, Any]:
@@ -249,14 +251,30 @@ def _parse_flee(_rest: str) -> dict[str, Any]:
     return _build("flee")
 
 
-def _parse_fight(_rest: str) -> dict[str, Any]:
-    """/fight — Commit to combat."""
-    return _build("fight")
+def _parse_fight(rest: str) -> dict[str, Any]:
+    """/fight [target] — Initiate combat or commit to a fight."""
+    return _build("fight", target=rest.strip() if rest else None)
 
 
 def _parse_block(_rest: str) -> dict[str, Any]:
-    """/block — Defensive stance."""
-    return _build("block")
+    """/block — Alias for /dodge (D&D Dodge action)."""
+    return _build("dodge")
+
+
+def _parse_dodge(_rest: str) -> dict[str, Any]:
+    """/dodge — Take the Dodge action. Enemies have disadvantage."""
+    return _build("dodge")
+
+
+def _parse_turn(_rest: str) -> dict[str, Any]:
+    """/turn — Show current combat state and initiative order."""
+    return _build("turn")
+
+
+def _parse_combat_save(rest: str) -> dict[str, Any]:
+    """/save <ability> — Make a saving throw (in combat). e.g. /save dex"""
+    ability = rest.strip().upper() if rest else ""
+    return _build("saving_throw", ability=ability)
 
 
 def _parse_item(rest: str) -> dict[str, Any]:
@@ -583,6 +601,8 @@ _DISPATCH: dict[str, Any] = {
     "fight": _parse_fight,
     "flee": _parse_flee,
     "block": _parse_block,
+    "dodge": _parse_dodge,
+    "turn": _parse_turn,
     # Inventory / gear
     "inv": _parse_inv,
     "inventory": _parse_inv,
