@@ -1,0 +1,128 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "description": "Seed lore cards for Canon Engine codex, organized by genre"
+  },
+  "genres": {
+    "medieval_fantasy": [
+      {
+        "title": "The Sundering",
+        "category": "history",
+        "description": "A cataclysmic magical war shattered the old empire a century ago. The land still bears scars — twisted forests, floating ruins, and rifts leaking raw arcane energy.",
+        "locked": false
+      },
+      {
+        "title": "The Iron Covenant",
+        "category": "faction",
+        "description": "An alliance of blacksmiths, miners, and warriors who control the flow of enchanted metal. Their forges produce the finest weapons in the known world, and their loyalty is bought with coin.",
+        "locked": false
+      },
+      {
+        "title": "Eryndor the Wanderer",
+        "category": "character",
+        "description": "A mysterious sage who appears in times of crisis. Some say he is immortal; others claim he is a projection of the land itself. He speaks in riddles and vanishes without warning.",
+        "locked": true
+      }
+    ],
+    "space_opera": [
+      {
+        "title": "The Collapse",
+        "category": "history",
+        "description": "The Galactic Federation dissolved 50 years ago after the AI Uprising. Now independent systems trade, war, and scheme in a fractured galaxy. Faster-than-light travel persists, but hyperspace lanes are contested.",
+        "locked": false
+      },
+      {
+        "title": "The Krynn Collective",
+        "category": "faction",
+        "description": "A hive-mind species that absorbs other cultures. They offer perfect unity and efficiency — at the cost of individual identity. Diplomats debate whether they are conquerors or saviors.",
+        "locked": false
+      },
+      {
+        "title": "Station Omega-7",
+        "category": "location",
+        "description": "A derelict space station orbiting a dying star. Rumored to contain pre-Collapse technology of immense power. Multiple factions have sent expeditions; none have returned.",
+        "locked": true
+      }
+    ],
+    "gothic_horror": [
+      {
+        "title": "The Blight",
+        "category": "history",
+        "description": "A creeping supernatural corruption that transforms the living into abominations. It began in the catacombs beneath the old cathedral and spreads outward with each passing moon.",
+        "locked": false
+      },
+      {
+        "title": "The Order of the Ashen Veil",
+        "category": "faction",
+        "description": "A secretive cabal of scholars and exorcists who study the Blight. They believe it can be contained but not destroyed, and their methods are as terrifying as the threat they fight.",
+        "locked": false
+      },
+      {
+        "title": "The Hollow Man",
+        "category": "character",
+        "description": "A figure seen in fog-shrouded streets at night. Those who meet his gaze report visions of their own death. Is he a harbinger, a predator, or something else entirely?",
+        "locked": true
+      }
+    ],
+    "western": [
+      {
+        "title": "The Broken Treaty",
+        "category": "history",
+        "description": "Twenty years ago, the Cavalry promised the frontier would remain free. They lied. Railroads, mining companies, and settlers have pushed in, and tensions simmer between all parties.",
+        "locked": false
+      },
+      {
+        "title": "The Rustlers' Syndicate",
+        "category": "faction",
+        "description": "A loose network of cattle thieves, card cheats, and outlaws operating across the territory. Their leader, known only as 'The Dealer,' runs the organization from the shadows.",
+        "locked": false
+      },
+      {
+        "title": "Ghost Mesa",
+        "category": "location",
+        "description": "A flat-topped butte where an entire wagon train vanished in 1847. The local tribe warns against visiting at night. Prospectors who ignore the warnings find gold — but lose their minds.",
+        "locked": true
+      }
+    ],
+    "anime_dramatic": [
+      {
+        "title": "The Awakening",
+        "category": "history",
+        "description": "When the dimensional barriers thinned, ordinary humans began manifesting supernatural abilities. Society split between the Awakened and the mundane, sparking a cold war of ideology and power.",
+        "locked": false
+      },
+      {
+        "title": "The Student Council",
+        "category": "faction",
+        "description": "Nominally a school governance body, actually a front for an Awakened power bloc. Each member wields formidable abilities and pursues their own agenda beneath a veneer of civility.",
+        "locked": false
+      },
+      {
+        "title": "The Phantom Classroom",
+        "category": "location",
+        "description": "A classroom that appears on the thirteenth floor of the school at midnight. Students who enter find themselves in a pocket dimension where time flows differently. What they learn there changes them forever.",
+        "locked": true
+      }
+    ],
+    "_default": [
+      {
+        "title": "The Shattered World",
+        "category": "history",
+        "description": "Reality itself fractured in a long-forgotten cataclysm. Islands of stability dot an ocean of chaos. Travelers brave the Between to reach distant lands.",
+        "locked": false
+      },
+      {
+        "title": "The Keepers",
+        "category": "faction",
+        "description": "A ancient order dedicated to preserving knowledge across the fractures. They maintain libraries, way-stations, and safe houses throughout the known world.",
+        "locked": false
+      },
+      {
+        "title": "The Threshold",
+        "category": "location",
+        "description": "A shimmering barrier at the edge of known reality. Beyond it lies the raw chaos of the Between. Some seek to cross it; none have returned unchanged.",
+        "locked": true
+      }
+    ]
+  }
+}

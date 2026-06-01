@@ -166,20 +166,18 @@ async def handle_action(
 
     This is the main game loop entry point for API clients.
     """
-    from core.command_parser import parse_command
-    from canon_engine.ui.game_session import _apply_parsed
+    from canon_engine.core.command_parser import parse_command
+    from canon_engine.ui.game_session import _apply_parsed, step_session_turn, build_layout_payload
+    import random as _random_mod
 
     state = _get_or_load_state(req.slot)
-    parsed = parse_command(req.command)
 
-    # Apply the command
-    result = _apply_parsed(state, parsed, config=Config())
+    # Use step_session_turn as the primary orchestrator
+    rng = _random_mod.Random()
+    turn_result = step_session_turn(state, req.command, rng)
 
-    narration = result.get("narration", "")
-    layout_data = result.get("layout")
-    if layout_data is None:
-        from canon_engine.ui.game_layout import render_layout_dict
-        layout_data = render_layout_dict(state, narration)
+    narration = turn_result.get("narration", "")
+    layout_data = turn_result.get("layout", {})
 
     # Auto-save after each action
     _save_session(req.slot)
@@ -686,6 +684,152 @@ async def rename_save(
     if req.slot in _sessions:
         _sessions[req.target] = _sessions.pop(req.slot)
     return {"status": "renamed", "slot": req.slot, "target": req.target}
+
+
+# ── Codex ───────────────────────────────────────────────────────────────────
+
+@app.get("/codex")
+async def get_codex(
+    slot: str = "default",
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Return the codex (lore entries) for a save slot."""
+    state = _get_or_load_state(slot)
+    return {"codex": state.get("lore_entries", [])}
+
+
+# ── Quests (structured) ────────────────────────────────────────────────────
+
+@app.get("/quests")
+async def get_quests(
+    slot: str = "default",
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Return the quest log for a save slot."""
+    state = _get_or_load_state(slot)
+    quests = state.get("quests", {})
+    if isinstance(quests, dict):
+        return {
+            "active": quests.get("active", []),
+            "completed": quests.get("completed", []),
+        }
+    return {"active": quests if isinstance(quests, list) else [], "completed": []}
+
+
+# ── Manual (alias for handbook) ────────────────────────────────────────────
+
+@app.get("/manual")
+async def get_manual(
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Return handbook topics (alias for /handbook)."""
+    topics = _load_handbook()
+    if isinstance(topics, dict):
+        return {
+            "topics": [
+                {"id": k, "title": v.get("title", k) if isinstance(v, dict) else k}
+                for k, v in topics.items()
+            ]
+        }
+    return {"topics": []}
+
+
+# ── Equipment Slots ────────────────────────────────────────────────────────
+
+@app.get("/equipment/slots")
+async def get_equipment_slots(
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Return the 17 equipment slot definitions."""
+    from canon_engine.core.inventory import EQUIP_SLOTS
+    return {"slots": [{"key": k, "label": v} for k, v in EQUIP_SLOTS.items()]}
+
+
+# ── Me (current user info) ────────────────────────────────────────────────
+
+@app.get("/me")
+async def get_me(
+    slot: str = "default",
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Return current user/player info."""
+    state = _get_or_load_state(slot)
+    player = state.get("player", {})
+    return {
+        "username": player.get("name", "Adventurer"),
+        "level": player.get("level", 1),
+        "archetype": player.get("archetype", ""),
+        "genre": state.get("genre", state.get("world", {}).get("setting_primary", "")),
+    }
+
+
+# ── API Key Settings ──────────────────────────────────────────────────────
+
+class APIKeyRequest(BaseModel):
+    """Body for POST /settings/keys."""
+    provider: str = Field(..., description="Key provider (e.g. 'openrouter', 'openai').")
+    api_key: str = Field(..., description="The API key value.")
+
+
+@app.get("/settings/keys")
+async def get_api_keys(
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Return which API key providers are configured (values are masked)."""
+    providers = {}
+    for key_name in ("OPENROUTER_API_KEY", "OPENAI_API_KEY", "CANON_LLM_API_KEY"):
+        val = os.getenv(key_name, "")
+        provider = key_name.replace("_API_KEY", "").replace("CANON_LLM", "CANON").lower()
+        providers[provider] = {"configured": bool(val), "masked": f"***{val[-4:]}" if len(val) > 4 else ""}
+    return {"providers": providers}
+
+
+@app.post("/settings/keys")
+async def set_api_key(
+    req: APIKeyRequest,
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Set an API key at runtime (in-memory only, not persisted to .env)."""
+    env_map = {
+        "openrouter": "OPENROUTER_API_KEY",
+        "openai": "OPENAI_API_KEY",
+        "canon": "CANON_LLM_API_KEY",
+    }
+    env_name = env_map.get(req.provider.lower())
+    if not env_name:
+        raise HTTPException(status_code=400, detail=f"Unknown provider '{req.provider}'. Use: {list(env_map.keys())}")
+    os.environ[env_name] = req.api_key
+    return {"status": "set", "provider": req.provider, "env_var": env_name}
+
+
+# ── Backstory Generation ──────────────────────────────────────────────────
+
+class BackstoryRequest(BaseModel):
+    """Body for POST /backstory."""
+    name: str = Field(default="Adventurer", description="Character name.")
+    archetype: str = Field(default="adventurer", description="Character archetype.")
+    race: str = Field(default="human", description="Character race.")
+    gender: str = Field(default="", description="Character gender.")
+    genre: str = Field(default="medieval_fantasy", description="World genre.")
+
+
+@app.post("/backstory")
+async def generate_backstory_endpoint(
+    req: BackstoryRequest,
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Generate a backstory for a character."""
+    from canon_engine.core.backstory import generate_backstory
+    character = {
+        "name": req.name,
+        "archetype": req.archetype,
+        "race": req.race,
+        "gender": req.gender,
+        "genre": req.genre,
+    }
+    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+    backstory = generate_backstory(character, api_key=api_key)
+    return {"backstory": backstory, "character": character}
 
 
 # ── Run helper ───────────────────────────────────────────────────────────────

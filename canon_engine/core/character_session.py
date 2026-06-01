@@ -153,8 +153,8 @@ def _try_calculate_max_hp(stats: dict, level: int = 1) -> int:
     """Calculate max HP using stats module if available."""
     try:
         from canon_engine.core.stats import calculate_max_hp
-        return calculate_max_hp(stats, level)
-    except (ImportError, AttributeError):
+        return calculate_max_hp({"stats": stats, "level": level})
+    except (ImportError, AttributeError, TypeError):
         return 100 + (stats.get("CON", 10) - 10) * 5 + (level - 1) * 10
 
 
@@ -162,8 +162,8 @@ def _try_calculate_max_mp(stats: dict, level: int = 1) -> int:
     """Calculate max MP using stats module if available."""
     try:
         from canon_engine.core.stats import calculate_max_mp
-        return calculate_max_mp(stats, level)
-    except (ImportError, AttributeError):
+        return calculate_max_mp({"stats": stats, "level": level})
+    except (ImportError, AttributeError, TypeError):
         return 50 + (stats.get("INT", 10) - 10) * 3 + (level - 1) * 5
 
 
