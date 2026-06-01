@@ -183,6 +183,7 @@ def _build_system_prompt(state: dict, player_input: str) -> str:
 
     # Quest prompt block
     quests = state.get("quests", {})
+    if isinstance(quests, list): quests = {"active": {}, "completed": {}, "failed": {}}
     active_quests = [q for q in quests.get("active", []) if q]
     if active_quests:
         quest_lines = ["=== ACTIVE QUESTS ==="]

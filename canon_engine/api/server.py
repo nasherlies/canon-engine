@@ -476,7 +476,7 @@ async def start_character(
     }
     state["combat"] = {"active": False, "enemies": [], "active_enemy_index": 0, "round": 0, "turn": "player", "initiative_order": [], "current_turn_index": 0, "player_dodging": False, "defeated_enemies": []}
     state["companions"] = []
-    state["quests"] = []
+    state["quests"] = {"active": {}, "completed": {}, "failed": {}}
     state["world_log"] = [f"{char_name} awakens at {location}."]
 
     # Generate narration
