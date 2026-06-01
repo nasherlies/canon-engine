@@ -197,6 +197,8 @@ def get_memory_prompt_block(state: dict) -> str:
         Formatted memory text, or empty string if no memory exists.
     """
     memory = state.get("memory", {})
+    if isinstance(memory, list): memory = {"summary": "", "last_summary_turn": 0, "pending": []}
+    if isinstance(memory, list): memory = {"summary": "", "last_summary_turn": 0, "pending": []}
     summary = memory.get("summary", "")
     pending = memory.get("pending", [])
 
