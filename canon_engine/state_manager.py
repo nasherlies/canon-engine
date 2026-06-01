@@ -170,12 +170,19 @@ def new_state() -> Dict[str, Any]:
         "world": {},
         "combat": {},
         "companions": [],
-        "memory": [],
+        "memory": {"summary": "", "last_summary_turn": 0},
         "quests": [],
         "npcs": {},
         "factions": {},
-        "saga": [],
+        "saga": {"phase": 0, "flags": []},
         "world_bible": {},
+        "world_flags": {},
+        "lore_cards": [],
+        "equipment": {},
+        "turn": 0,
+        "tutorial": {"active": False},
+        "honor_score": 0,
+        "chaos_score": 0,
         "command_log": [],
         "world_log": [],
     }
@@ -246,7 +253,14 @@ def load_state(slot: str) -> Dict[str, Any]:
     # Return a deep copy so callers cannot accidentally mutate the in-memory
     # snapshot that subsequent loads would re-read from cache (if caching is
     # ever added).
-    return copy.deepcopy(data)
+    merged = new_state()
+    merged.update(data)
+    # Fix legacy shapes: memory must be dict, saga must be dict
+    if isinstance(merged.get("memory"), list):
+        merged["memory"] = {"summary": "", "last_summary_turn": 0}
+    if isinstance(merged.get("saga"), list):
+        merged["saga"] = {"phase": 0, "flags": []}
+    return copy.deepcopy(merged)
 
 
 # ---------------------------------------------------------------------------
