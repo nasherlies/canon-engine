@@ -184,11 +184,13 @@ def _build_system_prompt(state: dict, player_input: str) -> str:
     # Quest prompt block
     quests = state.get("quests", {})
     if isinstance(quests, list): quests = {"active": {}, "completed": {}, "failed": {}}
-    active_quests = [q for q in quests.get("active", []) if q]
+    active_quests = [q for q in quests.get("active", {}).values() if isinstance(q, dict)]
     if active_quests:
         quest_lines = ["=== ACTIVE QUESTS ==="]
         for q in active_quests:
-            quest_lines.append(f"- {q.get('title', 'Unknown Quest')}: {', '.join(q.get('objectives', []))}")
+            objs = q.get("objectives", [])
+            obj_strs = [o.get("text", str(o)) if isinstance(o, dict) else str(o) for o in objs]
+            quest_lines.append(f"- {q.get('title', 'Unknown Quest')}: {', '.join(obj_strs)}")
         parts.append("\n".join(quest_lines))
 
     # Saga block
