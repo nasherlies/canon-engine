@@ -102,6 +102,7 @@ h1.title{color:var(--gold);font-size:28px;margin-bottom:8px;letter-spacing:3px}
 .topbar .p{background:var(--panel);border:1px solid rgba(58,58,92,.3);padding:6px 10px;overflow:hidden}
 .topbar .p h3{color:var(--gold);font-size:10px;margin-bottom:4px;letter-spacing:2px}
 .main{flex:1;display:grid;grid-template-columns:1fr 280px;gap:0;min-height:0}
+.main.side-closed{grid-template-columns:1fr}
 .world{background:var(--panel);display:flex;flex-direction:column;min-height:0}
 .world h3{color:var(--gold);font-size:10px;padding:6px 10px;border-bottom:1px solid var(--border);letter-spacing:2px}
 .narr{flex:1;overflow-y:auto;padding:12px;line-height:1.6;-webkit-overflow-scrolling:touch;touch-action:pan-y;scroll-behavior:smooth}
@@ -232,7 +233,10 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
   .side-tab{font-size:16px;padding:10px 2px;min-height:48px}
   .side-tab .tab-text{display:none}
   .side-pane{max-height:40dvh}
+  .side .side-pane.show{display:none!important}
+  .side.open .side-pane.show{display:flex!important;flex-direction:column}
   .side .side-tabs{display:flex !important}
+  .cbar{position:relative;z-index:90}
   .qactions{padding:6px 8px;gap:6px}
   .qbtn{font-size:12px;padding:6px 12px;min-height:36px}
   .cbar{padding:10px 12px}
@@ -808,16 +812,19 @@ function switchSideTab(idx){
 }
 function closeSidePanel(){
  var sp=document.getElementById('side-panel');
+ var mn=document.querySelector('.main');
+ document.querySelectorAll('.side-pane').forEach(function(p){p.classList.remove('show')});
  if(window.innerWidth<=768){sp.classList.remove('open');}
- else{sp.style.display='none';sideOpen=false;}
+ else{sp.style.display='none';sideOpen=false;mn.classList.add('side-closed');}
 }
 function toggleSidePanel(idx){
  var sp=document.getElementById('side-panel');
+ var mn=document.querySelector('.main');
  if(window.innerWidth<=768){
-  if(sp.classList.contains('open')&&activeSideTab===idx){sp.classList.remove('open');}
+  if(sp.classList.contains('open')&&activeSideTab===idx){closeSidePanel();}
   else{switchSideTab(idx);}
  } else {
-  if(sp.style.display==='none'||!sideOpen){sp.style.display='flex';sideOpen=true;switchSideTab(idx);}
+  if(sp.style.display==='none'||!sideOpen){sp.style.display='flex';sideOpen=true;mn.classList.remove('side-closed');switchSideTab(idx);}
   else if(activeSideTab===idx){closeSidePanel();}
   else{switchSideTab(idx);}
  }
