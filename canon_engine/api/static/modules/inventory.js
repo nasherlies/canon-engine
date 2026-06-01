@@ -11,8 +11,9 @@ const RARITY_COLORS = {
 };
 
 const EQUIP_SLOTS = [
-  'head','face','neck','shoulders','chest','back','wrists','hands',
-  'waist','legs','feet','finger_1','finger_2','main_hand','off_hand','ranged','artifact'
+  'head','face','neck','back','chest_armor','chest_clothing','hands',
+  'waist','legs_armor','legs_clothing','feet','ring_left','ring_right',
+  'weapon_main','weapon_off','accessory_1','accessory_2'
 ];
 
 function esc(s) {
@@ -33,7 +34,17 @@ function sortItems(items) {
 }
 
 function getSlotLabel(slot) {
-  return slot.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const labels = {
+    head: 'HEAD', face: 'FACE', neck: 'NECK', back: 'BACK',
+    chest_armor: 'CHEST \u00b7 ARMOR', chest_clothing: 'CHEST \u00b7 CLOTH',
+    hands: 'HANDS', waist: 'WAIST',
+    legs_armor: 'LEGS \u00b7 ARMOR', legs_clothing: 'LEGS \u00b7 CLOTH',
+    feet: 'FEET',
+    ring_left: 'RING \u00b7 L', ring_right: 'RING \u00b7 R',
+    weapon_main: 'WEAPON \u00b7 MAIN', weapon_off: 'WEAPON \u00b7 OFF',
+    accessory_1: 'ACC \u00b7 1', accessory_2: 'ACC \u00b7 2'
+  };
+  return labels[slot] || slot.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 }
 
 let _expandedItem = null;
@@ -83,35 +94,136 @@ function renderItemRow(item, index) {
 /* ── Equipment SVG silhouette ── */
 function renderEquipmentMap(equipment) {
   const equip = equipment || {};
-  let html = `<div style="margin-bottom:12px;"><div style="color:#8a7535;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Equipment</div>`;
-  html += `<svg viewBox="0 0 120 200" width="120" height="200" style="display:block;margin:0 auto 10px;">`;
-  html += `<g fill="none" stroke="#2a2a3a" stroke-width="1">`;
-  html += `<circle cx="60" cy="20" r="12"/><line x1="60" y1="32" x2="60" y2="38"/>`;
-  html += `<rect x="40" y="38" width="40" height="50" rx="3"/>`;
-  html += `<line x1="40" y1="42" x2="22" y2="75"/><line x1="80" y1="42" x2="98" y2="75"/>`;
-  html += `<line x1="50" y1="88" x2="42" y2="140"/><line x1="70" y1="88" x2="78" y2="140"/>`;
-  html += `<line x1="42" y1="140" x2="34" y2="148"/><line x1="78" y1="140" x2="86" y2="148"/>`;
-  html += `</g>`;
 
-  const slotPos = {
-    head:[60,12], face:[60,24], neck:[60,36], shoulders:[36,42],
-    chest:[60,58], back:[60,48], wrists:[18,72], hands:[14,80],
-    waist:[60,82], legs:[60,110], feet:[40,148],
-    finger_1:[10,88], finger_2:[110,88], main_hand:[14,95], off_hand:[106,95],
-    ranged:[110,60], artifact:[60,168]
+  // Slot definitions: [x, y, width, height] for each slot rectangle on the body
+  const slotDefs = {
+    head:           { x: 88,  y: 12,  w: 28, h: 20 },
+    face:           { x: 91,  y: 34,  w: 22, h: 14 },
+    neck:           { x: 95,  y: 50,  w: 14, h: 12 },
+    back:           { x: 80,  y: 72,  w: 44, h: 36 },
+    chest_armor:    { x: 78,  y: 66,  w: 24, h: 32 },
+    chest_clothing: { x: 102, y: 66,  w: 24, h: 32 },
+    hands:          { x: 16,  y: 140, w: 24, h: 20 },
+    waist:          { x: 85,  y: 104, w: 34, h: 16 },
+    legs_armor:     { x: 81,  y: 124, w: 20, h: 44 },
+    legs_clothing:  { x: 103, y: 124, w: 20, h: 44 },
+    feet:           { x: 72,  y: 310, w: 28, h: 22 },
+    ring_left:      { x: 14,  y: 116, w: 24, h: 16 },
+    ring_right:     { x: 164, y: 116, w: 24, h: 16 },
+    weapon_main:    { x: 4,   y: 140, w: 28, h: 36 },
+    weapon_off:     { x: 170, y: 140, w: 28, h: 36 },
+    accessory_1:    { x: 72,  y: 104, w: 18, h: 16 },
+    accessory_2:    { x: 114, y: 104, w: 18, h: 16 }
   };
 
+  // Label offsets (relative to slot center, dx/dy)
+  const labelPos = {
+    head:           { dx: 0,  dy: -8, anchor: 'middle' },
+    face:           { dx: 0,  dy: -8, anchor: 'middle' },
+    neck:           { dx: 0,  dy: -8, anchor: 'middle' },
+    back:           { dx: 0,  dy: -8, anchor: 'middle' },
+    chest_armor:    { dx: -28, dy: 0, anchor: 'end' },
+    chest_clothing: { dx: 28,  dy: 0, anchor: 'start' },
+    hands:          { dx: 0,  dy: 24, anchor: 'middle' },
+    waist:          { dx: 0,  dy: 20, anchor: 'middle' },
+    legs_armor:     { dx: -24, dy: 0, anchor: 'end' },
+    legs_clothing:  { dx: 24,  dy: 0, anchor: 'start' },
+    feet:           { dx: 0,  dy: 28, anchor: 'middle' },
+    ring_left:      { dx: -24, dy: 0, anchor: 'end' },
+    ring_right:     { dx: 24,  dy: 0, anchor: 'start' },
+    weapon_main:    { dx: 0,  dy: -8, anchor: 'middle' },
+    weapon_off:     { dx: 0,  dy: -8, anchor: 'middle' },
+    accessory_1:    { dx: -22, dy: 0, anchor: 'end' },
+    accessory_2:    { dx: 22,  dy: 0, anchor: 'start' }
+  };
+
+  let html = `<div style="margin-bottom:12px;"><div style="color:#8a7535;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Equipment</div>`;
+  html += `<svg viewBox="0 0 200 360" style="display:block;margin:0 auto 10px;width:100%;max-width:200px;height:auto;">`;
+
+  // Drop-shadow filter for filled slots
+  html += `<defs><filter id="gold-glow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#c8a84e" flood-opacity="0.5"/></filter></defs>`;
+
+  // Body silhouette
+  html += `<g fill="none" stroke="#3a3a4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">`;
+  // Head
+  html += `<ellipse cx="100" cy="26" rx="18" ry="22"/>`;
+  // Neck
+  html += `<line x1="93" y1="48" x2="93" y2="56"/>`;
+  html += `<line x1="107" y1="48" x2="107" y2="56"/>`;
+  // Shoulders & torso
+  html += `<path d="M68,56 L93,56 L93,62 L68,62 Z"/>`;
+  html += `<path d="M107,56 L132,56 L132,62 L107,62 Z"/>`;
+  html += `<path d="M68,62 Q64,66 62,72 L62,108 Q62,110 64,110 L136,110 Q138,110 138,108 L138,72 Q136,66 132,62"/>`;
+  // Left arm: shoulder → elbow → hand
+  html += `<path d="M62,72 L40,86 L28,130"/>`;
+  html += `<line x1="28" y1="130" x2="20" y2="156"/>`;
+  // Right arm
+  html += `<path d="M138,72 L160,86 L172,130"/>`;
+  html += `<line x1="172" y1="130" x2="180" y2="156"/>`;
+  // Waist
+  html += `<line x1="76" y1="110" x2="76" y2="120"/>`;
+  html += `<line x1="124" y1="110" x2="124" y2="120"/>`;
+  // Left leg
+  html += `<path d="M76,120 L70,180 L68,280 L72,310"/>`;
+  html += `<line x1="72" y1="310" x2="60" y2="330"/>`;
+  // Right leg
+  html += `<path d="M124,120 L130,180 L132,280 L128,310"/>`;
+  html += `<line x1="128" y1="310" x2="140" y2="330"/>`;
+  // Feet
+  html += `<rect x="54" y="326" width="30" height="10" rx="3"/>`;
+  html += `<rect x="116" y="326" width="30" height="10" rx="3"/>`;
+  // Hands (small circles)
+  html += `<circle cx="18" cy="160" r="5"/>`;
+  html += `<circle cx="182" cy="160" r="5"/>`;
+  html += `</g>`;
+
+  // Back slot (dashed, rendered behind body)
+  (() => {
+    const d = slotDefs.back;
+    const cx = d.x + d.w / 2;
+    const cy = d.y + d.h / 2;
+    const filled = equip['back'];
+    const borderColor = filled ? '#c8a84e' : '#3a3a4a';
+    const fillAttr = filled ? 'rgba(200,168,78,0.15)' : 'transparent';
+    const filter = filled ? 'filter="url(#gold-glow)"' : '';
+    const title = filled ? `<title>${esc(typeof filled === 'string' ? filled : (filled.name || 'back'))}</title>` : '';
+    const abbrev = filled ? esc((typeof filled === 'string' ? filled : (filled.name || '')).substring(0, 3).toUpperCase()) : '';
+    html += `<g class="equip-slot" data-slot="back" style="cursor:${filled ? 'pointer' : 'default'};">`;
+    html += `<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" rx="3" fill="${fillAttr}" stroke="${borderColor}" stroke-width="1.5" stroke-dasharray="4 2" ${filter}/>`;
+    if (abbrev) html += `<text x="${cx}" y="${cy + 3}" text-anchor="middle" font-size="7" fill="#c8a84e">${abbrev}</text>`;
+    const lp = labelPos['back'];
+    html += `<text x="${cx + lp.dx}" y="${cy + lp.dy}" text-anchor="${lp.anchor}" font-size="8" fill="${filled ? '#c8a84e' : '#4a4a5a'}">${getSlotLabel('back')}</text>`;
+    html += title;
+    html += `</g>`;
+  })();
+
+  // Render all equipment slots (except back, already rendered)
   EQUIP_SLOTS.forEach(slot => {
-    const pos = slotPos[slot];
-    if (!pos) return;
+    if (slot === 'back') return;
+    const d = slotDefs[slot];
+    if (!d) return;
+    const cx = d.x + d.w / 2;
+    const cy = d.y + d.h / 2;
     const filled = equip[slot];
-    const color = filled ? '#c8a84e' : '#2a2a3a';
-    const fill = filled ? 'rgba(200,168,78,0.3)' : 'transparent';
-    html += `<circle cx="${pos[0]}" cy="${pos[1]}" r="7" fill="${fill}" stroke="${color}" stroke-width="1.5" class="equip-slot" data-slot="${slot}" style="cursor:${filled ? 'pointer' : 'default'};"/>`;
-    html += `<text x="${pos[0]}" y="${pos[1]+3}" text-anchor="middle" font-size="6" fill="${filled ? '#c8a84e' : '#6a6a7a'}">${slot.charAt(0).toUpperCase()}</text>`;
+    const borderColor = filled ? '#c8a84e' : '#2a2a3a';
+    const fillAttr = filled ? 'rgba(200,168,78,0.2)' : '#1a1a24';
+    const filter = filled ? 'filter="url(#gold-glow)"' : '';
+    const borderStyle = filled ? '' : 'stroke-dasharray="3 2"';
+    const title = filled ? `<title>${esc(typeof filled === 'string' ? filled : (filled.name || slot))}</title>` : '';
+    const abbrev = filled ? esc((typeof filled === 'string' ? filled : (filled.name || '')).substring(0, 3).toUpperCase()) : '';
+
+    html += `<g class="equip-slot" data-slot="${slot}" style="cursor:${filled ? 'pointer' : 'default'};">`;
+    html += `<rect x="${d.x}" y="${d.y}" width="${d.w}" height="${d.h}" rx="3" fill="${fillAttr}" stroke="${borderColor}" stroke-width="1.5" ${borderStyle} ${filter}/>`;
+    if (abbrev) html += `<text x="${cx}" y="${cy + 3}" text-anchor="middle" font-size="7" fill="#c8a84e" font-weight="bold">${abbrev}</text>`;
+    const lp = labelPos[slot];
+    html += `<text x="${cx + lp.dx}" y="${cy + lp.dy}" text-anchor="${lp.anchor}" font-size="8" fill="${filled ? '#c8a84e' : '#6a6a7a'}">${getSlotLabel(slot)}</text>`;
+    html += title;
+    html += `</g>`;
   });
+
   html += `</svg>`;
 
+  // Equipment list below the map
   html += `<div style="font-size:11px;">`;
   EQUIP_SLOTS.forEach(slot => {
     const item = equip[slot];
@@ -119,7 +231,7 @@ function renderEquipmentMap(equipment) {
       const name = typeof item === 'string' ? item : (item.name || slot);
       const rarity = (typeof item === 'object' ? item.rarity : '') || 'common';
       html += `<div class="equip-entry" data-slot="${slot}" style="display:flex;align-items:center;gap:6px;padding:2px 0;cursor:pointer;">
-        <span style="color:#6a6a7a;font-size:10px;width:70px;">${getSlotLabel(slot)}</span>
+        <span style="color:#6a6a7a;font-size:10px;width:90px;">${getSlotLabel(slot)}</span>
         <span style="color:${rarityColor(rarity)};font-size:11px;">${esc(name)}</span>
       </div>`;
     }
