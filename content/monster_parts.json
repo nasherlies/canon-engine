@@ -1,168 +1,46 @@
 {
   "_meta": {
-    "version": "1.0.0",
-    "description": "Monster parts and salvage drops for Canon Engine RPG economy",
-    "note": "Parts drop from specific enemy types and are used in crafting/alchemy/selling"
+    "version": "2.0.0",
+    "description": "Monster parts by enemy type for Canon Engine"
   },
-  "monster_parts": [
-    {
-      "id": "goblin_ear",
-      "name": "Goblin Ear",
-      "source_enemies": ["goblin"],
-      "drop_chance": 0.60,
-      "rarity": "dirt",
-      "base_value": 3,
-      "description": "A severed goblin ear. Some bounty boards accept these as proof.",
-      "uses": ["bounty_proof", "alchemy_ingredient"],
-      "weight": 0.1
-    },
-    {
-      "id": "wolf_pelt",
-      "name": "Wolf Pelt",
-      "source_enemies": ["wolf"],
-      "drop_chance": 0.50,
-      "rarity": "common",
-      "base_value": 8,
-      "description": "A thick grey pelt. Can be sold or used in tailoring.",
-      "uses": ["crafting_material", "trade_good"],
-      "craft_recipes": ["leather_armor_craft", "fur_cloak"],
-      "weight": 2.0
-    },
-    {
-      "id": "wolf_fang",
-      "name": "Wolf Fang",
-      "source_enemies": ["wolf"],
-      "drop_chance": 0.35,
-      "rarity": "common",
-      "base_value": 5,
-      "description": "A sharp canine tooth. Used in some alchemy recipes.",
-      "uses": ["alchemy_ingredient", "trophy"],
-      "weight": 0.1
-    },
-    {
-      "id": "skeleton_bone",
-      "name": "Bone Fragment",
-      "source_enemies": ["skeleton", "undead_soldier"],
-      "drop_chance": 0.45,
-      "rarity": "common",
-      "base_value": 4,
-      "description": "A fragment of animated bone. Still faintly magical.",
-      "uses": ["alchemy_ingredient", "necromantic_crafting"],
-      "weight": 0.3
-    },
-    {
-      "id": "ectoplasm",
-      "name": "Ectoplasm",
-      "source_enemies": ["skeleton", "undead_soldier", "dark_mage"],
-      "drop_chance": 0.25,
-      "rarity": "uncommon",
-      "base_value": 18,
-      "description": "A translucent, gooey substance that glows faintly with necrotic energy.",
-      "uses": ["alchemy_ingredient", "enchanting_material"],
-      "weight": 0.5
-    },
-    {
-      "id": "bandit_ear",
-      "name": "Bandit Insignia",
-      "source_enemies": ["bandit"],
-      "drop_chance": 0.40,
-      "rarity": "common",
-      "base_value": 6,
-      "description": "A rough metal badge or token identifying a bandit gang.",
-      "uses": ["bounty_proof", "quest_item"],
-      "weight": 0.1
-    },
-    {
-      "id": "spider_silk",
-      "name": "Spider Silk",
-      "source_enemies": ["cave_spider"],
-      "drop_chance": 0.55,
-      "rarity": "uncommon",
-      "base_value": 22,
-      "description": "Incredibly strong and fine spider silk. Valued by tailors and alchemists.",
-      "uses": ["crafting_material", "trade_good"],
-      "craft_recipes": ["silk_rope", "spider_armor", "reinforced_cloth"],
-      "weight": 0.2
-    },
-    {
-      "id": "spider_venom_sac",
-      "name": "Spider Venom Sac",
-      "source_enemies": ["cave_spider"],
-      "drop_chance": 0.30,
-      "rarity": "uncommon",
-      "base_value": 25,
-      "description": "A delicate sac filled with potent venom. Handle with extreme care.",
-      "uses": ["alchemy_ingredient", "poison_crafting"],
-      "craft_recipes": ["poison_vial", "antidote", "paralytic_toxin"],
-      "weight": 0.3
-    },
-    {
-      "id": "dark_mage_cloak",
-      "name": "Shadow-Touched Cloak",
-      "source_enemies": ["dark_mage"],
-      "drop_chance": 0.20,
-      "rarity": "rare",
-      "base_value": 45,
-      "description": "A cloak that seems to absorb light. Still warm with residual magic.",
-      "uses": ["crafting_material", "enchanting_base"],
-      "craft_recipes": ["cloak_of_shadows", "enchanted_robe"],
-      "weight": 1.5
-    },
-    {
-      "id": "shadow_crystal",
-      "name": "Shadow Crystal",
-      "source_enemies": ["dark_mage", "shadow_king"],
-      "drop_chance": 0.15,
-      "rarity": "rare",
-      "base_value": 60,
-      "description": "A crystallized fragment of shadow energy. Pulses with dark power.",
-      "uses": ["enchanting_material", "quest_item"],
-      "weight": 0.5
-    },
-    {
-      "id": "undead_soldier_tag",
-      "name": "Military Dog Tag",
-      "source_enemies": ["undead_soldier"],
-      "drop_chance": 0.35,
-      "rarity": "common",
-      "base_value": 5,
-      "description": "A rusted identification tag. The name is barely legible.",
-      "uses": ["lore_item", "quest_item"],
-      "weight": 0.1
-    },
-    {
-      "id": "rusty_sword",
-      "name": "Rusty Sword",
-      "source_enemies": ["undead_soldier", "skeleton"],
-      "drop_chance": 0.30,
-      "rarity": "dirt",
-      "base_value": 8,
-      "description": "A corroded blade. Can be smelted down for iron.",
-      "uses": ["smelting", "vendor_trash"],
-      "smelt_yield": {"iron_ore": 1},
-      "weight": 3.0
-    },
-    {
-      "id": "boss_crypt_lord_shard",
-      "name": "Crypt Lord's Soul Shard",
-      "source_enemies": ["crypt_lord"],
-      "drop_chance": 1.0,
-      "rarity": "epic",
-      "base_value": 200,
-      "description": "A fragment of Malachar's bound soul energy. Radiates cold.",
-      "uses": ["legendary_crafting", "quest_item"],
-      "weight": 0.3
-    },
-    {
-      "id": "boss_shadow_essence",
-      "name": "Shadow King's Essence",
-      "source_enemies": ["shadow_king"],
-      "drop_chance": 1.0,
-      "rarity": "legendary",
-      "base_value": 500,
-      "description": "Raw essence of the Shadow Realm itself, left behind when Valdris fell.",
-      "uses": ["mythical_crafting", "enchanting_material"],
-      "weight": 0.2
-    }
+  "skeleton": [
+    {"name": "Bone Dust", "rarity": "common", "base_value": 4},
+    {"name": "Bone Fragment", "rarity": "common", "base_value": 3},
+    {"name": "Ectoplasm", "rarity": "uncommon", "base_value": 18}
+  ],
+  "beast": [
+    {"name": "Wolf Pelt", "rarity": "common", "base_value": 8},
+    {"name": "Wolf Fang", "rarity": "common", "base_value": 5},
+    {"name": "Beast Claw", "rarity": "common", "base_value": 6}
+  ],
+  "goblin": [
+    {"name": "Goblin Ear", "rarity": "dirt", "base_value": 3},
+    {"name": "Crude Dagger", "rarity": "dirt", "base_value": 2},
+    {"name": "Goblin Idol", "rarity": "uncommon", "base_value": 15}
+  ],
+  "bandit": [
+    {"name": "Bandit Insignia", "rarity": "common", "base_value": 6},
+    {"name": "Lockpick Set", "rarity": "common", "base_value": 10},
+    {"name": "Stolen Trinket", "rarity": "uncommon", "base_value": 20}
+  ],
+  "undead": [
+    {"name": "Bone Dust", "rarity": "common", "base_value": 4},
+    {"name": "Ectoplasm", "rarity": "uncommon", "base_value": 18},
+    {"name": "Military Dog Tag", "rarity": "common", "base_value": 5},
+    {"name": "Rusty Sword", "rarity": "dirt", "base_value": 8}
+  ],
+  "spider": [
+    {"name": "Spider Silk", "rarity": "uncommon", "base_value": 22},
+    {"name": "Venom Sac", "rarity": "uncommon", "base_value": 25},
+    {"name": "Chitin Plate", "rarity": "common", "base_value": 7}
+  ],
+  "dark_mage": [
+    {"name": "Shadow-Touched Cloak", "rarity": "rare", "base_value": 45},
+    {"name": "Shadow Crystal", "rarity": "rare", "base_value": 60},
+    {"name": "Spell Scroll Fragment", "rarity": "uncommon", "base_value": 30}
+  ],
+  "wolf": [
+    {"name": "Wolf Pelt", "rarity": "common", "base_value": 8},
+    {"name": "Wolf Fang", "rarity": "common", "base_value": 5}
   ]
 }

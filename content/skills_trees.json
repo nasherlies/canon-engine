@@ -1,484 +1,198 @@
 {
   "_meta": {
-    "version": "1.0.0",
-    "description": "Skill trees for Canon Engine RPG",
+    "version": "2.0.0",
+    "description": "Skill trees for Canon Engine RPG — includes warrior, rogue, mage, ranger trees",
     "max_skill_points": 50,
-    "trees": ["combat", "magic", "social", "survival"]
+    "trees": ["warrior", "rogue", "mage", "ranger", "combat", "magic", "social", "survival"]
   },
-  "skill_trees": [
-    {
-      "id": "combat",
-      "name": "Combat Mastery",
-      "description": "The art of war. Enhances physical combat capabilities.",
-      "icon": "sword",
-      "skills": [
-        {
-          "id": "power_strike",
-          "name": "Power Strike",
-          "description": "Channel your strength into a devastating blow.",
-          "tier": 1,
-          "cost": 1,
-          "prerequisites": [],
-          "effects": {
-            "type": "active",
-            "damage_bonus": "1d6",
-            "cooldown": 2,
-            "stat_scaling": "STR"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "+1d6 damage"},
-            {"rank": 2, "bonus": "+2d6 damage"},
-            {"rank": 3, "bonus": "+3d6 damage, ignores 2 AC"}
-          ]
-        },
-        {
-          "id": "shield_wall",
-          "name": "Shield Wall",
-          "description": "Raise your guard to deflect incoming attacks.",
-          "tier": 1,
-          "cost": 1,
-          "prerequisites": [],
-          "effects": {
-            "type": "active",
-            "ac_bonus": 3,
-            "duration": 2,
-            "cooldown": 3,
-            "restriction": "Requires shield"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "+3 AC for 2 turns"},
-            {"rank": 2, "bonus": "+4 AC for 2 turns"},
-            {"rank": 3, "bonus": "+5 AC for 3 turns, reflects 1d4 damage"}
-          ]
-        },
-        {
+  "skill_trees": {
+    "warrior": {
+      "id": "warrior",
+      "name": "Warrior",
+      "description": "Masters of martial combat and battlefield control.",
+      "skills": {
+        "cleave": {
           "id": "cleave",
           "name": "Cleave",
           "description": "Swing your weapon in a wide arc to strike multiple foes.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["power_strike"],
-          "effects": {
-            "type": "active",
-            "targets": 2,
-            "damage": "weapon_damage",
-            "cooldown": 3,
-            "stat_scaling": "STR"
-          },
-          "max_rank": 2,
-          "rank_progression": [
-            {"rank": 1, "bonus": "Hit 2 targets"},
-            {"rank": 2, "bonus": "Hit 3 targets"}
-          ]
+          "type": "active",
+          "cost": 1,
+          "prerequisites": [],
+          "effects": {"type": "active", "splash_damage": true, "targets": 2, "damage_mult": 0.75},
+          "max_rank": 1
         },
-        {
-          "id": "riposte",
-          "name": "Riposte",
-          "description": "Counter an enemy's attack with a swift strike.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["shield_wall"],
-          "effects": {
-            "type": "reaction",
-            "trigger": "enemy_miss",
-            "damage": "weapon_damage",
-            "stat_scaling": "DEX"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "Counter on miss"},
-            {"rank": 2, "bonus": "Counter on miss with +2 to hit"},
-            {"rank": 3, "bonus": "Counter on miss or hit (if attack reduced by shield)"}
-          ]
+        "shield_bash": {
+          "id": "shield_bash",
+          "name": "Shield Bash",
+          "description": "Slam your shield into the enemy, stunning them briefly.",
+          "type": "active",
+          "cost": 1,
+          "prerequisites": [],
+          "effects": {"type": "active", "stun_duration": 1, "damage": "1d6+STR"},
+          "max_rank": 1
         },
-        {
-          "id": "battle_cry",
-          "name": "Battle Cry",
-          "description": "Unleash a thunderous war cry that bolsters allies and demoralizes enemies.",
-          "tier": 3,
-          "cost": 3,
+        "fortify": {
+          "id": "fortify",
+          "name": "Fortify",
+          "description": "Brace yourself against incoming attacks, raising your defenses.",
+          "type": "active",
+          "cost": 2,
+          "prerequisites": ["shield_bash"],
+          "effects": {"type": "active", "ac_bonus": 3, "duration": 2},
+          "max_rank": 1
+        },
+        "berserker_rage": {
+          "id": "berserker_rage",
+          "name": "Berserker Rage",
+          "description": "Enter a furious rage — more damage, but less defense.",
+          "type": "active",
+          "cost": 2,
           "prerequisites": ["cleave"],
-          "effects": {
-            "type": "active",
-            "ally_buff": {"attack_bonus": 2, "duration": 3},
-            "enemy_debuff": {"attack_penalty": 2, "duration": 2, "save": "DC 14 WIS"},
-            "cooldown": 5,
-            "aoe": "30ft"
-          },
-          "max_rank": 1
-        },
-        {
-          "id": "critical_mastery",
-          "name": "Critical Mastery",
-          "description": "Your strikes find vital points with lethal precision.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["power_strike", "riposte"],
-          "effects": {
-            "type": "passive",
-            "crit_range_bonus": 1,
-            "crit_damage_multiplier": 0.5
-          },
+          "effects": {"type": "active", "damage_mult": 1.5, "ac_penalty_pct": 0.25, "duration": 3},
           "max_rank": 1
         }
-      ]
+      }
     },
-    {
-      "id": "magic",
-      "name": "Arcane Arts",
-      "description": "The manipulation of mystical energies to reshape reality.",
-      "icon": "staff",
-      "skills": [
-        {
-          "id": "arcane_bolt",
-          "name": "Arcane Bolt",
-          "description": "Hurl a bolt of pure arcane energy at a target.",
-          "tier": 1,
+    "rogue": {
+      "id": "rogue",
+      "name": "Rogue",
+      "description": "Masters of stealth, cunning, and precision strikes.",
+      "skills": {
+        "backstab": {
+          "id": "backstab",
+          "name": "Backstab",
+          "description": "Strike from the shadows for devastating damage.",
+          "type": "active",
           "cost": 1,
           "prerequisites": [],
-          "effects": {
-            "type": "active",
-            "damage": "2d6+INT_mod force",
-            "range": 60,
-            "cooldown": 0,
-            "mp_cost": 4
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "2d6+INT force damage"},
-            {"rank": 2, "bonus": "3d6+INT force damage"},
-            {"rank": 3, "bonus": "4d6+INT force damage, ignores cover"}
-          ]
-        },
-        {
-          "id": "mage_armor",
-          "name": "Mage Armor",
-          "description": "Surround yourself with a shimmering field of protective energy.",
-          "tier": 1,
-          "cost": 1,
-          "prerequisites": [],
-          "effects": {
-            "type": "active",
-            "ac_set": 13,
-            "duration": "until_long_rest",
-            "mp_cost": 6
-          },
-          "max_rank": 2,
-          "rank_progression": [
-            {"rank": 1, "bonus": "AC becomes 13 + DEX mod"},
-            {"rank": 2, "bonus": "AC becomes 14 + DEX mod, resistance to force damage"}
-          ]
-        },
-        {
-          "id": "fireball",
-          "name": "Fireball",
-          "description": "Hurl an explosive ball of fire that detonates on impact.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["arcane_bolt"],
-          "effects": {
-            "type": "active",
-            "damage": "6d6 fire",
-            "aoe_radius": "20ft",
-            "save": "DC 14 DEX for half",
-            "range": 90,
-            "cooldown": 1,
-            "mp_cost": 12
-          },
-          "max_rank": 2,
-          "rank_progression": [
-            {"rank": 1, "bonus": "6d6 fire, 20ft radius"},
-            {"rank": 2, "bonus": "8d6 fire, 25ft radius"}
-          ]
-        },
-        {
-          "id": "heal",
-          "name": "Restoration",
-          "description": "Channel divine energy to mend wounds.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["mage_armor"],
-          "effects": {
-            "type": "active",
-            "healing": "3d8+INT_mod",
-            "range": 30,
-            "cooldown": 1,
-            "mp_cost": 10
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "3d8+INT healing"},
-            {"rank": 2, "bonus": "4d8+INT healing, cures 1 condition"},
-            {"rank": 3, "bonus": "5d8+INT healing, cures all conditions"}
-          ]
-        },
-        {
-          "id": "lightning_storm",
-          "name": "Lightning Storm",
-          "description": "Call down a devastating storm of lightning bolts.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["fireball"],
-          "effects": {
-            "type": "active",
-            "damage": "8d6 lightning",
-            "aoe_radius": "30ft",
-            "save": "DC 16 DEX for half",
-            "range": 120,
-            "cooldown": 3,
-            "mp_cost": 20
-          },
+          "effects": {"type": "active", "damage_mult": 2.0, "requires_stealth": true},
           "max_rank": 1
         },
-        {
-          "id": "time_warp",
-          "name": "Time Warp",
-          "description": "Briefly manipulate the flow of time, granting extra actions.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["mage_armor", "heal"],
-          "effects": {
-            "type": "active",
-            "effect": "Grant 1 additional action this turn",
-            "cooldown": 6,
-            "mp_cost": 25
-          },
+        "smoke_bomb": {
+          "id": "smoke_bomb",
+          "name": "Smoke Bomb",
+          "description": "Toss a smoke bomb to guarantee escape from combat.",
+          "type": "active",
+          "cost": 1,
+          "prerequisites": [],
+          "effects": {"type": "active", "guaranteed_flee": true},
+          "max_rank": 1
+        },
+        "pickpocket": {
+          "id": "pickpocket",
+          "name": "Pickpocket",
+          "description": "Steal gold from a target without them noticing.",
+          "type": "active",
+          "cost": 2,
+          "prerequisites": ["backstab"],
+          "effects": {"type": "active", "steal_gold": true, "dc_base": 12},
+          "max_rank": 1
+        },
+        "analyze": {
+          "id": "analyze",
+          "name": "Analyze",
+          "description": "Study an enemy to reveal their stats and weaknesses.",
+          "type": "active",
+          "cost": 1,
+          "prerequisites": [],
+          "effects": {"type": "active", "reveal_stats": true},
           "max_rank": 1
         }
-      ]
+      }
     },
-    {
-      "id": "social",
-      "name": "Social Influence",
-      "description": "The power of words, charm, and social manipulation.",
-      "icon": "crown",
-      "skills": [
-        {
-          "id": "persuasion",
-          "name": "Silver Tongue",
-          "description": "Your words carry weight. NPCs are more receptive to your requests.",
-          "tier": 1,
+    "mage": {
+      "id": "mage",
+      "name": "Mage",
+      "description": "Wielders of arcane power and elemental forces.",
+      "skills": {
+        "amplify": {
+          "id": "amplify",
+          "name": "Amplify",
+          "description": "Channel extra power into your next spell.",
+          "type": "active",
           "cost": 1,
           "prerequisites": [],
-          "effects": {
-            "type": "passive",
-            "persuasion_dc_reduction": 2,
-            "stat_scaling": "CHA"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "-2 to persuasion DCs"},
-            {"rank": 2, "bonus": "-4 to persuasion DCs"},
-            {"rank": 3, "bonus": "-6 to persuasion DCs, advantage on CHA checks"}
-          ]
-        },
-        {
-          "id": "intimidation",
-          "name": "Intimidating Presence",
-          "description": "Your very presence can make others hesitate or flee.",
-          "tier": 1,
-          "cost": 1,
-          "prerequisites": [],
-          "effects": {
-            "type": "active",
-            "effect": "Frighten target, DC 12+CHA_mod WIS save",
-            "duration": 2,
-            "cooldown": 3,
-            "stat_scaling": "CHA"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "Frighten 1 target"},
-            {"rank": 2, "bonus": "Frighten up to 3 targets"},
-            {"rank": 3, "bonus": "Frighten AoE 15ft, targets cower (no action) on fail"}
-          ]
-        },
-        {
-          "id": "haggle",
-          "name": "Master Haggler",
-          "description": "Negotiate better prices with merchants.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["persuasion"],
-          "effects": {
-            "type": "passive",
-            "buy_discount_percent": 10,
-            "sell_bonus_percent": 10
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "10% buy/sell bonus"},
-            {"rank": 2, "bonus": "15% buy/sell bonus"},
-            {"rank": 3, "bonus": "20% buy/sell bonus, access hidden stock"}
-          ]
-        },
-        {
-          "id": "deception",
-          "name": "Deceiver",
-          "description": "Master the art of lies and misdirection.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["persuasion"],
-          "effects": {
-            "type": "passive",
-            "deception_dc_reduction": 3,
-            "special": "NPCs don't become hostile on failed deception"
-          },
-          "max_rank": 2,
-          "rank_progression": [
-            {"rank": 1, "bonus": "-3 to deception DCs"},
-            {"rank": 2, "bonus": "-5 to deception DCs, can create false identities"}
-          ]
-        },
-        {
-          "id": "inspire",
-          "name": "Inspiring Leader",
-          "description": "Your words rally allies to fight harder.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["persuasion", "intimidation"],
-          "effects": {
-            "type": "active",
-            "ally_buff": {"temp_hp": "CHA_mod + level", "attack_bonus": 1, "duration": 5},
-            "cooldown": 6,
-            "aoe": "60ft"
-          },
+          "effects": {"type": "active", "spell_damage_mult": 1.5, "duration": 1},
           "max_rank": 1
         },
-        {
-          "id": "faction_reputation_bonus",
-          "name": "Reputation Broker",
-          "description": "Your reputation with all factions shifts more favorably.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["haggle", "deception"],
-          "effects": {
-            "type": "passive",
-            "reputation_gain_multiplier": 1.5,
-            "reputation_loss_multiplier": 0.5
-          },
+        "barrier": {
+          "id": "barrier",
+          "name": "Barrier",
+          "description": "Erect a magical barrier that absorbs incoming damage.",
+          "type": "active",
+          "cost": 1,
+          "prerequisites": [],
+          "effects": {"type": "active", "absorb_damage": 20, "duration": 3},
+          "max_rank": 1
+        },
+        "elemental_mastery": {
+          "id": "elemental_mastery",
+          "name": "Elemental Mastery",
+          "description": "Your spells ignore elemental resistances.",
+          "type": "passive",
+          "cost": 2,
+          "prerequisites": ["amplify"],
+          "effects": {"type": "passive", "ignore_resistance": true},
+          "max_rank": 1
+        },
+        "arcane_sight": {
+          "id": "arcane_sight",
+          "name": "Arcane Sight",
+          "description": "Perceive hidden objects, traps, and invisible creatures.",
+          "type": "passive",
+          "cost": 2,
+          "prerequisites": ["barrier"],
+          "effects": {"type": "passive", "detect_hidden": true, "perception_bonus": 3},
           "max_rank": 1
         }
-      ]
+      }
     },
-    {
-      "id": "survival",
-      "name": "Wilderness Survival",
-      "description": "Skills for thriving in the wild and enduring hardship.",
-      "icon": "leaf",
-      "skills": [
-        {
-          "id": "foraging",
-          "name": "Foraging",
-          "description": "Find food and useful herbs in the wilderness.",
-          "tier": 1,
+    "ranger": {
+      "id": "ranger",
+      "name": "Ranger",
+      "description": "Survivalists who thrive in the wilderness and bond with beasts.",
+      "skills": {
+        "forager": {
+          "id": "forager",
+          "name": "Forager",
+          "description": "Passively find more resources while scavenging.",
+          "type": "passive",
           "cost": 1,
           "prerequisites": [],
-          "effects": {
-            "type": "passive",
-            "herb_find_chance_bonus": 0.15,
-            "food_find_chance": 0.30,
-            "stat_scaling": "WIS"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "+15% herb find, 30% food find"},
-            {"rank": 2, "bonus": "+25% herb find, 50% food find"},
-            {"rank": 3, "bonus": "+35% herb find, 70% food find, find rare herbs"}
-          ]
-        },
-        {
-          "id": "trap_making",
-          "name": "Trap Making",
-          "description": "Craft and deploy traps to catch prey or enemies.",
-          "tier": 1,
-          "cost": 1,
-          "prerequisites": [],
-          "effects": {
-            "type": "active",
-            "trap_craft_dc": 12,
-            "trap_types": ["snare", "pit", "alarm"],
-            "stat_scaling": "DEX"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "Basic traps (snare, pit, alarm)"},
-            {"rank": 2, "bonus": "Advanced traps (poison, net, caltrops)"},
-            {"rank": 3, "bonus": "Master traps (explosive, paralysis, magical alarm)"}
-          ]
-        },
-        {
-          "id": "tracking",
-          "name": "Tracking",
-          "description": "Follow tracks and signs of creatures in the wild.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": ["foraging"],
-          "effects": {
-            "type": "passive",
-            "tracking_dc_reduction": 3,
-            "special": "Can identify creature type from tracks, detect ambushes"
-          },
-          "max_rank": 2,
-          "rank_progression": [
-            {"rank": 1, "bonus": "Track creatures, -3 to tracking DCs"},
-            {"rank": 2, "bonus": "Track invisible creatures, detect traps while tracking"}
-          ]
-        },
-        {
-          "id": "endurance",
-          "name": "Endurance",
-          "description": "Your body can withstand greater punishment.",
-          "tier": 2,
-          "cost": 2,
-          "prerequisites": [],
-          "effects": {
-            "type": "passive",
-            "hp_bonus_per_level": 3,
-            "resistance_exhaustion": true,
-            "stat_scaling": "CON"
-          },
-          "max_rank": 3,
-          "rank_progression": [
-            {"rank": 1, "bonus": "+3 HP per level"},
-            {"rank": 2, "bonus": "+5 HP per level, resistance to exhaustion"},
-            {"rank": 3, "bonus": "+8 HP per level, immune to exhaustion level 1-2"}
-          ]
-        },
-        {
-          "id": "master_herbalist",
-          "name": "Master Herbalist",
-          "description": "Your knowledge of herbs allows you to create superior concoctions.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["foraging", "tracking"],
-          "effects": {
-            "type": "passive",
-            "alchemy_dc_reduction": 4,
-            "potion_effectiveness_bonus": 0.25,
-            "special": "Can identify all herbs, craft rare potions"
-          },
+          "effects": {"type": "passive", "scavenge_bonus": 0.25},
           "max_rank": 1
         },
-        {
-          "id": "nature_ward",
-          "name": "Nature's Ward",
-          "description": "The natural world protects you from harm.",
-          "tier": 3,
-          "cost": 3,
-          "prerequisites": ["endurance"],
-          "effects": {
-            "type": "active",
-            "effect": "Heal 2d8+CON HP, gain resistance to all damage for 1 turn",
-            "environment": "outdoors_only",
-            "cooldown": 5,
-            "uses_per_day": 2
-          },
+        "pathfinder": {
+          "id": "pathfinder",
+          "name": "Pathfinder",
+          "description": "Your knowledge of terrain lowers scouting difficulty.",
+          "type": "passive",
+          "cost": 1,
+          "prerequisites": [],
+          "effects": {"type": "passive", "scout_dc_reduction": 3},
+          "max_rank": 1
+        },
+        "beast_bond": {
+          "id": "beast_bond",
+          "name": "Beast Bond",
+          "description": "Form a bond with a beast to tame it as a companion.",
+          "type": "active",
+          "cost": 2,
+          "prerequisites": ["pathfinder"],
+          "effects": {"type": "active", "tame_beast": true, "dc_base": 14},
+          "max_rank": 1
+        },
+        "eagle_eye": {
+          "id": "eagle_eye",
+          "name": "Eagle Eye",
+          "description": "Your sharp senses grant bonus perception.",
+          "type": "passive",
+          "cost": 2,
+          "prerequisites": ["forager"],
+          "effects": {"type": "passive", "perception_bonus": 2},
           "max_rank": 1
         }
-      ]
+      }
     }
-  ]
+  }
 }

@@ -1,267 +1,46 @@
 {
   "_meta": {
-    "version": "1.0.0",
-    "description": "Merchant catalogs for Canon Engine RPG",
-    "currency": "gold",
-    "haggle_enabled": true
+    "version": "2.0.0",
+    "description": "Merchant catalogs for Canon Engine"
   },
-  "merchants": [
-    {
-      "id": "general_merchant",
-      "name": "Bram the Steady",
-      "type": "general_goods",
-      "location": "starter_village",
-      "personality": {
-        "traits": ["friendly", "bargain-minded", "talkative"],
-        "disposition": "neutral_good",
-        "speech_style": "Warm and slightly verbose. Calls customers 'friend'.",
-        "haggle_dc": 12,
-        "buy_modifier": 0.5,
-        "sell_modifier": 1.1
-      },
-      "inventory": [
-        {
-          "id": "health_potion",
-          "name": "Health Potion",
-          "type": "consumable",
-          "rarity": "common",
-          "price": 25,
-          "stock": 10,
-          "effect": "Restore 2d4+2 HP",
-          "description": "A small vial of red liquid."
-        },
-        {
-          "id": "bread_loaf",
-          "name": "Loaf of Bread",
-          "type": "food",
-          "rarity": "dirt",
-          "price": 2,
-          "stock": 50,
-          "effect": "Restore 1 HP, satisfies hunger",
-          "description": "Day-old but filling."
-        },
-        {
-          "id": "torch",
-          "name": "Torch",
-          "type": "tool",
-          "rarity": "dirt",
-          "price": 3,
-          "stock": 20,
-          "effect": "Provides light for 1 hour",
-          "description": "A simple wooden torch."
-        },
-        {
-          "id": "rope_50ft",
-          "name": "Hempen Rope (50ft)",
-          "type": "tool",
-          "rarity": "common",
-          "price": 10,
-          "stock": 5,
-          "effect": "Utility item for climbing, binding",
-          "description": "Sturdy hemp rope."
-        },
-        {
-          "id": "iron_rations",
-          "name": "Iron Rations (3 days)",
-          "type": "food",
-          "rarity": "common",
-          "price": 15,
-          "stock": 8,
-          "effect": "Satisfies hunger for 3 days",
-          "description": "Dried meat, hardtack, and preserved vegetables."
-        },
-        {
-          "id": "leather_armor",
-          "name": "Leather Armor",
-          "type": "armor",
-          "rarity": "common",
-          "price": 45,
-          "stock": 3,
-          "ac_bonus": 2,
-          "description": "Simple but functional leather armor."
-        },
-        {
-          "id": "shortsword",
-          "name": "Shortsword",
-          "type": "weapon",
-          "rarity": "common",
-          "price": 30,
-          "stock": 4,
-          "damage": "1d6+1 piercing",
-          "description": "A basic shortsword."
-        },
-        {
-          "id": "antidote",
-          "name": "Antidote",
-          "type": "consumable",
-          "rarity": "common",
-          "price": 35,
-          "stock": 4,
-          "effect": "Cures Poisoned status",
-          "description": "A bitter herbal concoction."
-        }
-      ],
-      "restock_interval_days": 3,
-      "quest_giver": false,
-      "dialogue_hooks": [
-        "Business is slow with all these monsters about...",
-        "I heard the crypt lord has been restless lately. Bad for trade.",
-        "Looking for something specific? I keep a modest stock."
-      ]
-    },
-    {
-      "id": "blackmarket_dealer",
-      "name": "Whisper",
-      "type": "black_market",
-      "location": "undercity",
-      "personality": {
-        "traits": ["secretive", "amoral", "well-connected"],
-        "disposition": "chaotic_neutral",
-        "speech_style": "Speaks in hushed tones. Uses coded language. Never says anything directly incriminating.",
-        "haggle_dc": 16,
-        "buy_modifier": 0.3,
-        "sell_modifier": 1.5,
-        "requires_reputation": {
-          "faction": "thieves_circle",
-          "minimum": "neutral"
-        }
-      },
-      "inventory": [
-        {
-          "id": "poison_vial",
-          "name": "Vial of Nightshade Poison",
-          "type": "consumable",
-          "rarity": "uncommon",
-          "price": 80,
-          "stock": 3,
-          "effect": "Apply to weapon: +1d6 poison damage for 3 hits",
-          "description": "Handle with extreme care."
-        },
-        {
-          "id": "lockpick_set",
-          "name": "Lockpick Set",
-          "type": "tool",
-          "rarity": "common",
-          "price": 25,
-          "stock": 5,
-          "effect": "Required for lockpicking checks",
-          "description": "A set of fine steel picks."
-        },
-        {
-          "id": "smoke_bomb",
-          "name": "Smoke Bomb",
-          "type": "consumable",
-          "rarity": "uncommon",
-          "price": 45,
-          "stock": 4,
-          "effect": "Creates darkness in 20ft radius, allows escape or repositioning",
-          "description": "A small ceramic sphere filled with black powder."
-        },
-        {
-          "id": "forged_documents",
-          "name": "Forged Documents",
-          "type": "quest_item",
-          "rarity": "rare",
-          "price": 200,
-          "stock": 1,
-          "effect": "Can be used to bypass certain checks or gain access",
-          "description": "Expertly forged papers. For... legal purposes."
-        },
-        {
-          "id": "black_blade",
-          "name": "Blackened Dagger",
-          "type": "weapon",
-          "rarity": "rare",
-          "price": 150,
-          "stock": 1,
-          "damage": "1d6+2 piercing",
-          "special": "Bonus to stealth attacks: +1d6 if attacking from hiding",
-          "description": "A dagger coated in matte black finish. Silent and deadly."
-        }
-      ],
-      "restock_interval_days": 7,
-      "quest_giver": true,
-      "available_quests": ["steal_merchant_ledger", "eliminate_rival"],
-      "dialogue_hooks": [
-        "I don't know you. Who sent you?",
-        "I have things that... don't appear in any shop window.",
-        "Make it quick. The Watch patrols this quarter."
-      ]
-    },
-    {
-      "id": "traveling_merchant",
-      "name": "Sera the Wanderer",
-      "type": "traveling",
-      "location": "roaming",
-      "personality": {
-        "traits": ["exotic", "mysterious", "generous"],
-        "disposition": "chaotic_good",
-        "speech_style": "Speaks with an accent. Uses flowery language. Tells stories about distant lands.",
-        "haggle_dc": 14,
-        "buy_modifier": 0.4,
-        "sell_modifier": 1.2
-      },
-      "inventory": [
-        {
-          "id": "mana_crystal",
-          "name": "Mana Crystal",
-          "type": "consumable",
-          "rarity": "uncommon",
-          "price": 60,
-          "stock": 3,
-          "effect": "Restore 2d6 MP",
-          "description": "A faintly glowing blue crystal from the eastern mines."
-        },
-        {
-          "id": "exotic_spices",
-          "name": "Exotic Spices",
-          "type": "trade_good",
-          "rarity": "uncommon",
-          "price": 40,
-          "stock": 6,
-          "effect": "Can be sold at profit in different regions",
-          "description": "Rare spices from across the sea."
-        },
-        {
-          "id": "enchanted_thread",
-          "name": "Enchanted Thread",
-          "type": "crafting_material",
-          "rarity": "rare",
-          "price": 75,
-          "stock": 2,
-          "description": "Thread imbued with minor arcane energy. Used in advanced crafting."
-        },
-        {
-          "id": "fire_resist_amulet",
-          "name": "Amulet of Flame Warding",
-          "type": "accessory",
-          "rarity": "rare",
-          "price": 180,
-          "stock": 1,
-          "special": "Resistance to fire damage",
-          "description": "A turquoise amulet that feels cool to the touch."
-        },
-        {
-          "id": "mystery_potion",
-          "name": "Mystery Potion",
-          "type": "consumable",
-          "rarity": "uncommon",
-          "price": 20,
-          "stock": 5,
-          "effect": "Random positive or negative effect (roll d6)",
-          "description": "Sera claims she 'forgets what this one does.'"
-        }
-      ],
-      "restock_interval_days": 14,
-      "quest_giver": true,
-      "available_quests": ["escort_sera", "find_lost_cargo"],
-      "dialogue_hooks": [
-        "Ah, a traveler! You look like someone who appreciates the unusual.",
-        "I have wares from lands you've never heard of, friend.",
-        "The road is long, but the company makes it shorter, yes?"
-      ],
-      "encounter_chance": 0.15,
-      "movement_pattern": "circuit_between_towns"
-    }
-  ]
+  "default": {
+    "items": [
+      {"name": "Health Potion", "price": 25, "rarity": "common", "type": "consumable"},
+      {"name": "Bread Loaf", "price": 2, "rarity": "dirt", "type": "food"},
+      {"name": "Torch", "price": 3, "rarity": "dirt", "type": "tool"},
+      {"name": "Hempen Rope (50ft)", "price": 10, "rarity": "common", "type": "tool"},
+      {"name": "Antidote", "price": 15, "rarity": "common", "type": "consumable"},
+      {"name": "Bandages", "price": 5, "rarity": "dirt", "type": "consumable"},
+      {"name": "Waterskin", "price": 4, "rarity": "dirt", "type": "tool"},
+      {"name": "Rations (3 days)", "price": 12, "rarity": "dirt", "type": "food"},
+      {"name": "Lantern", "price": 15, "rarity": "common", "type": "tool"},
+      {"name": "Tent", "price": 30, "rarity": "common", "type": "tool"}
+    ]
+  },
+  "blacksmith": {
+    "items": [
+      {"name": "Iron Sword", "price": 50, "rarity": "common", "type": "weapon"},
+      {"name": "Steel Dagger", "price": 30, "rarity": "common", "type": "weapon"},
+      {"name": "Chain Mail", "price": 120, "rarity": "uncommon", "type": "armor"},
+      {"name": "Iron Shield", "price": 45, "rarity": "common", "type": "armor"},
+      {"name": "Battle Axe", "price": 65, "rarity": "uncommon", "type": "weapon"},
+      {"name": "Steel Helm", "price": 40, "rarity": "common", "type": "armor"},
+      {"name": "Iron Gauntlets", "price": 25, "rarity": "common", "type": "armor"},
+      {"name": "Whetstone", "price": 3, "rarity": "dirt", "type": "tool"},
+      {"name": "Shielding Ring", "price": 200, "rarity": "rare", "type": "accessory"},
+      {"name": "Enchanted Blade", "price": 500, "rarity": "epic", "type": "weapon"}
+    ]
+  },
+  "healer": {
+    "items": [
+      {"name": "Greater Health Potion", "price": 75, "rarity": "uncommon", "type": "consumable"},
+      {"name": "Mana Elixir", "price": 60, "rarity": "uncommon", "type": "consumable"},
+      {"name": "Cure Disease Tonic", "price": 40, "rarity": "common", "type": "consumable"},
+      {"name": "Phoenix Down", "price": 500, "rarity": "rare", "type": "consumable"},
+      {"name": "Herbal Poultice", "price": 20, "rarity": "common", "type": "consumable"},
+      {"name": "Antidote+", "price": 35, "rarity": "uncommon", "type": "consumable"},
+      {"name": "Stamina Draught", "price": 45, "rarity": "common", "type": "consumable"},
+      {"name": "Holy Water", "price": 25, "rarity": "common", "type": "consumable"}
+    ]
+  }
 }

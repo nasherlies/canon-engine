@@ -1,302 +1,65 @@
 {
   "_meta": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Boss encounters for Canon Engine RPG",
     "note": "Bosses use phases triggered at HP thresholds"
   },
-  "bosses": [
-    {
-      "id": "crypt_lord",
-      "boss_id": "BOSS_CRYPT_001",
-      "name": "Malachar, the Crypt Lord",
-      "title": "Keeper of the Buried Throne",
-      "type": "undead",
-      "is_boss": true,
-      "hp": 300,
-      "max_hp": 300,
-      "ac": 17,
-      "str": 18,
-      "dex": 10,
-      "con": 18,
-      "int": 16,
-      "cha": 14,
-      "lck": 12,
-      "statuses": ["undead", "boss"],
-      "resistances": ["poison", "cold", "necrotic", "psychic"],
-      "weaknesses": ["holy", "radiant", "fire"],
-      "xp_value": 500,
-      "encounter_location": "crypt_depths",
+  "bosses": {
+    "skeleton_king": {
+      "id": "skeleton_king",
+      "name": "Skeleton King",
+      "hp": 200,
+      "ac": 16,
       "phases": [
-        {
-          "phase": 1,
-          "hp_threshold": 1.0,
-          "name": "The Sentinel",
-          "behavior": "melee_defensive",
-          "ac_bonus": 2,
-          "description": "Malachar stands resolute, summoning skeletal minions to his aid.",
-          "abilities": [
-            {
-              "id": "summon_skeletons",
-              "name": "Raise the Fallen",
-              "cooldown": 4,
-              "effect": "Summons 2 skeleton minions"
-            },
-            {
-              "id": "grave_slash",
-              "name": "Grave Slash",
-              "cooldown": 1,
-              "damage": "2d8+6 slashing + 1d6 necrotic"
-            }
-          ],
-          "minion_spawns": ["skeleton", "skeleton"]
-        },
-        {
-          "phase": 2,
-          "hp_threshold": 0.66,
-          "name": "The Unbound",
-          "behavior": "aggressive_caster",
-          "ac_bonus": 0,
-          "description": "Dark energy erupts from Malachar's armor. He discards his shield and unleashes necrotic fury.",
-          "abilities": [
-            {
-              "id": "necrotic_burst",
-              "name": "Necrotic Burst",
-              "cooldown": 2,
-              "damage": "3d8 necrotic",
-              "aoe": true,
-              "description": "Hits all party members"
-            },
-            {
-              "id": "life_drain",
-              "name": "Life Drain",
-              "cooldown": 2,
-              "damage": "2d10 necrotic",
-              "heal_self": true,
-              "description": "Heals for 50% of damage dealt"
-            },
-            {
-              "id": "tomb_grasp",
-              "name": "Tomb Grasp",
-              "cooldown": 3,
-              "effect": "Restrains target, DC 15 STR save"
-            }
-          ]
-        },
-        {
-          "phase": 3,
-          "hp_threshold": 0.30,
-          "name": "The Desperate",
-          "behavior": "berserker",
-          "ac_bonus": -2,
-          "damage_bonus": 4,
-          "description": "Malachar's form begins to crumble. In desperation, he channels the crypt's death energy.",
-          "abilities": [
-            {
-              "id": "death_scream",
-              "name": "Death Scream",
-              "cooldown": 3,
-              "damage": "4d6 psychic",
-              "effect": "DC 14 WIS save or Frightened for 2 turns",
-              "aoe": true
-            },
-            {
-              "id": "final_strike",
-              "name": "Final Strike",
-              "cooldown": 0,
-              "damage": "3d10+8 slashing",
-              "description": "Used every other turn in phase 3"
-            }
-          ],
-          "enrage_timer": 5,
-          "enrage_effect": "Instant kill attack if not defeated within 5 turns of phase 3"
-        }
+        {"threshold": 1.0, "abilities": ["bone_storm"]},
+        {"threshold": 0.6, "abilities": ["bone_storm", "summon_skeletons"]},
+        {"threshold": 0.3, "abilities": ["death_beam"]}
       ],
-      "special_loot": [
-        {
-          "id": "crypt_lords_crown",
-          "name": "Crypt Lord's Crown",
-          "rarity": "legendary",
-          "type": "helmet",
-          "ac_bonus": 3,
-          "special": "+2 CON, resistance to necrotic damage",
-          "drop_chance": 0.50
-        },
-        {
-          "id": "grave_key",
-          "name": "Grave Key",
-          "rarity": "rare",
-          "type": "quest_item",
-          "description": "Opens the sealed passage to the Buried Throne",
-          "drop_chance": 1.0
-        },
-        {
-          "id": "soul_shard",
-          "name": "Soul Shard",
-          "rarity": "epic",
-          "type": "crafting_material",
-          "description": "A crystallized fragment of ancient necrotic power",
-          "drop_chance": 0.75
-        }
+      "loot": [
+        {"name": "Crown of Bones", "rarity": "epic", "equip_slot": "head", "effects": {"INT": 3, "CHA": 2}},
+        {"name": "Soul Shard", "rarity": "rare", "itype": "crafting_material"}
       ],
-      "dialogue": {
-        "intro": "You dare profane these halls? I am the keeper of what lies beneath... and you shall join my collection.",
-        "phase_2": "Enough! Feel the weight of a thousand burials!",
-        "phase_3": "Impossible... I will NOT be undone by mortals!",
-        "defeat": "The throne... will find... another keeper...",
-        "player_death": "Another soul for the crypt. Rise, and serve."
-      }
+      "xp": 500,
+      "resistances": {"cold": 0.5, "poison": 1.0},
+      "weaknesses": {"fire": 1.5, "radiant": 2.0}
     },
-    {
-      "id": "shadow_king",
-      "boss_id": "BOSS_SHADOW_001",
-      "name": "Valdris, the Shadow King",
-      "title": "Sovereign of the Umbral Court",
-      "type": "fiend",
-      "is_boss": true,
-      "hp": 500,
-      "max_hp": 500,
-      "ac": 19,
-      "str": 16,
-      "dex": 18,
-      "con": 20,
-      "int": 20,
-      "cha": 18,
-      "lck": 14,
-      "statuses": ["fiend", "boss", "shadow_touched"],
-      "resistances": ["necrotic", "cold", "psychic", "nonmagical_physical"],
-      "weaknesses": ["radiant", "holy", "fire"],
-      "xp_value": 1200,
-      "encounter_location": "shadow_throne",
+    "crypt_lord": {
+      "id": "crypt_lord",
+      "name": "Malachar, the Crypt Lord",
+      "hp": 300,
+      "ac": 17,
       "phases": [
-        {
-          "phase": 1,
-          "hp_threshold": 1.0,
-          "name": "The Observer",
-          "behavior": "ranged_caster",
-          "ac_bonus": 2,
-          "description": "Valdris watches from his throne, testing the intruders with shadow magic.",
-          "abilities": [
-            {
-              "id": "shadow_tendrils",
-              "name": "Shadow Tendrils",
-              "cooldown": 1,
-              "damage": "2d8+4 necrotic",
-              "range": 60,
-              "description": "Tendrils of darkness lash out"
-            },
-            {
-              "id": "mirror_shadows",
-              "name": "Mirror Shadows",
-              "cooldown": 4,
-              "effect": "Creates 2 shadow clones with half HP"
-            },
-            {
-              "id": "darkness_aura",
-              "name": "Darkness Aura",
-              "passive": true,
-              "effect": "All attacks against Valdris have disadvantage unless attacker is within 5ft"
-            }
-          ]
-        },
-        {
-          "phase": 2,
-          "hp_threshold": 0.60,
-          "name": "The Warlord",
-          "behavior": "teleport_melee",
-          "ac_bonus": 0,
-          "description": "Valdris rises, wielding a blade of solidified shadow. He teleports between strikes.",
-          "abilities": [
-            {
-              "id": "shadow_step",
-              "name": "Shadow Step",
-              "cooldown": 0,
-              "effect": "Teleport up to 60ft to a shadow, attack with advantage",
-              "description": "Used as bonus action"
-            },
-            {
-              "id": "void_blade",
-              "name": "Void Blade Strike",
-              "cooldown": 0,
-              "damage": "3d8+8 slashing + 2d6 necrotic"
-            },
-            {
-              "id": "umbral_cage",
-              "name": "Umbral Cage",
-              "cooldown": 3,
-              "effect": "Traps target in shadow sphere, DC 16 WIS save, 3d8 necrotic per turn trapped"
-            }
-          ]
-        },
-        {
-          "phase": 3,
-          "hp_threshold": 0.25,
-          "name": "The Void Incarnate",
-          "behavior": "reality_warper",
-          "ac_bonus": 3,
-          "description": "Valdris discards his form, becoming one with the shadow realm itself.",
-          "abilities": [
-            {
-              "id": "reality_tear",
-              "name": "Reality Tear",
-              "cooldown": 2,
-              "damage": "5d8 necrotic",
-              "aoe": true,
-              "effect": "DC 17 CON save or Banished for 1 turn"
-            },
-            {
-              "id": "shadow_consume",
-              "name": "Shadow Consume",
-              "cooldown": 3,
-              "damage": "4d10 necrotic",
-              "heal_self": true,
-              "description": "Heals for full damage dealt"
-            },
-            {
-              "id": "void_collapse",
-              "name": "Void Collapse",
-              "cooldown": 5,
-              "damage": "8d6 force",
-              "aoe": true,
-              "effect": "DC 18 DEX save for half damage. One-time devastating attack."
-            }
-          ]
-        }
+        {"threshold": 1.0, "abilities": ["grave_slash", "summon_skeletons"]},
+        {"threshold": 0.66, "abilities": ["necrotic_burst", "life_drain"]},
+        {"threshold": 0.3, "abilities": ["death_scream", "final_strike"]}
       ],
-      "special_loot": [
-        {
-          "id": "shadow_crown",
-          "name": "Crown of the Shadow King",
-          "rarity": "mythical",
-          "type": "helmet",
-          "ac_bonus": 4,
-          "special": "+3 INT, +3 CHA, resistance to all shadow damage, can cast Darkness 1/day",
-          "drop_chance": 0.25
-        },
-        {
-          "id": "void_blade_weapon",
-          "name": "Blade of the Void",
-          "rarity": "legendary",
-          "type": "weapon",
-          "damage": "2d8+4 slashing + 2d6 necrotic",
-          "special": "Teleport 30ft on hit 1/day",
-          "drop_chance": 0.40
-        },
-        {
-          "id": "shadow_essence",
-          "name": "Essence of the Shadow Realm",
-          "rarity": "epic",
-          "type": "crafting_material",
-          "description": "Raw shadow energy made manifest. Incredibly rare and dangerous.",
-          "drop_chance": 1.0
-        }
+      "loot": [
+        {"name": "Crypt Lord's Crown", "rarity": "legendary", "equip_slot": "head", "effects": {"CON": 2}},
+        {"name": "Grave Key", "rarity": "rare", "itype": "quest_item"},
+        {"name": "Soul Shard", "rarity": "epic", "itype": "crafting_material"}
       ],
-      "dialogue": {
-        "intro": "Ah, the living. How quaint that you walk so boldly into the domain of shadows. Let us see if your courage outlasts your light.",
-        "phase_2": "Enough games. You have earned the right to face me truly.",
-        "phase_3": "The void hungers! I am the darkness between stars, the silence at the end of all things!",
-        "defeat": "Light... so there is still light in this world... How... disappointing...",
-        "player_death": "Return to the light, little mortal. The shadows will be waiting."
-      }
+      "xp": 500,
+      "resistances": {"poison": 1.0, "cold": 0.5, "necrotic": 0.0},
+      "weaknesses": {"radiant": 2.0, "fire": 1.5}
+    },
+    "shadow_king": {
+      "id": "shadow_king",
+      "name": "Valdris, the Shadow King",
+      "hp": 500,
+      "ac": 19,
+      "phases": [
+        {"threshold": 1.0, "abilities": ["shadow_tendrils", "mirror_shadows"]},
+        {"threshold": 0.6, "abilities": ["shadow_step", "void_blade"]},
+        {"threshold": 0.25, "abilities": ["reality_tear", "shadow_consume"]}
+      ],
+      "loot": [
+        {"name": "Crown of the Shadow King", "rarity": "mythical", "equip_slot": "head", "effects": {"INT": 3, "CHA": 3}},
+        {"name": "Blade of the Void", "rarity": "legendary", "equip_slot": "weapon_main"},
+        {"name": "Essence of the Shadow Realm", "rarity": "epic", "itype": "crafting_material"}
+      ],
+      "xp": 1200,
+      "resistances": {"necrotic": 0.0, "cold": 0.5, "psychic": 0.5},
+      "weaknesses": {"radiant": 2.0, "fire": 1.5}
     }
-  ]
+  }
 }
