@@ -489,6 +489,11 @@ async def start_character(
     if equip:
         state["player"]["equipment"] = equip
 
+    # Also set top-level inventory/equipment for core systems
+    state["inventory"] = list(inventory)
+    if equip:
+        state["equipment"] = dict(equip)
+
     state["world"] = {
         "setting_primary": setting_primary,
         "setting_secondary": setting_secondary,

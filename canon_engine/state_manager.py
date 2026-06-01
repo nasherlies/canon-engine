@@ -179,6 +179,7 @@ def new_state() -> Dict[str, Any]:
         "world_flags": {},
         "lore_cards": [],
         "equipment": {},
+        "inventory": [],
         "turn": 0,
         "tutorial": {"active": False},
         "honor_score": 0,
