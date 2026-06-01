@@ -1,8 +1,8 @@
 // factions.js — Faction Panel
 // Canon Engine UI Module
 
-import { showToast } from './toast.js';
-import { getState, setState } from './store.js';
+import { show as showToast } from './toast.js';
+import { get as getState, set as setState } from './store.js';
 
 const TIER_THRESHOLDS = [
   { min: -100, max: -80, label: 'Hated', color: '#cc3333', shopMod: 150 },

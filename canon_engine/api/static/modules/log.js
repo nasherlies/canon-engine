@@ -8,20 +8,20 @@ let isNearBottom = true;
 
 function getElements() {
   if (!logContent) {
-    logContent = $('#log-content');
-    scrollBtn = $('#btn-scroll-bottom');
+    // Match actual HTML: #narr is the narrative container
+    logContent = $('#narr');
+    scrollBtn = $('#jump-bottom');
   }
 }
 
 export function init() {
   getElements();
-  const container = $('#narrative-log');
-  if (!container) return;
+  if (!logContent) return;
 
-  container.addEventListener('scroll', () => {
+  logContent.addEventListener('scroll', () => {
     const threshold = 80;
-    isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
-    if (scrollBtn) scrollBtn.hidden = isNearBottom;
+    isNearBottom = logContent.scrollHeight - logContent.scrollTop - logContent.clientHeight < threshold;
+    if (scrollBtn) scrollBtn.classList.toggle('show', !isNearBottom);
   });
 
   if (scrollBtn) {
@@ -48,7 +48,7 @@ export function appendMessage(text, type = 'narration') {
   if (isNearBottom) {
     scrollToBottom();
   } else if (scrollBtn) {
-    scrollBtn.hidden = false;
+    scrollBtn.classList.add('show');
   }
 }
 
@@ -59,14 +59,32 @@ export function clearLog() {
 
 export function scrollToBottom() {
   getElements();
-  const container = $('#narrative-log');
-  if (container) {
+  if (logContent) {
     requestAnimationFrame(() => {
-      container.scrollTop = container.scrollHeight;
+      logContent.scrollTop = logContent.scrollHeight;
     });
   }
-  if (scrollBtn) scrollBtn.hidden = true;
+  if (scrollBtn) scrollBtn.classList.remove('show');
   isNearBottom = true;
+}
+
+export function showLoading() {
+  getElements();
+  if (!logContent) return '';
+  const id = 'ld-' + Date.now();
+  const d = document.createElement('div');
+  d.className = 'msg msg-sys';
+  d.id = id;
+  d.innerHTML = '<em>Thinking...</em>';
+  logContent.appendChild(d);
+  scrollToBottom();
+  return id;
+}
+
+export function removeLoading(id) {
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (el) el.remove();
 }
 
 function formatText(text) {
@@ -78,6 +96,6 @@ function formatText(text) {
     .replace(/>/g, '&gt;')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code>$1</code>')
+    .replace(/`(.+?)`/g, '<code style="color:var(--gold);background:var(--panel);padding:0 3px">$1</code>')
     .replace(/\n/g, '<br>');
 }

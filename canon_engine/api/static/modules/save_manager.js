@@ -1,7 +1,7 @@
 // save_manager.js — Save Manager Modal
 // Canon Engine UI Module
 
-import { showToast } from './toast.js';
+import { show as showToast } from './toast.js';
 
 let _modal = null;
 let _saves = [];

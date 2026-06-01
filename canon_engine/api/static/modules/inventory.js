@@ -1,6 +1,6 @@
 // ─── inventory.js ─── Inventory Panel ───
 import { action } from './api.js';
-import { get, set, emit } from './store.js';
+import * as store from './store.js';
 import { show as toast } from './toast.js';
 
 /* ── Constants ── */
@@ -156,7 +156,7 @@ function renderGold(gold) {
 export function renderInventorySidebar(items, equipment, carry, cap) {
   const body = document.getElementById('sp-inventory-body');
   if (!body) return;
-  let html = renderGold(get('player')?.gold ?? 0);
+  let html = renderGold(store.get('player')?.gold ?? 0);
   const sorted = sortItems(items || []);
   sorted.forEach(item => {
     const name = item.name || 'Item';
@@ -188,7 +188,7 @@ export function renderInventoryOverlay(items, equipment, carry, cap) {
     <div style="color:#c8a84e;font-size:16px;letter-spacing:2px;">◆ INVENTORY</div>
     <button class="btn btn-small" id="inv-close-btn">CLOSE</button>
   </div>`;
-  html += renderGold(get('player')?.gold ?? 0);
+  html += renderGold(store.get('player')?.gold ?? 0);
   html += renderCarryBar(carry, cap);
   html += renderEquipmentMap(equipment);
 
@@ -237,12 +237,12 @@ export function renderInventoryOverlay(items, equipment, carry, cap) {
 
 /* ── Action handlers ── */
 async function sendItemCmd(cmd, name) {
-  const slot = get('slot') || 'default';
+  const slot = store.get('slot') || 'default';
   try {
     const d = await action(`${cmd} ${name}`, { slot });
-    emit('narration', d.narration);
-    emit('layout', d.layout);
-    emit('state', d.state);
+    store.emit('narration', d.narration);
+    store.emit('layout', d.layout);
+    store.emit('state', d.state);
     toast(`${cmd} ${name}`, 'info');
   } catch (e) {
     toast('Failed: ' + e.message, 'error');

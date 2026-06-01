@@ -65,6 +65,11 @@ async def serve_ui():
     return {"error": "UI not found"}
 
 
+# Serve static files (JS modules, CSS, etc.)
+from fastapi.staticfiles import StaticFiles
+app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
+
+
 # ── Auth ─────────────────────────────────────────────────────────────────────
 
 def _get_admin_password() -> str:
@@ -139,6 +144,7 @@ class ActionResponse(BaseModel):
     narration: str = Field(default="", description="AI narration output.")
     layout: Dict[str, Any] = Field(default_factory=dict, description="Layout data for UI rendering.")
     state: Dict[str, Any] = Field(default_factory=dict, description="Updated game state snapshot.")
+    command_log: list = Field(default_factory=list, description="Recent command log entries.")
 
 
 class HealthResponse(BaseModel):
@@ -178,6 +184,7 @@ async def handle_action(
 
     narration = turn_result.get("narration", "")
     layout_data = turn_result.get("layout", {})
+    command_log = turn_result.get("command_log", [])
 
     # Auto-save after each action
     _save_session(req.slot)
@@ -186,6 +193,7 @@ async def handle_action(
         narration=narration,
         layout=layout_data,
         state=state,
+        command_log=command_log,
     )
 
 

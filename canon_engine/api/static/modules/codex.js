@@ -1,8 +1,8 @@
 // codex.js — Lore Codex Overlay
 // Canon Engine UI Module
 
-import { showToast } from './toast.js';
-import { getState, setState } from './store.js';
+import { show as showToast } from './toast.js';
+import { get as getState, set as setState } from './store.js';
 
 const CATEGORY_COLORS = {
   CHARACTER: { bg: '#c8b16c', color: '#000' },

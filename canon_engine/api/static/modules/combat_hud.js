@@ -1,6 +1,6 @@
 // ─── combat_hud.js ─── Combat Overlay ───
 import { action } from './api.js';
-import { get, set, emit } from './store.js';
+import * as store from './store.js';
 import { show as toast } from './toast.js';
 
 let _layout = null;
@@ -59,7 +59,7 @@ function render(layout) {
   const enemies = numberEnemies(layout.enemies || []);
   const companions = layout.companions || [];
   const announcements = layout.move_announcements || layout.announcements || [];
-  const slot = get('slot') || 'default';
+  const slot = store.get('slot') || 'default';
 
   let html = `<div style="max-width:900px;margin:0 auto;">`;
 
@@ -168,7 +168,7 @@ function render(layout) {
 
 /* ── Actions ── */
 function handleAction(act) {
-  const slot = get('slot') || 'default';
+  const slot = store.get('slot') || 'default';
   const enemies = _layout?.enemies || [];
 
   switch (act) {
@@ -206,9 +206,9 @@ function handleAction(act) {
 async function doCmd(cmd, slot) {
   try {
     const d = await action(cmd, { slot });
-    emit('narration', d.narration);
-    emit('layout', d.layout);
-    emit('state', d.state);
+    store.emit('narration', d.narration);
+    store.emit('layout', d.layout);
+    store.emit('state', d.state);
     if (d.layout) {
       if (d.layout.combat_active) updateCombat(d.layout);
       else closeCombat();

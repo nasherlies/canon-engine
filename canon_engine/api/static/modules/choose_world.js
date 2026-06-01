@@ -1,7 +1,7 @@
 // ─── choose_world.js ─── World Picker Screen ───
 import { apiGet, apiPost } from './api.js';
-import { getState, setState } from './store.js';
-import { toast } from './toast.js';
+import { get as getState, set as setState } from './store.js';
+import { show as toast } from './toast.js';
 
 function esc(s) {
   if (s == null) return '';
@@ -92,10 +92,13 @@ function render() {
 
   // Step 2: Collision
   if (_step === 2) {
+    const allGenres = _worldSettings.length > 0
+      ? _worldSettings.map(w => w.id || w.genre)
+      : Object.keys(GENRE_META);
     html += `<div class="form-group"><label>Step 2: Collision Mode (optional secondary genre)</label>`;
     html += `<select id="cw-collision" style="width:100%;padding:6px 10px;background:#0a0a0f;border:1px solid #2a2a3a;color:#c8c8d0;">
       <option value="">None (single genre)</option>`;
-    genres.forEach(g => {
+    allGenres.forEach(g => {
       if (g !== _selectedGenre) {
         html += `<option value="${esc(g)}"${_selectedCollision === g ? ' selected' : ''}>${GENRE_META[g]?.label || esc(g)}</option>`;
       }

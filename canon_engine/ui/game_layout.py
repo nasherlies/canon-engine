@@ -293,27 +293,90 @@ def render_full_layout(
 def render_layout_dict(state: Dict[str, Any], narration: str = "") -> Dict[str, Any]:
     """Return a plain dict representation of the layout for API responses.
 
-    This avoids Rich objects and returns JSON-serializable data.
+    This produces the SAME shape as ``build_layout_payload`` in game_session.py
+    so the web frontend receives a consistent layout format regardless of which
+    code path creates the response.
     """
     player = state.get("player", {})
+    stats = player.get("stats", {})
+    world = state.get("world", {})
+    combat = state.get("combat", {})
     companions = state.get("companions", [])
+
+    # Player info (mirrors build_layout_payload)
+    player_info = {
+        "name": player.get("name", "Adventurer"),
+        "hp": player.get("hp", 0),
+        "hp_max": player.get("max_hp", player.get("hp", 0)),
+        "mp": player.get("mp", 0),
+        "mp_max": player.get("max_mp", player.get("mp", 0)),
+        "stm": player.get("stm", player.get("stamina", 0)),
+        "stm_max": player.get("max_stm", player.get("max_stamina", 0)),
+        "xp": player.get("xp", 0),
+        "xp_to_next": player.get("xp_to_next", player.get("xp_next", 100)),
+        "level": player.get("level", 1),
+        "stats": stats,
+        "gold": player.get("gold", 0),
+        "race": player.get("race", ""),
+        "archetype": player.get("archetype", ""),
+    }
+
+    # Inventory
     inventory = player.get("inventory", [])
-    log = state.get("command_log", [])
+    inventory_rows = [
+        {
+            "name": it.get("name", "???") if isinstance(it, dict) else str(it),
+            "qty": it.get("qty", 1) if isinstance(it, dict) else 1,
+            "rarity": it.get("rarity", "common") if isinstance(it, dict) else "common",
+        }
+        for it in inventory[:30]
+    ]
+
+    # Combat info
+    combat_info = {}
+    if combat.get("active"):
+        enemies = combat.get("enemies", [])
+        combat_info = {
+            "active": True,
+            "round": combat.get("round", 0),
+            "enemies": [
+                {
+                    "name": e.get("display_name", e.get("type", "enemy")),
+                    "hp": e.get("hp", 0),
+                    "max_hp": e.get("max_hp", 0),
+                    "alive": e.get("alive", True),
+                }
+                for e in enemies
+            ],
+            "player_moves": combat.get("player_moves_remaining", 0),
+        }
+
+    # World info
+    minutes = world.get("minutes_total", 0)
+    hour = (minutes // 60) % 24
+    minute_of_hour = minutes % 60
+    day = minutes // 1440
+    time_str = f"{hour:02d}:{minute_of_hour:02d} (Day {day})"
+
+    world_info = {
+        "clock": time_str,
+        "weather": world.get("weather", "clear"),
+        "location": world.get("location_name", world.get("location_id", "Unknown")),
+    }
+
+    # Quests
+    quests_data = state.get("quests", {})
+    if isinstance(quests_data, dict):
+        quest_list = quests_data.get("active", [])
+    elif isinstance(quests_data, list):
+        quest_list = quests_data
+    else:
+        quest_list = []
 
     return {
-        "status": {
-            "name": player.get("name", "Adventurer"),
-            "level": player.get("level", 1),
-            "hp": player.get("hp", 0),
-            "max_hp": player.get("max_hp", 0),
-            "mp": player.get("mp", 0),
-            "max_mp": player.get("max_mp", 0),
-            "stamina": player.get("stamina", 0),
-            "max_stamina": player.get("max_stamina", 0),
-            "stats": player.get("stats", {}),
-            "location": state.get("world", {}).get("location_name", "Unknown"),
-        },
-        "narrative": narration,
+        "player": player_info,
+        "equipment": state.get("equipment", {}),
+        "inventory_rows": inventory_rows,
         "companions": [
             {
                 "name": c.get("name", "Unknown"),
@@ -321,18 +384,21 @@ def render_layout_dict(state: Dict[str, Any], narration: str = "") -> Dict[str, 
                 "max_hp": c.get("max_hp", 0),
                 "loyalty": c.get("loyalty", 50),
                 "archetype": c.get("archetype", ""),
+                "level": c.get("level", 1),
             }
             for c in companions[:4]
         ],
-        "inventory": [
-            {
-                "name": it.get("name", "???") if isinstance(it, dict) else str(it),
-                "qty": it.get("qty", 1) if isinstance(it, dict) else 1,
-                "rarity": it.get("rarity", "common") if isinstance(it, dict) else "common",
-            }
-            for it in inventory[:15]
-        ],
-        "command_log": [e.get("kind", "?") if isinstance(e, dict) else str(e) for e in log[-5:]],
+        "combat": combat_info,
+        "suggested_actions": ["/look", "/do examine surroundings", "/say hello", "/inv"],
+        "skills": {
+            "unlocked": state.get("unlocked_skills", player.get("skills", [])),
+            "points": state.get("skill_points", player.get("skill_points", 0)),
+        },
+        "codex": state.get("lore_entries", []),
+        "quests": quest_list,
+        "world": world_info,
+        "dev_mode": False,
+        "turn": state.get("turn", 0),
     }
 
 

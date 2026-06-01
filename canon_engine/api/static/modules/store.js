@@ -53,6 +53,10 @@ export function emit(event, ...args) {
 // Settings persistence
 const SETTINGS_KEY = 'canon-engine-settings';
 
+// ── Aliases used by modules ──
+export function getState(key) { return get(key); }
+export function setState(key, value) { set(key, value); }
+
 export function loadSettings() {
   try {
     const saved = localStorage.getItem(SETTINGS_KEY);

@@ -1,7 +1,7 @@
 // pause.js — Pause Menu
 // Canon Engine UI Module
 
-import { showToast } from './toast.js';
+import { show as showToast } from './toast.js';
 
 let _modal = null;
 let _isOpen = false;

@@ -2,7 +2,7 @@
 // Canon Engine UI Module
 
 import { save, load, getAll, resetAll, getDefaults } from './prefs.js';
-import { showToast } from './toast.js';
+import { show as showToast } from './toast.js';
 
 let _modal = null;
 

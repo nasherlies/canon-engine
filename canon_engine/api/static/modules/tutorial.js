@@ -1,7 +1,7 @@
 // tutorial.js — Tutorial System
 // Canon Engine UI Module
 
-import { showToast } from './toast.js';
+import { show as showToast } from './toast.js';
 
 let _panel = null;
 let _steps = [];

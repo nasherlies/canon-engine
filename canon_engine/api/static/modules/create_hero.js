@@ -1,7 +1,7 @@
 // ─── create_hero.js ─── Hero Builder Screen ───
 import { apiGet } from './api.js';
-import { getState, setState } from './store.js';
-import { toast } from './toast.js';
+import { get as getState, set as setState } from './store.js';
+import { show as toast } from './toast.js';
 
 function esc(s) {
   if (s == null) return '';

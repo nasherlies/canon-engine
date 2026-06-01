@@ -1,8 +1,8 @@
 // quests.js — Quest Log Overlay
 // Canon Engine UI Module
 
-import { showToast } from './toast.js';
-import { getState, setState } from './store.js';
+import { show as showToast } from './toast.js';
+import { get as getState, set as setState } from './store.js';
 
 const PULSE_MAP = {
   'NEW QUEST': { icon: '📜', color: '#c8b16c' },

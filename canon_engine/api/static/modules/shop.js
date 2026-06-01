@@ -1,7 +1,7 @@
 // ─── shop.js ─── Shop Overlay ───
 import { apiPost } from './api.js';
-import { getState, setState } from './store.js';
-import { toast } from './toast.js';
+import { get as getState, set as setState } from './store.js';
+import { show as toast } from './toast.js';
 
 /* ── Constants ── */
 const RARITY_COLORS = {
@@ -51,8 +51,8 @@ function render(layout) {
   html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
     <div>
       <div style="color:#c8a84e;font-size:16px;letter-spacing:2px;">⬡ SHOP</div>
-      <div style="color:#e8e8f0;font-size:13px;margin-top:4px;">${esc(erchant.name || 'Merchant')}</div>
-      ${erchant.greeting ? `<div style="color:#6a6a7a;font-size:11px;font-style:italic;margin-top:2px;">"${esc(merchant.greeting)}"</div>` : ''}
+      <div style="color:#e8e8f0;font-size:13px;margin-top:4px;">${esc(merchant.name || 'Merchant')}</div>
+      ${merchant.greeting ? `<div style="color:#6a6a7a;font-size:11px;font-style:italic;margin-top:2px;">"${esc(merchant.greeting)}"</div>` : ''}
     </div>
     <div style="text-align:right;">
       <div style="color:#c8a84e;font-size:14px;font-weight:bold;">${gold} Gold</div>

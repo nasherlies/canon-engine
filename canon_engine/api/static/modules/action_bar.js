@@ -10,8 +10,8 @@ let sendCallback = null;
 let acIndex = -1;
 
 export function init(onSend) {
-  input = $('#action-input');
-  dropdown = $('#autocomplete-dropdown');
+  input = $('#cinput');
+  dropdown = $('#autocomplete');
   sendCallback = onSend;
 
   if (!input) return;

@@ -46,6 +46,16 @@ function get(endpoint) {
   return request('GET', endpoint);
 }
 
+// ── Generic API helpers (used by modules) ──
+
+export function apiGet(endpoint) {
+  return get(endpoint);
+}
+
+export function apiPost(endpoint, body = {}) {
+  return post(endpoint, body);
+}
+
 // ── API Methods ──
 
 export function health() {
@@ -93,7 +103,7 @@ export function me() {
 }
 
 export function settingsKeys(method, data) {
-  return post('/settings_keys', { method, ...data });
+  return post('/settings/keys', { method, ...data });
 }
 
 export function backstory(data) {

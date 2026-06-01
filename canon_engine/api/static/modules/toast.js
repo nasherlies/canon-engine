@@ -47,3 +47,10 @@ function escapeHtml(str) {
   d.textContent = str;
   return d.innerHTML;
 }
+
+// ── Alias used by modules ──
+export function showToast(message, opts) {
+  const type = (opts && opts.color) ? 'info' : 'info';
+  const duration = (opts && opts.duration) || 3000;
+  show(message, type, duration);
+}

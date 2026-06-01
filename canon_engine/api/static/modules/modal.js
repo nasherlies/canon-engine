@@ -11,7 +11,7 @@ export function open(id) {
     const top = openStack[openStack.length - 1];
     if (top !== id) close(top);
   }
-  addClass(el, 'open');
+  addClass(el, 'show');
   if (!openStack.includes(id)) openStack.push(id);
   document.body.style.overflow = 'hidden';
 }
@@ -19,7 +19,7 @@ export function open(id) {
 export function close(id) {
   const el = $(`#${id}`);
   if (!el) return;
-  removeClass(el, 'open');
+  removeClass(el, 'show');
   const idx = openStack.indexOf(id);
   if (idx !== -1) openStack.splice(idx, 1);
   if (openStack.length === 0) document.body.style.overflow = '';
@@ -28,7 +28,7 @@ export function close(id) {
 export function toggle(id) {
   const el = $(`#${id}`);
   if (!el) return;
-  if (el.classList.contains('open')) close(id);
+  if (el.classList.contains('show')) close(id);
   else open(id);
 }
 
@@ -51,7 +51,7 @@ export function init() {
 
   // Close on backdrop click
   document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal') && e.target.classList.contains('open')) {
+    if (e.target.classList.contains('modal') && e.target.classList.contains('show')) {
       close(e.target.id);
     }
   });
