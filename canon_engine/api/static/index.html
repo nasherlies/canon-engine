@@ -45,6 +45,13 @@ h1.title{color:var(--gold);font-size:28px;margin-bottom:8px;letter-spacing:3px}
 .close-btn{position:absolute;top:8px;right:12px;background:none;border:none;color:#666;font-size:20px;cursor:pointer;line-height:1;padding:4px 8px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center}
 .close-btn:hover{color:var(--gold)}
 
+/* Pause menu */
+#pause-menu .pause-btns{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+#pause-menu .pause-btns button{width:100%;text-align:left;padding:12px 20px;font-size:15px;letter-spacing:1px}
+#pause-menu .pause-btns button:first-child{border-color:var(--gold);color:var(--gold)}
+.menu-btn{position:absolute;top:8px;left:12px;background:none;border:1px solid var(--border);color:#666;font-size:18px;cursor:pointer;padding:4px 10px;font-family:inherit;z-index:10;min-height:36px;letter-spacing:1px;transition:border-color .2s,color .2s}
+.menu-btn:hover{border-color:var(--gold);color:var(--gold)}
+
 /* Genre / presets */
 .genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0}
 .genre-grid label{margin:0;display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #222;cursor:pointer;font-size:13px;color:#888;transition:all .2s ease;min-height:40px}
@@ -417,6 +424,22 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
  </div>
 </div>
 
+<!-- PAUSE MENU -->
+<div id="pause-menu" class="modal" style="z-index:120">
+ <div class="modal-box" style="width:340px">
+  <h2>&#9776; MENU</h2>
+  <div class="pause-btns">
+   <button onclick="resumeGame()">&#9654; RESUME</button>
+   <button onclick="pauseSettings()">&#9881; SETTINGS</button>
+   <button onclick="pauseLoadSave()">&#128190; LOAD SAVE</button>
+   <button onclick="pauseSave()">&#128190; SAVE GAME</button>
+   <button onclick="pauseTutorial()">&#128218; TUTORIAL</button>
+   <button onclick="quitToTitle()">&#127968; MAIN MENU</button>
+  </div>
+  <div style="margin-top:16px;text-align:center;color:#555;font-size:11px">Press ESC to resume</div>
+ </div>
+</div>
+
 <!-- CHARACTER CREATION -->
 <div id="setup" class="modal" style="z-index:110">
  <div class="modal-box">
@@ -472,6 +495,7 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
 
 <!-- GAME -->
 <div id="game">
+ <button class="menu-btn" onclick="togglePause()" title="Menu (Esc)">&#9776; MENU</button>
  <div class="topbar">
   <div class="p"><h3>MINIMAP</h3><span id="t-loc" style="color:var(--gold)">Unknown</span></div>
   <div class="p">
@@ -1034,6 +1058,30 @@ function pickPreset(b){
  }
 }
 
+/* === PAUSE MENU === */
+function togglePause(){
+ var pm=document.getElementById('pause-menu');
+ if(pm.classList.contains('show')){closeModal('pause-menu');}
+ else{pm.classList.add('show');}
+}
+function resumeGame(){closeModal('pause-menu');}
+function pauseSettings(){closeModal('pause-menu');openSettings();}
+function pauseLoadSave(){closeModal('pause-menu');doLoad();}
+function pauseSave(){
+ cmd('/save');
+ narr('Game saved.','sys');
+ closeModal('pause-menu');
+}
+function pauseTutorial(){closeModal('pause-menu');doTutorial();}
+function quitToTitle(){
+ if(confirm('Return to main menu? Unsaved progress will be auto-saved.')){
+  cmd('/save');
+  closeModal('pause-menu');
+  showScreen('boot');
+  narr('','');/* clear narration on next game start */
+ }
+}
+
 /* Boot actions */
 function doNewGame(){needAuth(function(){document.getElementById('setup').classList.add('show');});}
 function doLoad(){
@@ -1372,8 +1420,12 @@ document.addEventListener('DOMContentLoaded',function(){
   if(e.key==='Escape'){
    /* Close in priority order */
    if(document.getElementById('settings-modal').classList.contains('show')){closeModal('settings-modal');return;}
+   if(document.getElementById('saves-modal').classList.contains('show')){closeModal('saves-modal');return;}
+   if(document.getElementById('pause-menu').classList.contains('show')){closeModal('pause-menu');return;}
    if(document.getElementById('setup').classList.contains('show')){closeModal('setup');return;}
    if(document.getElementById('auth').classList.contains('show')){closeModal('auth');return;}
+   /* If in game, open pause menu */
+   if(document.getElementById('game').style.display==='flex'){togglePause();return;}
    closeSidePanel();
   }
   if(e.key>='1'&&e.key<='5'&&!e.ctrlKey&&!e.altKey&&!e.metaKey){
