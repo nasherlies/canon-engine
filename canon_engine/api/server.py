@@ -574,22 +574,118 @@ async def trigger_encounter(
 
 # ── Saves ────────────────────────────────────────────────────────────────────
 
+def _save_metadata(f: Path) -> Dict[str, Any]:
+    """Extract metadata from a save file."""
+    try:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        # Try 'player' first (current format), then 'hero' (legacy)
+        player = data.get("player") or data.get("hero") or {}
+        world = data.get("world", {})
+        return {
+            "slot": f.stem,
+            "size_bytes": f.stat().st_size,
+            "modified": f.stat().st_mtime,
+            "character_name": player.get("name", "Unknown"),
+            "race": player.get("race", ""),
+            "class_name": player.get("archetype") or player.get("class_name", ""),
+            "level": player.get("level", 1),
+            "genre": world.get("setting_primary") or world.get("genre") or data.get("genre", ""),
+            "location": world.get("location_name") or world.get("location") or data.get("location", ""),
+            "hp": player.get("hp", 0) or data.get("hp", 0),
+            "max_hp": player.get("max_hp", 0) or data.get("max_hp", 0),
+        }
+    except Exception:
+        return {
+            "slot": f.stem,
+            "size_bytes": f.stat().st_size,
+            "modified": f.stat().st_mtime,
+            "character_name": "Corrupted",
+            "race": "",
+            "class_name": "",
+            "level": 0,
+            "genre": "",
+            "location": "",
+            "hp": 0,
+            "max_hp": 0,
+        }
+
+
 @app.get("/saves")
 async def list_saves(
     _auth: None = Depends(_verify_auth),
 ) -> Dict[str, Any]:
-    """List all save files in the saves/ directory."""
+    """List all save files with metadata."""
     from canon_engine.state_manager import _saves_dir
     saves_dir = _saves_dir()
     saves = []
     if saves_dir.exists():
-        for f in sorted(saves_dir.glob("*.json")):
-            saves.append({
-                "slot": f.stem,
-                "size_bytes": f.stat().st_size,
-                "modified": f.stat().st_mtime,
-            })
+        for f in sorted(saves_dir.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+            saves.append(_save_metadata(f))
     return {"saves": saves}
+
+
+class SaveActionRequest(BaseModel):
+    """Body for save management actions."""
+    slot: str = Field(..., description="Source save slot name.")
+    target: str = Field(default="", description="Target slot name (for duplicate/rename).")
+
+
+@app.post("/saves/delete")
+async def delete_save(
+    req: SaveActionRequest,
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Delete a save file."""
+    from canon_engine.state_manager import _saves_dir
+    saves_dir = _saves_dir()
+    save_path = saves_dir / f"{req.slot}.json"
+    if not save_path.exists():
+        raise HTTPException(status_code=404, detail=f"Save '{req.slot}' not found.")
+    save_path.unlink()
+    # Remove from cache if loaded
+    _sessions.pop(req.slot, None)
+    return {"status": "deleted", "slot": req.slot}
+
+
+@app.post("/saves/duplicate")
+async def duplicate_save(
+    req: SaveActionRequest,
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Duplicate a save file to a new slot."""
+    from canon_engine.state_manager import _saves_dir
+    saves_dir = _saves_dir()
+    src_path = saves_dir / f"{req.slot}.json"
+    if not src_path.exists():
+        raise HTTPException(status_code=404, detail=f"Save '{req.slot}' not found.")
+    target_name = req.target or f"{req.slot} (copy)"
+    dst_path = saves_dir / f"{target_name}.json"
+    import shutil
+    shutil.copy2(src_path, dst_path)
+    return {"status": "duplicated", "slot": req.slot, "target": target_name}
+
+
+@app.post("/saves/rename")
+async def rename_save(
+    req: SaveActionRequest,
+    _auth: None = Depends(_verify_auth),
+) -> Dict[str, Any]:
+    """Rename a save file."""
+    from canon_engine.state_manager import _saves_dir
+    saves_dir = _saves_dir()
+    src_path = saves_dir / f"{req.slot}.json"
+    if not src_path.exists():
+        raise HTTPException(status_code=404, detail=f"Save '{req.slot}' not found.")
+    if not req.target:
+        raise HTTPException(status_code=400, detail="Target name required for rename.")
+    dst_path = saves_dir / f"{req.target}.json"
+    if dst_path.exists():
+        raise HTTPException(status_code=409, detail=f"Save '{req.target}' already exists.")
+    src_path.rename(dst_path)
+    # Update cache key if loaded
+    if req.slot in _sessions:
+        _sessions[req.target] = _sessions.pop(req.slot)
+    return {"status": "renamed", "slot": req.slot, "target": req.target}
 
 
 # ── Run helper ───────────────────────────────────────────────────────────────

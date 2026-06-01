@@ -230,6 +230,17 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
 @supports(padding-top:env(safe-area-inset-top)){
   .cbar{padding-bottom:max(8px,env(safe-area-inset-bottom))}
 }
+.save-card{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;margin-bottom:8px;border:2px solid var(--border);background:rgba(26,26,46,0.5);transition:border-color 0.2s}
+.save-card:hover{border-color:var(--gold)}
+.save-name{color:var(--gold);font-size:16px;font-weight:bold;margin-bottom:4px}
+.save-meta{color:#888;font-size:12px}
+.save-slot-name{color:#555;font-size:11px;margin-top:4px}
+.save-actions{display:flex;flex-direction:column;gap:4px;margin-left:12px}
+.btn-sm{padding:4px 12px;font-size:11px;background:none;border:1px solid var(--border);color:#a3a3a3;cursor:pointer;font-family:inherit;min-height:32px}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-load{border-color:var(--gold);color:var(--gold)}
+.btn-danger{border-color:#8b0000;color:#ff4444}
+.btn-danger:hover{border-color:#ff0000;background:rgba(255,0,0,0.1)}
 </style>
 </head>
 <body>
@@ -384,6 +395,15 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
  </div>
 </div>
 
+<!-- SAVE MANAGER -->
+<div id="saves-modal" class="modal" style="z-index:115">
+ <div class="modal-box" style="width:600px;max-height:80dvh">
+  <button class="close-btn" onclick="closeModal('saves-modal')">&times;</button>
+  <h2>SAVED GAMES</h2>
+  <div id="saves-list" style="overflow-y:auto;max-height:60dvh"></div>
+ </div>
+</div>
+
 <!-- BOOT -->
 <div id="boot" class="screen show">
  <h1 class="title">CANON ENGINE</h1>
@@ -391,6 +411,7 @@ body.theme-blood{--bg:#1a0a0a;--panel:#2a0f0f;--border:#5c1a1a;--gold:#c86c6c}
  <div class="menu">
   <button onclick="doNewGame()">NEW GAME</button>
   <button onclick="doLoad()">LOAD SAVE</button>
+  <button onclick="doTutorial()">TUTORIAL</button>
   <button onclick="doQuick()">QUICK PLAY</button>
   <button onclick="openSettings()">SETTINGS</button>
  </div>
@@ -1015,7 +1036,110 @@ function pickPreset(b){
 
 /* Boot actions */
 function doNewGame(){needAuth(function(){document.getElementById('setup').classList.add('show');});}
-function doLoad(){needAuth(function(){var s=prompt('Slot name:');if(s){SLOT=s;showScreen('game');cmd('/load '+s);}});}
+function doLoad(){
+ needAuth(function(){
+  fetch(API+'/saves').then(function(r){return r.json();}).then(function(d){
+   var list=document.getElementById('saves-list');
+   if(!d.saves||!d.saves.length){
+    list.innerHTML='<div style="text-align:center;color:#666;padding:0px">No saved games found</div>';
+   } else {
+    var html='';
+    d.saves.forEach(function(s){
+     var date=new Date(s.modified*1000);
+     var dateStr=date.toLocaleDateString()+' '+date.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+     var hpPct=s.max_hp>0?Math.round(s.hp/s.max_hp*100):0;
+     html+='<div class="save-card" data-slot="'+s.slot+'">';
+     html+='<div class="save-info">';
+     html+='<div class="save-name">'+s.character_name+'</div>';
+     html+='<div class="save-meta">'+s.race+' '+s.class_name+' — Level '+s.level+'</div>';
+     html+='<div class="save-meta">'+s.genre.replace(/_/g,' ')+' — '+s.location+'</div>';
+     html+='<div class="save-meta">HP: '+s.hp+'/'+s.max_hp+' — '+dateStr+'</div>';
+     html+='<div class="save-slot-name">Slot: '+s.slot+'</div>';
+     html+='</div>';
+     html+='<div class="save-actions">';
+     html+='<button class="btn-sm btn-load" onclick="loadSave(\''+s.slot+'')">LOAD</button>';
+     html+='<button class="btn-sm" onclick="duplicateSave(\''+s.slot+'\')">COPY</button>';
+     html+='<button class="btn-sm" onclick="renameSave(\''+s.slot+'\')">RENAME</button>';
+     html+='<button class="btn-sm btn-danger" onclick="deleteSave(\''+s.slot+'\')">DELETE</button>';
+     html+='</div></div>';
+    });
+    list.innerHTML=html;
+   }
+   document.getElementById('saves-modal').classList.add('show');
+  }).catch(function(){alert('Could not load saves');});
+ });
+}
+function loadSave(slot){
+ SLOT=slot;
+ closeModal('saves-modal');
+ showScreen('game');
+ cmd('/help');
+}
+function deleteSave(slot){
+ if(!confirm('Delete save "'+slot+'"? This cannot be undone.'))return;
+ fetch(API+'/saves/delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot:slot})})
+  .then(function(r){return r.json();}).then(function(){doLoad();});
+}
+function duplicateSave(slot){
+ var name=prompt('Name for the copy:',slot+' (copy)');
+ if(!name)return;
+ fetch(API+'/saves/duplicate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot:slot,target:name})})
+  .then(function(r){return r.json();}).then(function(){doLoad();});
+}
+function renameSave(slot){
+ var name=prompt('New name:',slot);
+ if(!name)return;
+ fetch(API+'/saves/rename',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({slot:slot,target:name})})
+  .then(function(r){return r.json();}).then(function(){doLoad();});
+}
+var TUTORIAL_STEPS=[
+ {msg:"Welcome to Canon Engine! I'm Tutorial Bot, your guide. This is a text-based RPG where your imagination is the limit.",delay:0},
+ {msg:"**THE COMMAND INPUT**\n\nAt the bottom of the screen, you'll see a text box. Type anything to interact with the world — describe actions, talk to characters, explore.\n\nTry typing: *I look around the tavern*",delay:3000},
+ {msg:"**SLASH COMMANDS**\n\nType / to see all available commands. Here are the essentials:\n\n• /help — Show all commands\n• /stats — View your character sheet\n• /inv — Check your inventory\n• /look — Examine surroundings\n• /map — View the world map\n• /fight — Start combat\n• /save — Save your game",delay:3000},
+ {msg:"**THE SIDE PANEL**\n\nOn the right side, you'll see tabs:\n\n⚔ **Stats** — Your character's attributes and HP\n⚒ **Inventory** — Items you've collected\n☺ **Party** — Your companions\n★ **Skills** — Your abilities\n☠ **Quests** — Your active quests\n\nClick any tab or press 1-5 to toggle it!",delay:3000},
+ {msg:"**QUICK ACTIONS**\n\nBelow the game output, you'll see quick action buttons: LOOK, INVENTORY, STATS, MAP, REST, and HELP. These are shortcuts for common commands.",delay:3000},
+ {msg:"**COMBAT**\n\nWhen enemies appear, use:\n• /attack — Strike the enemy\n• /block — Defend yourself\n• /flee — Run away\n• /fight — Trigger a random encounter\n\nCombat is turn-based. Choose wisely!",delay:3000},
+ {msg:"**SAVING & LOADING**\n\nYour game auto-saves after each action. To manually save, type /save. To load a save, click LOAD SAVE from the main menu — you can load, copy, rename, or delete saves from there.",delay:3000},
+ {msg:"**SETTINGS**\n\nClick SETTINGS from the main menu to customize:\n• Themes (Dark, Ocean, Forest, Blood)\n• Font size and style\n• Audio levels\n• API settings for custom AI models",delay:3000},
+ {msg:"**TIPS & TRICKS**\n\n• Be creative! Describe your actions in detail for better narration\n• Use /author to set the story's tone (dark, comedic, epic)\n• Use /summary to get a recap of your adventure\n• Use /choices to see branching story options\n• Mix genres with /collide for wild mashups\n• Your companions will react to your choices!\n\nYou're ready. Type anything to begin your adventure!",delay:3000}
+];
+var TUTIDX=0;
+var TUTTIMER=null;
+
+function doTutorial(){
+ needAuth(function(){
+  TUTIDX=0;
+  var body={slot:'tutorial',name:'Tutorial Bot',race:'Robot-Android',archetype:'Engineer',
+   traits:'helpful, knowledgeable, patient',setting_primary:'medieval_fantasy',
+   setting_secondary:'',starting_location:'',speech_style:'default',preset_id:''};
+  fetch(API+'/start_character',{method:'POST',headers:{'Content-Type':'application/json',
+   'Authorization':'Bearer '+TOKEN},body:JSON.stringify(body)})
+   .then(function(r){return r.json();}).then(function(d){
+    SLOT='tutorial';
+    showScreen('game');
+    if(d.narration)narr(d.narration,'ai');
+    setTimeout(function(){playTutorialStep();},1500);
+   }).catch(function(e){
+    alert('Tutorial error: '+e.message);
+   });
+ });
+}
+
+function playTutorialStep(){
+ if(TUTIDX>=TUTORIAL_STEPS.length)return;
+ var step=TUTORIAL_STEPS[TUTIDX];
+ narr(step.msg,'sys');
+ TUTIDX++;
+ if(TUTIDX<TUTORIAL_STEPS.length){
+  TUTTIMER=setTimeout(function(){playTutorialStep();},step.delay||3000);
+ }
+}
+
+function stopTutorial(){
+ if(TUTTIMER)clearTimeout(TUTTIMER);
+ TUTIDX=TUTORIAL_STEPS.length;
+ narr('Tutorial ended. You\'re on your own now, adventurer. Type /help if you need a refresher.','sys');
+}
 function doQuick(){needAuth(function(){showScreen('game');cmd('/godmode');narr('Quick Play - all stats maxed. Type /help.','sys');});}
 
 /* Start game */
