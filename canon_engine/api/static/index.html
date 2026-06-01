@@ -622,7 +622,7 @@ var HIST=[];var HPOS=-1;
 /* === PLAYER STATE CACHE === */
 var PLAYER={name:'',race:'',class_name:'',level:1,hp:0,max_hp:0,xp:0,xp_next:100,
  strength:10,dexterity:10,constitution:10,intelligence:10,wisdom:10,charisma:10,
- inventory:[],abilities:[]};
+ inventory:[],abilities:[],equipment:{}};
 var COMPANIONS=[];
 var JOURNAL=[];
 
@@ -875,23 +875,112 @@ function renderPlayerStats(){
 function statCell(name,val){
  return '<div class="stat-cell"><div class="sc-name">'+name+'</div><div class="sc-val">'+(val||10)+'</div></div>';
 }
+/* ═══ EQUIPMENT BODY MAP ═══ */
+var EQUIP_SLOTS={
+ head:'HEAD',face:'FACE',neck:'NECK',back:'BACK',
+ chest_armor:'CHEST · ARMOR',chest_clothing:'CHEST · CLOTH',
+ hands:'HANDS',waist:'WAIST',
+ legs_armor:'LEGS · ARMOR',legs_clothing:'LEGS · CLOTH',
+ feet:'FEET',ring_left:'RING · L',ring_right:'RING · R',
+ weapon_main:'WEAPON · MAIN',weapon_off:'WEAPON · OFF',
+ accessory_1:'ACC · 1',accessory_2:'ACC · 2'
+};
+var SLOT_POS={
+ head:{x:88,y:18,w:24,h:24},face:{x:88,y:44,w:20,h:16},
+ neck:{x:88,y:64,w:16,h:12},back:{x:88,y:100,w:36,h:40},
+ chest_armor:{x:72,y:90,w:30,h:28},chest_clothing:{x:106,y:90,w:30,h:28},
+ hands:{x:24,y:140,w:24,h:24},waist:{x:88,y:134,w:40,h:12},
+ legs_armor:{x:76,y:160,w:22,h:40},legs_clothing:{x:102,y:160,w:22,h:40},
+ feet:{x:76,y:208,w:22,h:16},ring_left:{x:16,y:120,w:18,h:16},
+ ring_right:{x:166,y:120,w:18,h:16},weapon_main:{x:8,y:140,w:28,h:36},
+ weapon_off:{x:164,y:140,w:28,h:36},accessory_1:{x:52,y:134,w:18,h:16},
+ accessory_2:{x:130,y:134,w:18,h:16}
+};
+function renderBodyMap(equipment){
+ var eq=equipment||{};
+ var svg='<svg viewBox="0 0 200 240" width="100%" style="max-width:200px;display:block;margin:0 auto 12px;">';
+ /* Body silhouette */
+ svg+='<g fill="none" stroke="#2a2a3a" stroke-width="1.5" opacity="0.6">';
+ svg+='<ellipse cx="88" cy="24" rx="16" ry="18"/>'; /* head */
+ svg+='<line x1="88" y1="42" x2="88" y2="52"/>'; /* neck */
+ svg+='<path d="M52,52 Q88,48 128,52 L128,90 Q88,94 52,90 Z"/>'; /* torso */
+ svg+='<path d="M52,56 L30,80 L20,120 L28,140"/>'; /* left arm */
+ svg+='<path d="M128,56 L150,80 L160,120 L168,140"/>'; /* right arm */
+ svg+='<path d="M72,140 L68,200 L60,220 L80,220"/>'; /* left leg */
+ svg+='<path d="M108,140 L112,200 L104,220 L124,220"/>'; /* right leg */
+ svg+='<rect x="56" y="130" width="64" height="10" rx="3"/>'; /* waist/belt */
+ svg+='</g>';
+ /* Slot rectangles */
+ Object.keys(EQUIP_SLOTS).forEach(function(slot){
+  var pos=SLOT_POS[slot];if(!pos)return;
+  var item=eq[slot];
+  var filled=!!item;
+  var color=filled?'#c8a84e':'#2a2a3a';
+  var fill=filled?'rgba(200,168,78,0.25)':'rgba(20,20,30,0.6)';
+  var glow=filled?'':'';
+  var label=(typeof item==='string'?item:(item&&item.name)||'').substring(0,3).toUpperCase();
+  svg+='<rect x="'+pos.x+'" y="'+pos.y+'" width="'+pos.w+'" height="'+pos.h+'" rx="3" fill="'+fill+'" stroke="'+color+'" stroke-width="'+(filled?2:1)+'"'+glow+' style="cursor:'+(filled?'pointer':'default')+'" data-slot="'+slot+'" onclick="unequipSlot(\''+slot+'\')">';
+  if(filled)svg+='<title>'+esc(typeof item==='string'?item:(item&&item.name)||slot)+'</title>';
+  svg+='</rect>';
+  if(filled&&label)svg+='<text x="'+(pos.x+pos.w/2)+'" y="'+(pos.y+pos.h/2+3)+'" text-anchor="middle" font-size="8" fill="#c8a84e" font-weight="bold" pointer-events="none">'+esc(label)+'</text>';
+  /* Slot label */
+  var lx=pos.x+pos.w+4;var ly=pos.y+pos.h/2+3;
+  if(pos.x>100)lx=pos.x-4;
+  var lcolor=filled?'#c8a84e':'#4a4a5a';
+  svg+='<text x="'+lx+'" y="'+ly+'" text-anchor="'+(pos.x>100?'end':'start')+'" font-size="7" fill="'+lcolor+'" letter-spacing="0.5" pointer-events="none">'+EQUIP_SLOTS[slot]+'</text>';
+ });
+ svg+='</svg>';
+ return svg;
+}
+function unequipSlot(slot){
+ if(!PLAYER.equipment||!PLAYER.equipment[slot])return;
+ var name=typeof PLAYER.equipment[slot]==='string'?PLAYER.equipment[slot]:(PLAYER.equipment[slot].name||'');
+ if(name)cmd('/equip '+name);
+}
 function renderInventory(){
  var el=document.getElementById('inv-list');
  if(!el)return;
  var items=PLAYER.inventory;
- if(!items||!items.length){el.innerHTML='<span class="empty">Empty</span>';updateBadge('badge-inv',0);return;}
- updateBadge('badge-inv',items.length);
- el.innerHTML=items.map(function(i){
-  var n=typeof i==='string'?i:(i.name||'?');
-  var r=typeof i==='object'&&i.rarity?i.rarity:'Common';
-  var w=typeof i==='object'&&i.weight?i.weight:1;
-  return '<div class="inv-item"><div><b>'+esc(n)+'</b> <span style="color:#555">['+esc(r)+']</span></div>'+
-   '<div class="inv-actions"><button onclick="invAction(\'equip\',\''+esc(n)+'\')">Equip</button>'+
-   '<button onclick="invAction(\'use\',\''+esc(n)+'\')">Use</button>'+
-   '<button onclick="invAction(\'drop\',\''+esc(n)+'\')">Drop</button></div></div>';
- }).join('');
- var totalW=items.reduce(function(s,i){return s+(typeof i==='object'&&i.weight?i.weight:1);},0);
- document.getElementById('inv-weight').textContent='Weight: '+totalW+' / '+Math.max(totalW,100);
+ var eq=PLAYER.equipment||{};
+ /* Body map first */
+ var html='<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(58,58,92,.3)">';
+ html+='<div style="color:#8a7535;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;text-align:center">Equipment</div>';
+ html+=renderBodyMap(eq);
+ /* Equipment list */
+ var hasEquip=false;
+ Object.keys(EQUIP_SLOTS).forEach(function(slot){
+  var item=eq[slot];if(!item)return;
+  hasEquip=true;
+  var name=typeof item==='string'?item:(item.name||slot);
+  var rarity=(typeof item==='object'&&item.rarity)?item.rarity:'common';
+  var rc=rarityColor(rarity);
+  html+='<div class="inv-item" style="cursor:pointer" onclick="unequipSlot(\''+slot+'\')">';
+  html+='<div><span style="color:#6a6a7a;font-size:10px;width:80px;display:inline-block">'+EQUIP_SLOTS[slot]+'</span>';
+  html+='<span style="color:'+rc+';font-size:12px">'+esc(name)+'</span></div>';
+  html+='<div class="inv-actions"><button onclick="event.stopPropagation();cmd(\'/equip '+esc(name)+'\')">Unequip</button></div></div>';
+ });
+ html+='</div>';
+ /* Pack items */
+ if(!items||!items.length){html+='<span class="empty">Pack is empty</span>';}
+ else{
+  html+=items.map(function(i){
+   var n=typeof i==='string'?i:(i.name||'?');
+   var r=typeof i==='object'&&i.rarity?i.rarity:'Common';
+   var rc=rarityColor(r);
+   return '<div class="inv-item"><div><b style="color:'+rc+'">'+esc(n)+'</b> <span style="color:#555">['+esc(r)+']</span></div>'+
+    '<div class="inv-actions"><button onclick="invAction(\'equip\',\''+esc(n)+'\')">Equip</button>'+
+    '<button onclick="invAction(\'use\',\''+esc(n)+'\')">Use</button>'+
+    '<button onclick="invAction(\'drop\',\''+esc(n)+'\')">Drop</button></div></div>';
+  }).join('');
+ }
+ var totalW=items?items.reduce(function(s,i){return s+(typeof i==='object'&&i.weight?i.weight:1);},0):0;
+ html+='<div style="color:#555;font-size:11px;margin-top:6px">Weight: '+totalW+' / '+Math.max(totalW,100)+'</div>';
+ el.innerHTML=html;
+ updateBadge('badge-inv',items?items.length:0);
+}
+function rarityColor(r){
+ var m={dirt:'#444',common:'#aaa',uncommon:'#55cc55',power:'#5599ff',rare:'#cc55cc',epic:'#ff8800',mythical:'#ffd700',god:'#ff2222'};
+ return m[(r||'').toLowerCase()]||'#888';
 }
 function invAction(action,itemName){
  cmd('/'+action+' '+itemName);
@@ -1365,6 +1454,7 @@ function updateLayout(L){
  }
  if(L.companions!==undefined){COMPANIONS=L.companions||[];renderCompanions();renderCompTopbar(L.companions);}
  if(L.inventory!==undefined){PLAYER.inventory=L.inventory||[];renderInventory();renderInvTopbar(L.inventory);}
+ if(L.equipment!==undefined){PLAYER.equipment=L.equipment||{};renderInventory();}
  if(L.abilities!==undefined){PLAYER.abilities=L.abilities||[];renderAbilities();}
 }
 function updateState(S){
