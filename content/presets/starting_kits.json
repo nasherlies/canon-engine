@@ -1,0 +1,232 @@
+{
+  "knight": {
+    "inventory": [
+      {
+        "name": "Iron Longsword",
+        "rarity": "common",
+        "itype": "weapon",
+        "weight": 3.0,
+        "equip_slot": "weapon_main",
+        "effects": {"damage": 8}
+      },
+      {
+        "name": "Wooden Shield",
+        "rarity": "common",
+        "itype": "shield",
+        "weight": 5.0,
+        "equip_slot": "weapon_off",
+        "effects": {"defense": 3}
+      },
+      {
+        "name": "Chainmail Hauberk",
+        "rarity": "common",
+        "itype": "armor",
+        "weight": 12.0,
+        "equip_slot": "chest_armor",
+        "effects": {"defense": 5}
+      },
+      {
+        "name": "Iron Helm",
+        "rarity": "common",
+        "itype": "armor",
+        "weight": 3.0,
+        "equip_slot": "head",
+        "effects": {"defense": 2}
+      },
+      {
+        "name": "Health Potion",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 0.5,
+        "qty": 3,
+        "consumable": true,
+        "effects": {"heal_hp": 25}
+      },
+      {
+        "name": "Torch",
+        "rarity": "common",
+        "itype": "tool",
+        "weight": 1.0,
+        "qty": 2
+      }
+    ],
+    "equip": {
+      "weapon_main": "Iron Longsword",
+      "weapon_off": "Wooden Shield",
+      "chest_armor": "Chainmail Hauberk",
+      "head": "Iron Helm"
+    }
+  },
+  "rogue": {
+    "inventory": [
+      {
+        "name": "Steel Dagger",
+        "rarity": "common",
+        "itype": "weapon",
+        "weight": 1.0,
+        "equip_slot": "weapon_main",
+        "effects": {"damage": 5}
+      },
+      {
+        "name": "Leather Jerkin",
+        "rarity": "common",
+        "itype": "armor",
+        "weight": 4.0,
+        "equip_slot": "chest_clothing",
+        "effects": {"defense": 2}
+      },
+      {
+        "name": "Lockpick Set",
+        "rarity": "common",
+        "itype": "tool",
+        "weight": 0.2,
+        "qty": 5
+      },
+      {
+        "name": "Smoke Bomb",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 0.3,
+        "qty": 3,
+        "consumable": true,
+        "effects": {"apply_status": ["Blinded"]}
+      },
+      {
+        "name": "Health Potion",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 0.5,
+        "qty": 2,
+        "consumable": true,
+        "effects": {"heal_hp": 25}
+      },
+      {
+        "name": "Dark Hood",
+        "rarity": "common",
+        "itype": "clothing",
+        "weight": 0.5,
+        "equip_slot": "head"
+      }
+    ],
+    "equip": {
+      "weapon_main": "Steel Dagger",
+      "chest_clothing": "Leather Jerkin",
+      "head": "Dark Hood"
+    }
+  },
+  "mage": {
+    "inventory": [
+      {
+        "name": "Apprentice Staff",
+        "rarity": "common",
+        "itype": "weapon",
+        "weight": 4.0,
+        "equip_slot": "weapon_main",
+        "effects": {"damage": 4, "spell_power": 2}
+      },
+      {
+        "name": "Cloth Robes",
+        "rarity": "common",
+        "itype": "clothing",
+        "weight": 2.0,
+        "equip_slot": "chest_clothing",
+        "effects": {"defense": 1, "spell_power": 1}
+      },
+      {
+        "name": "Mana Crystal",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 0.3,
+        "qty": 3,
+        "consumable": true,
+        "effects": {"heal_mp": 20}
+      },
+      {
+        "name": "Spell Scroll: Firebolt",
+        "rarity": "uncommon",
+        "itype": "consumable",
+        "weight": 0.1,
+        "qty": 2,
+        "consumable": true,
+        "effects": {"damage": 15}
+      },
+      {
+        "name": "Potion of Clarity",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 0.5,
+        "qty": 1,
+        "consumable": true,
+        "effects": {"remove_status": ["Confused"]}
+      }
+    ],
+    "equip": {
+      "weapon_main": "Apprentice Staff",
+      "chest_clothing": "Cloth Robes"
+    }
+  },
+  "ranger": {
+    "inventory": [
+      {
+        "name": "Hunting Bow",
+        "rarity": "common",
+        "itype": "weapon",
+        "weight": 2.5,
+        "equip_slot": "weapon_main",
+        "effects": {"damage": 6, "range": "ranged"}
+      },
+      {
+        "name": "Quiver of Arrows",
+        "rarity": "common",
+        "itype": "ammo",
+        "weight": 1.5,
+        "qty": 20
+      },
+      {
+        "name": "Leather Vest",
+        "rarity": "common",
+        "itype": "armor",
+        "weight": 3.0,
+        "equip_slot": "chest_armor",
+        "effects": {"defense": 3}
+      },
+      {
+        "name": "Traveler's Cloak",
+        "rarity": "common",
+        "itype": "clothing",
+        "weight": 1.0,
+        "equip_slot": "back",
+        "effects": {"stealth": 1}
+      },
+      {
+        "name": "Antidote",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 0.3,
+        "qty": 2,
+        "consumable": true,
+        "effects": {"remove_status": ["Poisoned"]}
+      },
+      {
+        "name": "Trail Rations",
+        "rarity": "common",
+        "itype": "consumable",
+        "weight": 1.0,
+        "qty": 5,
+        "consumable": true,
+        "effects": {"heal_hp": 10}
+      },
+      {
+        "name": "Rope (50ft)",
+        "rarity": "common",
+        "itype": "tool",
+        "weight": 3.0
+      }
+    ],
+    "equip": {
+      "weapon_main": "Hunting Bow",
+      "chest_armor": "Leather Vest",
+      "back": "Traveler's Cloak"
+    }
+  }
+}
