@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CANON ENGINE</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -12,20 +12,32 @@ html,body{height:100%;background:#0a0a0f;color:#c8c8d0;font-family:'Courier New'
 h1.title{color:#e8b84b;font-size:28px;margin-bottom:8px;letter-spacing:3px}
 .sub{color:#555;margin-bottom:40px;font-size:14px}
 .menu{display:flex;flex-direction:column;gap:10px;width:240px}
-.menu button,.btn{background:transparent;border:1px solid #333;color:#c8c8d0;font-family:inherit;font-size:16px;padding:12px 20px;cursor:pointer;text-align:center;transition:all .15s}
+.menu button,.btn{background:transparent;border:1px solid #333;color:#c8c8d0;font-family:inherit;font-size:16px;padding:12px 20px;cursor:pointer;text-align:center;transition:all .15s;min-height:44px}
 .menu button:hover,.btn:hover{border-color:#e8b84b;color:#e8b84b}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:90;align-items:center;justify-content:center}
 .modal.show{display:flex}
-.modal-box{background:#111118;border:1px solid #e8b84b;padding:24px;width:400px;max-width:90%}
+.modal-box{background:#111118;border:1px solid #e8b84b;padding:24px;width:420px;max-width:90%;max-height:90vh;overflow-y:auto}
 .modal-box h2{color:#e8b84b;font-size:14px;margin-bottom:16px;text-align:center}
 .modal-box label{color:#666;font-size:12px;display:block;margin:12px 0 4px}
-.modal-box input,.modal-box select{width:100%;background:#0a0a0f;border:1px solid #333;color:#c8c8d0;font-family:inherit;font-size:16px;padding:8px;outline:none}
+.modal-box input,.modal-box select{width:100%;background:#0a0a0f;border:1px solid #333;color:#c8c8d0;font-family:inherit;font-size:16px;padding:8px;outline:none;min-height:44px}
 .modal-box input:focus,.modal-box select:focus{border-color:#e8b84b}
 .modal-box select option{background:#111118}
 .modal-btns{margin-top:20px;display:flex;gap:8px;justify-content:flex-end}
+.modal-btns .btn{min-height:44px}
 .presets{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}
-.presets button{font-size:14px;padding:8px;text-align:left;border-color:#222}
+.presets button{font-size:14px;padding:8px;text-align:left;border-color:#222;min-height:44px}
 .presets button.sel{border-color:#e8b84b;color:#e8b84b}
+.genre-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0}
+.genre-grid label{margin:0;display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid #222;cursor:pointer;font-size:13px;color:#888;transition:all .15s;min-height:40px}
+.genre-grid label:hover{border-color:#e8b84b}
+.genre-grid input[type="checkbox"]{width:auto;min-height:auto;accent-color:#e8b84b}
+.genre-grid label.active{border-color:#e8b84b;color:#e8b84b;background:#1a1a2a}
+.settings-row{display:flex;align-items:center;gap:12px;margin:8px 0}
+.settings-row label{flex:0 0 auto;margin:0;min-width:100px}
+.settings-row input[type="range"]{flex:1;min-height:auto;accent-color:#e8b84b}
+.settings-row select{flex:1}
+.toggle-btn{background:#1a1a2a;border:1px solid #333;color:#666;padding:6px 16px;cursor:pointer;font-family:inherit;font-size:14px;min-height:44px;transition:all .15s}
+.toggle-btn.on{border-color:#e8b84b;color:#e8b84b;background:#1a1a2a}
 #game{display:none;flex-direction:column;height:100vh}
 .topbar{display:grid;grid-template-columns:1fr 2fr 1fr;gap:1px;height:90px;min-height:90px;border-bottom:1px solid #222}
 .topbar .p{background:#111118;border:1px solid #1a1a1a;padding:6px 10px;overflow:hidden}
@@ -54,13 +66,42 @@ h1.title{color:#e8b84b;font-size:28px;margin-bottom:8px;letter-spacing:3px}
 .inv-item{padding:2px 0;border-bottom:1px solid #1a1a2a;font-size:15px}
 .cbar{display:flex;align-items:center;background:#111118;border-top:1px solid #222;padding:8px 12px;gap:8px}
 .cbar .gt{color:#e8b84b;font-size:16px}
-#cinput{flex:1;background:transparent;border:none;color:#c8c8d0;font-family:inherit;font-size:18px;outline:none;caret-color:#e8b84b}
+#cinput{flex:1;background:transparent;border:none;color:#c8c8d0;font-family:inherit;font-size:18px;outline:none;caret-color:#e8b84b;min-height:44px}
 #cinput::placeholder{color:#333}
 .empty{color:#444;font-style:italic}
 #auth{z-index:200}
 #auth .modal-box{max-width:320px;text-align:center}
 #auth input{text-align:center;margin-bottom:12px}
 #auth .err{color:#cc3333;font-size:13px;margin-bottom:8px;display:none}
+
+/* High contrast mode */
+body.high-contrast{background:#000;color:#fff}
+body.high-contrast .msg-nar{color:#fff}
+body.high-contrast .side .p .c,body.high-contrast .narr{color:#fff}
+
+/* Mobile responsive */
+@media(max-width:600px){
+ html,body{font-size:16px}
+ .menu{width:90%;max-width:300px}
+ .menu button,.btn{font-size:15px;padding:14px 16px;min-height:48px}
+ .modal-box{width:95%;padding:16px}
+ .modal-box label{font-size:13px}
+ .modal-box input,.modal-box select{font-size:15px;padding:10px;min-height:48px}
+ .genre-grid{grid-template-columns:1fr}
+ .presets{grid-template-columns:1fr}
+ h1.title{font-size:22px}
+ .sub{font-size:12px}
+ .topbar{grid-template-columns:1fr;height:auto;min-height:auto}
+ .topbar .p{display:none}
+ .topbar .p:nth-child(2){display:block;min-height:60px}
+ .main{grid-template-columns:1fr}
+ .side{display:none}
+ .cbar{padding:10px 12px}
+ #cinput{font-size:16px;min-height:48px}
+ .settings-row{flex-direction:column;align-items:stretch;gap:6px}
+ .settings-row label{margin-bottom:2px}
+ .toggle-btn{min-height:48px}
+}
 </style>
 </head>
 <body>
@@ -74,27 +115,70 @@ h1.title{color:#e8b84b;font-size:28px;margin-bottom:8px;letter-spacing:3px}
  </div>
 </div>
 
+<div id="settings-modal" class="modal" style="z-index:115">
+ <div class="modal-box">
+  <h2>SETTINGS</h2>
+  <div class="settings-row">
+   <label>Font Size</label>
+   <input type="range" id="set-fontsize" min="12" max="24" value="18">
+   <span id="set-fontsize-val" style="color:#e8b84b;min-width:30px">18</span>
+  </div>
+  <div class="settings-row">
+   <label>Text Speed</label>
+   <select id="set-textspeed">
+    <option value="fast">Fast</option>
+    <option value="normal" selected>Normal</option>
+    <option value="slow">Slow</option>
+   </select>
+  </div>
+  <div class="settings-row">
+   <label>High Contrast</label>
+   <button class="toggle-btn" id="set-contrast" onclick="toggleContrast()">OFF</button>
+  </div>
+  <div class="modal-btns">
+   <button class="btn" style="border-color:#e8b84b;color:#e8b84b" onclick="saveSettings();closeModal('settings-modal')">SAVE</button>
+  </div>
+ </div>
+</div>
+
 <div id="boot" class="screen show">
  <h1 class="title">CANON ENGINE</h1>
- <div class="sub">v0.5.2 &mdash; AI-Powered Infinite RPG</div>
+ <div class="sub">v0.6.0 &mdash; AI-Powered Infinite RPG</div>
  <div class="menu">
   <button onclick="doNewGame()">NEW GAME</button>
   <button onclick="doLoad()">LOAD SAVE</button>
   <button onclick="doQuick()">QUICK PLAY</button>
+  <button onclick="openSettings()">SETTINGS</button>
  </div>
 </div>
 
-<div id="setup" class="modal">
+<div id="setup" class="modal" style="z-index:110">
  <div class="modal-box">
   <h2>CHARACTER CREATION</h2>
   <label>NAME</label>
   <input type="text" id="c-name" value="Adventurer">
-  <label>ARCHETYPE</label>
-  <select id="c-arch">
-   <option value="knight">Knight</option><option value="rogue">Rogue</option>
-   <option value="mage">Mage</option><option value="ranger">Ranger</option>
-   <option value="barbarian">Barbarian</option><option value="skeleton">Skeleton</option>
-  </select>
+
+  <label>RACE</label>
+  <input type="text" id="c-race" list="race-list" placeholder="e.g. Human, Elf, Cat-Humanoid..." value="Human">
+  <datalist id="race-list">
+   <option value="Human"><option value="Elf"><option value="Dwarf"><option value="Orc">
+   <option value="Robot-Android"><option value="Alien"><option value="Cat-Humanoid">
+   <option value="Mannequin"><option value="Undead"><option value="Demon">
+   <option value="Angel"><option value="Hybrid"><option value="Other">
+  </datalist>
+
+  <label>CLASS</label>
+  <input type="text" id="c-class" list="class-list" placeholder="e.g. Knight, Mage, Rogue..." value="Knight">
+  <datalist id="class-list">
+   <option value="Knight"><option value="Mage"><option value="Rogue"><option value="Ranger">
+   <option value="Barbarian"><option value="Healer"><option value="Warlock">
+   <option value="Necromancer"><option value="Bard"><option value="Engineer">
+   <option value="Psychic"><option value="Custom">
+  </datalist>
+
+  <label>TRAITS <span style="color:#555">(optional)</span></label>
+  <input type="text" id="c-traits" placeholder="e.g. scarred, noble-born, haunted...">
+
   <label>PRESET</label>
   <div class="presets">
    <button data-p="garros" onclick="pickPreset(this)"><b>GARROS</b><br>Western Knight</button>
@@ -102,18 +186,23 @@ h1.title{color:#e8b84b;font-size:28px;margin-bottom:8px;letter-spacing:3px}
    <button data-p="thalric" onclick="pickPreset(this)"><b>THALRIC</b><br>Mage</button>
    <button data-p="custom" class="sel" onclick="pickPreset(this)"><b>CUSTOM</b><br>Your own</button>
   </div>
-  <label>WORLD</label>
-  <select id="c-world">
-   <option value="medieval_fantasy">Medieval Fantasy</option><option value="sci_fi">Sci-Fi</option>
-   <option value="modern">Modern</option><option value="post_apocalyptic">Post-Apocalyptic</option>
-   <option value="anime_shonen">Anime</option><option value="horror">Horror</option>
-  </select>
-  <label>LOCATION</label>
+
+  <label>WORLD GENRE <span style="color:#555">(pick 1-2)</span></label>
+  <div class="genre-grid" id="genre-grid">
+   <label><input type="checkbox" name="genre" value="medieval_fantasy" onchange="onGenreChange()"> Medieval Fantasy</label>
+   <label><input type="checkbox" name="genre" value="space_opera" onchange="onGenreChange()"> Space Opera</label>
+   <label><input type="checkbox" name="genre" value="gothic_horror" onchange="onGenreChange()"> Gothic Horror</label>
+   <label><input type="checkbox" name="genre" value="western" onchange="onGenreChange()"> Western</label>
+   <label><input type="checkbox" name="genre" value="anime_dramatic" onchange="onGenreChange()"> Anime Dramatic</label>
+   <label><input type="checkbox" name="genre" value="cyberpunk" onchange="onGenreChange()"> Cyberpunk</label>
+   <label><input type="checkbox" name="genre" value="post_apocalyptic" onchange="onGenreChange()"> Post-Apocalyptic</label>
+  </div>
+
+  <label>STARTING LOCATION</label>
   <select id="c-loc">
-   <option value="crypt">Crypt</option><option value="tavern">Tavern</option>
-   <option value="forest_clearing">Forest</option><option value="space_station">Space Station</option>
-   <option value="supermarket">Supermarket</option>
+   <option value="">Select a genre first...</option>
   </select>
+
   <div class="modal-btns">
    <button class="btn" onclick="closeModal('setup')">BACK</button>
    <button class="btn" style="border-color:#e8b84b;color:#e8b84b" onclick="doStart()">BEGIN</button>
@@ -158,8 +247,106 @@ var API=window.location.origin;
 var TOKEN = '';
 var SLOT='playtest';
 var HIST=[];var HPOS=-1;
-var P={garros:{name:'Garros',arch:'knight'},lyra:{name:'Lyra Shadowveil',arch:'rogue'},thalric:{name:'Thalric Ashborn',arch:'mage'},custom:null};
 
+/* Preset data */
+var P={
+ garros:{name:'Garros the Western Knight',race:'Human',class:'Knight',arch:'knight',traits:'western drawl, grizzled veteran',speech:'western_drawl'},
+ lyra:{name:'Lyra Shadowveil',race:'Elf',class:'Rogue',arch:'rogue',traits:'sly, mysterious, nimble',speech:'sly_whisper'},
+ thalric:{name:'Thalric Ashborn',race:'Human',class:'Mage',arch:'mage',traits:'arcane scholar, fire affinity',speech:'arcane_verbose'},
+ custom:null
+};
+var PRESET=null;
+
+/* Genre-to-location mapping */
+var GENRE_LOCATIONS={
+ medieval_fantasy:['The Crossroads Inn','Dark Forest Clearing','Ancient Ruins','Castle Courtyard','Village Square'],
+ space_opera:['Starport Delta','Space Station Hub','Alien Marketplace','Ship Bridge','Cargo Bay'],
+ gothic_horror:['Ravenmoor Manor','Abandoned Cathedral','Foggy Graveyard','Crypt Entrance','Haunted Village'],
+ western:['Dusty Gulch Saloon','Train Station','Main Street','Canyon Ridge','Desert Oasis'],
+ anime_dramatic:['Academy Courtyard','Rooftop at Sunset','Shrine Steps','Neon City Street','Battle Arena'],
+ cyberpunk:['Neon Alley','Corporate Tower Lobby','Underground Club','Hacker Den','Market District'],
+ post_apocalyptic:['Ruined Highway','Bunker Entrance','Scavenger Camp','Collapsed Mall','Watchtower']
+};
+
+/* Settings */
+var SETTINGS={fontsize:18,textspeed:'normal',contrast:false};
+
+function loadSettings(){
+ try{
+  var s=JSON.parse(localStorage.getItem('canon_settings'));
+  if(s)SETTINGS=Object.assign(SETTINGS,s);
+ }catch(e){}
+ applySettings();
+}
+function saveSettings(){
+ SETTINGS.fontsize=parseInt(document.getElementById('set-fontsize').value)||18;
+ SETTINGS.textspeed=document.getElementById('set-textspeed').value||'normal';
+ SETTINGS.contrast=document.getElementById('set-contrast').classList.contains('on');
+ try{localStorage.setItem('canon_settings',JSON.stringify(SETTINGS));}catch(e){}
+ applySettings();
+}
+function applySettings(){
+ document.documentElement.style.fontSize=SETTINGS.fontsize+'px';
+ document.body.classList.toggle('high-contrast',!!SETTINGS.contrast);
+ var fs=document.getElementById('set-fontsize');
+ if(fs)fs.value=SETTINGS.fontsize;
+ var fsv=document.getElementById('set-fontsize-val');
+ if(fsv)fsv.textContent=SETTINGS.fontsize;
+ var ts=document.getElementById('set-textspeed');
+ if(ts)ts.value=SETTINGS.textspeed;
+ var cb=document.getElementById('set-contrast');
+ if(cb){cb.classList.toggle('on',!!SETTINGS.contrast);cb.textContent=SETTINGS.contrast?'ON':'OFF';}
+}
+function toggleContrast(){
+ var cb=document.getElementById('set-contrast');
+ cb.classList.toggle('on');
+ cb.textContent=cb.classList.contains('on')?'ON':'OFF';
+}
+function openSettings(){
+ document.getElementById('settings-modal').classList.add('show');
+}
+
+/* Genre checkbox enforcement (max 2) + location update */
+function onGenreChange(){
+ var boxes=document.querySelectorAll('#genre-grid input[type="checkbox"]');
+ var checked=[];
+ boxes.forEach(function(b){if(b.checked)checked.push(b);});
+ /* Enforce max 2 */
+ if(checked.length>2){
+  /* Uncheck the oldest one beyond 2 (keep last 2 clicked) */
+  checked[0].checked=false;
+  checked.shift();
+ }
+ /* Update visual highlight */
+ var labels=document.querySelectorAll('#genre-grid label');
+ labels.forEach(function(l){
+  l.classList.toggle('active',l.querySelector('input').checked);
+ });
+ /* Update locations dropdown */
+ updateLocations();
+}
+function updateLocations(){
+ var boxes=document.querySelectorAll('#genre-grid input[type="checkbox"]');
+ var locSel=document.getElementById('c-loc');
+ var selected=[];
+ boxes.forEach(function(b){if(b.checked)selected.push(b.value);});
+ locSel.innerHTML='';
+ if(selected.length===0){
+  locSel.innerHTML='<option value="">Select a genre first...</option>';
+  return;
+ }
+ /* Use first selected genre for locations */
+ var primary=selected[0];
+ var locs=GENRE_LOCATIONS[primary]||[];
+ locs.forEach(function(l){
+  var o=document.createElement('option');
+  o.value=l.toLowerCase().replace(/\s+/g,'_');
+  o.textContent=l;
+  locSel.appendChild(o);
+ });
+}
+
+/* Auth functions */
 function doAuth(){
  var pw=document.getElementById('auth-pw').value;
  if(!pw)return;
@@ -174,8 +361,11 @@ function testToken(cb){
  .then(function(r){cb(r.ok);}).catch(function(){cb(false);});
 }
 function needAuth(cb){
- if(TOKEN){testToken(function(ok){if(ok)cb();else showAuth(cb);});}
- else{showAuth(cb);}
+ fetch(API+'/health').then(function(r){return r.json();}).then(function(d){
+  if(d.dev_mode===true){cb();return;}
+  if(TOKEN){testToken(function(ok){if(ok)cb();else showAuth(cb);});}
+  else{showAuth(cb);}
+ }).catch(function(){cb();});
 }
 function showAuth(cb){
  document.getElementById('auth').classList.add('show');
@@ -189,31 +379,65 @@ function showScreen(id){
  if(id==='boot'){if(b)b.classList.add('show');if(g)g.style.display='none';}
  if(id==='game'){if(g)g.style.display='flex';setTimeout(function(){var ci=document.getElementById('cinput');if(ci)ci.focus();},50);}
 }
+
+/* Boot menu actions */
 function doNewGame(){needAuth(function(){document.getElementById('setup').classList.add('show');});}
 function doLoad(){needAuth(function(){var s=prompt('Slot name:');if(s){SLOT=s;showScreen('game');cmd('/load '+s);}});}
 function doQuick(){needAuth(function(){showScreen('game');cmd('/godmode');narr('Quick Play - all stats maxed. Type /help.','sys');});}
-var P={garros:{name:'Garros the Western Knight',arch:'knight',speech:'western_drawl'},lyra:{name:'Lyra Shadowveil',arch:'rogue',speech:'sly_whisper'},thalric:{name:'Thalric Ashborn',arch:'mage',speech:'arcane_verbose'},custom:null};
-var PRESET=null;
 
+/* Preset selection */
 function pickPreset(b){
  document.querySelectorAll('.presets button').forEach(function(x){x.classList.remove('sel');});
  b.classList.add('sel');
  var k=b.dataset.p;
  PRESET=(k!=='custom')?k:null;
- if(P[k]){document.getElementById('c-name').value=P[k].name;document.getElementById('c-arch').value=P[k].arch;}
- else{document.getElementById('c-name').value='Adventurer';document.getElementById('c-arch').value='knight';}
+ if(P[k]){
+  document.getElementById('c-name').value=P[k].name;
+  document.getElementById('c-race').value=P[k].race||'Human';
+  document.getElementById('c-class').value=P[k].class||'Knight';
+  document.getElementById('c-traits').value=P[k].traits||'';
+ }else{
+  document.getElementById('c-name').value='Adventurer';
+  document.getElementById('c-race').value='Human';
+  document.getElementById('c-class').value='Knight';
+  document.getElementById('c-traits').value='';
+ }
 }
+
+/* Start game - sends all new fields */
 function doStart(){
  needAuth(function(){
   var name=document.getElementById('c-name').value||'Adventurer';
-  var arch=document.getElementById('c-arch').value;
-  var world=document.getElementById('c-world').value;
-  var loc=document.getElementById('c-loc').value;
+  var race=document.getElementById('c-race').value||'Human';
+  var cls=document.getElementById('c-class').value||'Knight';
+  var traits=document.getElementById('c-traits').value||'';
+  var loc=document.getElementById('c-loc').value||'';
+
+  /* Get selected genres */
+  var boxes=document.querySelectorAll('#genre-grid input[type="checkbox"]');
+  var genres=[];
+  boxes.forEach(function(b){if(b.checked)genres.push(b.value);});
+  var settingPrimary=genres[0]||'medieval_fantasy';
+  var settingSecondary=genres[1]||'';
+
   var speech=(PRESET&&P[PRESET])?P[PRESET].speech:'default';
-  var body={slot:SLOT,setting_primary:world,starting_location:loc,speech_style:speech};
-  if(PRESET){body.preset_id=PRESET;}else{body.name=name;body.archetype=arch;}
+
+  var body={
+   slot:SLOT,
+   name:name,
+   race:race,
+   archetype:cls,
+   traits:traits,
+   setting_primary:settingPrimary,
+   setting_secondary:settingSecondary,
+   starting_location:loc,
+   speech_style:speech
+  };
+  if(PRESET){body.preset_id=PRESET;}
+
   closeModal('setup');showScreen('game');
   narr('Starting adventure...','sys');
+
   fetch(API+'/start_character',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+TOKEN},body:JSON.stringify(body)})
   .then(function(r){return r.json();})
   .then(function(d){
@@ -223,6 +447,8 @@ function doStart(){
   .catch(function(e){narr('Error starting: '+e.message,'sys');});
  });
 }
+
+/* API / game functions */
 function api(command,cb){
  var h={'Content-Type':'application/json'};
  if(TOKEN)h['Authorization']='Bearer '+TOKEN;
@@ -315,6 +541,18 @@ function updateState(S){
 }
 
 document.addEventListener('DOMContentLoaded',function(){
+ /* Load saved settings */
+ loadSettings();
+
+ /* Font size slider live update */
+ var fsSlider=document.getElementById('set-fontsize');
+ if(fsSlider){
+  fsSlider.addEventListener('input',function(){
+   document.getElementById('set-fontsize-val').textContent=this.value;
+  });
+ }
+
+ /* Command input */
  var ci=document.getElementById('cinput');
  if(ci){ci.addEventListener('keydown',function(e){
   if(e.key==='Enter'){e.preventDefault();cmd(ci.value);}
@@ -329,6 +567,10 @@ document.addEventListener('DOMContentLoaded',function(){
    if(ci2&&document.getElementById('game').style.display==='flex')ci2.focus();
   }
  });
+
+ /* Initialize locations (no genre selected yet) */
+ updateLocations();
+
  narr('Canon Engine loaded. Click NEW GAME to begin.','sys');
 });
 </script>

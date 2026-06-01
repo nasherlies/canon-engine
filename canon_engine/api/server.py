@@ -58,7 +58,10 @@ async def serve_ui():
     html_path = _STATIC_DIR / "index.html"
     if html_path.exists():
         from fastapi.responses import HTMLResponse
-        return HTMLResponse(html_path.read_text(encoding="utf-8"))
+        return HTMLResponse(
+            html_path.read_text(encoding="utf-8"),
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
+        )
     return {"error": "UI not found"}
 
 
@@ -349,7 +352,9 @@ class StartCharacterRequest(BaseModel):
     """Body for POST /start_character."""
     preset_id: Optional[str] = Field(default=None, description="Character preset ID (e.g. 'garros').")
     name: Optional[str] = Field(default=None, description="Character name (overrides preset).")
-    archetype: Optional[str] = Field(default=None, description="Character archetype (e.g. 'knight', 'mage').")
+    race: Optional[str] = Field(default=None, description="Character race (e.g. 'Human', 'Robot-Android', 'Cat-Humanoid').")
+    archetype: Optional[str] = Field(default=None, description="Character archetype/class (e.g. 'knight', 'mage', 'warlock cat humanoid').")
+    traits: Optional[str] = Field(default=None, description="Extra character traits/descriptors (free text).")
     stats: Optional[Dict[str, int]] = Field(default=None, description="Stats dict: STR, DEX, INT, CHA, CON, LCK.")
     speech_style: Optional[str] = Field(default=None, description="NPC narrator speech style.")
     setting_primary: Optional[str] = Field(default="medieval_fantasy", description="Primary genre.")
@@ -385,7 +390,9 @@ async def start_character(
 
     # --- Build character ---
     char_name = req.name or preset_data.get("name", "Adventurer")
+    race = req.race or preset_data.get("race", "Human")
     archetype = req.archetype or preset_data.get("archetype", "Adventurer")
+    traits = req.traits or ""
     stats = req.stats or preset_data.get("stats", {})
     speech_style = req.speech_style or preset_data.get("speech_style", "default")
     starting_gear = preset_data.get("starting_gear", [])
@@ -428,7 +435,9 @@ async def start_character(
     state = state_manager.new_state()
     state["player"] = {
         "name": char_name,
+        "race": race,
         "archetype": archetype,
+        "traits": traits,
         "level": 1,
         "xp": 0,
         "xp_next": 100,
@@ -465,8 +474,10 @@ async def start_character(
     state["world_log"] = [f"{char_name} awakens at {location}."]
 
     # Generate narration
+    race_str = f" {race}" if race and race.lower() != "human" else ""
+    traits_str = f" [{traits}]" if traits else ""
     narration = (
-        f"**{char_name}** the {archetype} has entered the world.\n\n"
+        f"**{char_name}** the{race_str} {archetype}{traits_str} has entered the world.\n\n"
         f"Location: {location}\n"
         f"HP: {hp}/{hp}  |  AC: {state['player']['ac']}\n"
         f"Speech Style: {speech_style}\n\n"
